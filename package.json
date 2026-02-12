@@ -1,0 +1,12 @@
+{
+  "name": "meu-corpo-minha-mente",
+  "version": "1.0.0",
+  "description": "Dra. Raniele e Cleucia - Meu Corpo Minha Mente",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
