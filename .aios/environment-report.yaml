@@ -1,0 +1,25 @@
+generated_at: 2026-02-12T19:15:00-03:00
+project_name: meu-corpo-minha-mente
+system:
+  os: windows
+  arch: x64
+tools:
+  git:
+    status: installed
+    version: unknown
+  gh:
+    status: installed
+    version: 2.86.0
+repository:
+  url: https://github.com/SamuraidoCopy/meu-corpo-minha-mente
+  node:
+    status: installed
+    version: 24.11.0
+  npm:
+    status: installed
+    version: 11.6.1
+notes:
+  - Project directory created at g:\Meu Drive\Meu-Corpo-Minha-Mente
+  - Git repository initialized locally
+  - .gitignore and README.md created
+  - GitHub CLI installation attempted via winget. If 'gh' command is not found, please restart terminal.

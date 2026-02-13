@@ -1,0 +1,167 @@
+{
+    "meta": {
+        "version": "1.1.0",
+        "source": "O Idioma da Doença - Método Cortando o Mal pela Raiz",
+        "author": "Dras. Raniele e Cleucia"
+    },
+    "elements": {
+        "wood": {
+            "name": "Madeira",
+            "color": "#81C784",
+            "organs": [
+                "Fígado",
+                "Vesícula Biliar"
+            ],
+            "facial_zones": [
+                {
+                    "id": "glabella",
+                    "name": "Glabela (Entre as sobrancelhas)",
+                    "symptom_match": [
+                        "Ruga vertical",
+                        "Tensão",
+                        "Vermelhidão"
+                    ],
+                    "translation": {
+                        "root_emotion": "Frustração / Raiva",
+                        "message": "Você está vivendo no 'Tenho que'. Excesso de obrigações e falta de prazer.",
+                        "healing_emotion": "Benevolência e Fluxo"
+                    }
+                },
+                {
+                    "id": "temples",
+                    "name": "Têmporas",
+                    "symptom_match": [
+                        "Veias saltadas",
+                        "Dor de cabeça lateral"
+                    ],
+                    "translation": {
+                        "root_emotion": "Raiva reprimida",
+                        "message": "Decisões que você não quer tomar mas se sente forçado.",
+                        "healing_emotion": "Planejamento flexível"
+                    }
+                }
+            ]
+        },
+        "fire": {
+            "name": "Fogo",
+            "color": "#E57373",
+            "organs": [
+                "Coração",
+                "Intestino Delgado"
+            ],
+            "facial_zones": [
+                {
+                    "id": "nose_tip",
+                    "name": "Ponta do Nariz",
+                    "symptom_match": [
+                        "Vermelhidão",
+                        "Dilatação de poros"
+                    ],
+                    "translation": {
+                        "root_emotion": "Ansiedade / Euforia",
+                        "message": "Seu coração está acelerado buscando aprovação ou resultados imediatos.",
+                        "healing_emotion": "Alegria Serena"
+                    }
+                },
+                {
+                    "id": "chin",
+                    "name": "Queixo (Hormonal)",
+                    "symptom_match": [
+                        "Espinhas",
+                        "Manchas"
+                    ],
+                    "translation": {
+                        "root_emotion": "Agitação Mental",
+                        "message": "Desconexão com seus instintos básicos por excesso de racionalização.",
+                        "healing_emotion": "Paz Interior"
+                    }
+                }
+            ]
+        },
+        "earth": {
+            "name": "Terra",
+            "color": "#FFD54F",
+            "organs": [
+                "Estômago",
+                "Baço"
+            ],
+            "facial_zones": [
+                {
+                    "id": "cheekbones",
+                    "name": "Maçãs do Rosto",
+                    "symptom_match": [
+                        "Manchas",
+                        "Inchaço",
+                        "Flacidez"
+                    ],
+                    "translation": {
+                        "root_emotion": "Preocupação / Obsessão",
+                        "message": "Pensamento circular. Você não está conseguindo 'digerir' a vida.",
+                        "healing_emotion": "Confiança e Estabilidade"
+                    }
+                }
+            ]
+        },
+        "metal": {
+            "name": "Metal",
+            "color": "#B0BEC5",
+            "organs": [
+                "Pulmão",
+                "Intestino Grosso"
+            ],
+            "facial_zones": [
+                {
+                    "id": "cheeks_side",
+                    "name": "Bochechas Laterais",
+                    "symptom_match": [
+                        "Palidez",
+                        "Pele seca",
+                        "Vazio"
+                    ],
+                    "translation": {
+                        "root_emotion": "Tristeza / Melancolia",
+                        "message": "Dificuldade em soltar o passado ou perdoar.",
+                        "healing_emotion": "Coragem e Desapego"
+                    }
+                }
+            ]
+        },
+        "water": {
+            "name": "Água",
+            "color": "#546E7A",
+            "organs": [
+                "Rins",
+                "Bexiga"
+            ],
+            "facial_zones": [
+                {
+                    "id": "undereyes",
+                    "name": "Olheiras",
+                    "symptom_match": [
+                        "Escurecimento",
+                        "Bolsas",
+                        "Profundidade"
+                    ],
+                    "translation": {
+                        "root_emotion": "Medo / Insegurança",
+                        "message": "Esgotamento da energia vital. Medo do futuro ou de faltar algo.",
+                        "healing_emotion": "Sabedoria e Vontade"
+                    }
+                },
+                {
+                    "id": "jawline",
+                    "name": "Linha da Mandíbula",
+                    "symptom_match": [
+                        "Acne cística",
+                        "Tensão muscular"
+                    ],
+                    "translation": {
+                        "root_emotion": "Medo paralisante",
+                        "message": "Medo de perder o controle ou de não ser capaz de se sustentar.",
+                        "healing_emotion": "Fluidez"
+                    }
+                }
+            ]
+        }
+    }
+}
