@@ -63,6 +63,23 @@ export default async function Home() {
             </CardContent>
           </Card>
 
+          {/* Card Diário das Emoções */}
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 border-transparent hover:border-zinc-200 dark:hover:border-zinc-700">
+            <CardHeader>
+              <CardTitle className="flex items-center justify-center gap-2">
+                <span>📅</span> Diário das Emoções
+              </CardTitle>
+              <CardDescription>
+                Registre como você se sente hoje.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button asChild className="w-full" variant="secondary">
+                <Link href="/diario">Fazer Check-in</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
           {/* Card Diagnóstico (Wizard) */}
           <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 border-transparent hover:border-zinc-200 dark:hover:border-zinc-700">
             <CardHeader>
