@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { getMonthlyMoods } from './history-actions'
-import { ptBR } from 'date-fns/locale'
+import { ptBR } from 'date-fns/locale/pt-BR'
 
 type Entry = {
     entry_date: string
@@ -39,11 +39,11 @@ export function DiaryHistory() {
     }
 
     return (
-        <Card className="mt-8">
-            <CardHeader>
-                <CardTitle>Seu Histórico</CardTitle>
+        <Card className="glass border-white/20 rounded-[2.5rem] shadow-xl overflow-hidden animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
+            <CardHeader className="text-center pt-8 border-b border-foreground/5">
+                <CardTitle className="text-xl font-serif">Sua Constelação de Emoções</CardTitle>
             </CardHeader>
-            <CardContent className="flex justify-center">
+            <CardContent className="flex flex-col items-center p-8">
                 <Calendar
                     mode="single"
                     selected={date}
@@ -51,9 +51,18 @@ export function DiaryHistory() {
                     locale={ptBR}
                     modifiers={modifiers}
                     modifiersStyles={modifiersStyles}
-                    className="rounded-md border"
+                    className="p-4 bg-white/30 rounded-3xl border border-white/40 shadow-inner"
                 />
-                {/* Detail view for selected date could go here */}
+                <div className="mt-8 flex gap-6 text-[10px] uppercase tracking-[0.2em] font-bold text-foreground/30">
+                    <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-primary" />
+                        Houve Registro
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-wellness-gold" />
+                        Dia Selecionado
+                    </div>
+                </div>
             </CardContent>
         </Card>
     )

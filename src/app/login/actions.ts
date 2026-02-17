@@ -16,9 +16,16 @@ export async function login(prevState: any, formData: FormData) {
     })
 
     if (error) {
-        return { message: 'Credenciais inválidas. Tente novamente.' }
+        console.error('Login error:', error)
+        return { message: error.message }
     }
 
     revalidatePath('/', 'layout')
     redirect('/')
+}
+
+export async function signOut() {
+    const supabase = createClient()
+    await (await supabase).auth.signOut()
+    redirect('/login')
 }

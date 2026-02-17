@@ -2,20 +2,147 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 40 20% 97%;
+    /* #F9F6F1 */
+    --foreground: 160 8% 18%;
+    /* #2C3330 */
+
+    --card: 0 0% 100%;
+    --card-foreground: 160 8% 18%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 160 8% 18%;
+
+    --primary: 153 8% 52%;
+    /* Sage #7D9085 */
+    --primary-foreground: 40 20% 97%;
+
+    --secondary: 34 25% 71%;
+    /* Earth #C9B7A2 */
+    --secondary-foreground: 160 8% 18%;
+
+    --muted: 40 10% 90%;
+    --muted-foreground: 160 5% 45%;
+
+    --accent: 46 65% 52%;
+    /* Gold #D4AF37 */
+    --accent-foreground: 40 20% 97%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 153 5% 85%;
+    --input: 153 5% 85%;
+    --ring: 153 8% 52%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 160 15% 8%;
+    /* #121815 */
+    --foreground: 40 20% 97%;
+
+    --card: 160 15% 10%;
+    --card-foreground: 40 20% 97%;
+
+    --popover: 160 15% 10%;
+    --popover-foreground: 40 20% 97%;
+
+    --primary: 153 10% 65%;
+    --primary-foreground: 160 15% 8%;
+
+    --secondary: 34 15% 61%;
+    --secondary-foreground: 40 20% 97%;
+
+    --muted: 160 10% 15%;
+    --muted-foreground: 160 5% 65%;
+
+    --accent: 46 65% 64%;
+    --accent-foreground: 160 15% 8%;
+
+    --border: 160 10% 18%;
+    --input: 160 10% 18%;
+    --ring: 153 10% 65%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: system-ui, -apple-system, sans-serif;
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary/20;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+.glass {
+  @apply bg-white/40 backdrop-blur-md border border-white/20 shadow-xl;
+}
+
+.dark .glass {
+  @apply bg-black/40 backdrop-blur-md border border-white/10 shadow-2xl;
+}
+
+.mesh-gradient {
+  background-color: hsla(40, 20%, 97%, 1);
+  background-image:
+    radial-gradient(at 0% 0%, hsla(153, 8%, 85%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(34, 25%, 85%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(46, 65%, 90%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(153, 20%, 90%, 0.5) 0px, transparent 50%);
+}
+
+.dark .mesh-gradient {
+  background-color: hsla(160, 15%, 8%, 1);
+  background-image:
+    radial-gradient(at 0% 0%, hsla(153, 20%, 15%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(34, 15%, 15%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(46, 35%, 15%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(153, 15%, 15%, 0.5) 0px, transparent 50%);
+}
+
+/* Safe Space Animations */
+@keyframes breathe {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-breathe {
+  animation: breathe 8s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1s ease-out forwards;
+}
+
+.delay-1000 {
+  animation-delay: 1000ms;
+}
+
+.delay-3000 {
+  animation-delay: 3000ms;
+}
+
+.delay-5000 {
+  animation-delay: 5000ms;
 }
