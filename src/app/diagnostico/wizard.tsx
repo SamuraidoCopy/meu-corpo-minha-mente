@@ -1,24 +1,29 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { TCM_QUESTIONS, ELEMENTS, ElementType } from '@/lib/tcm-data'
+import { getTcmQuestions, ELEMENTS, ElementType } from '@/lib/tcm-data'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { saveDiagnosis } from './actions'
 import { useRouter } from 'next/navigation'
 
-export function DiagnosisWizard() {
+interface DiagnosisWizardProps {
+    userGender?: string
+}
+
+export function DiagnosisWizard({ userGender = 'Feminino' }: DiagnosisWizardProps) {
     const router = useRouter()
+    const questions = getTcmQuestions(userGender)
     const [currentStep, setCurrentStep] = useState(0)
     const [answers, setAnswers] = useState<Record<string, number>>({}) // element -> score
     const [showResult, setShowResult] = useState(false)
     const [resultElement, setResultElement] = useState<ElementType | null>(null)
     const [isPending, startTransition] = useTransition()
 
-    const progress = ((currentStep) / TCM_QUESTIONS.length) * 100
+    const progress = ((currentStep) / questions.length) * 100
 
     const handleAnswer = (yes: boolean) => {
-        const question = TCM_QUESTIONS[currentStep]
+        const question = questions[currentStep]
 
         if (yes) {
             setAnswers(prev => ({
@@ -27,7 +32,7 @@ export function DiagnosisWizard() {
             }))
         }
 
-        if (currentStep < TCM_QUESTIONS.length - 1) {
+        if (currentStep < questions.length - 1) {
             setCurrentStep(prev => prev + 1)
         } else {
             finishDiagnosis()
@@ -108,7 +113,7 @@ export function DiagnosisWizard() {
         )
     }
 
-    const question = TCM_QUESTIONS[currentStep]
+    const question = questions[currentStep]
 
     return (
         <div className="max-w-2xl mx-auto space-y-12">
@@ -116,7 +121,7 @@ export function DiagnosisWizard() {
                 <div className="flex justify-between items-end">
                     <div className="space-y-1">
                         <p className="text-[10px] uppercase tracking-widest text-foreground/40 font-bold">Progresso</p>
-                        <p className="text-xl font-serif text-primary">{currentStep + 1} <span className="text-sm text-foreground/30">de {TCM_QUESTIONS.length}</span></p>
+                        <p className="text-xl font-serif text-primary">{currentStep + 1} <span className="text-sm text-foreground/30">de {questions.length}</span></p>
                     </div>
                     <span className="text-xs font-bold text-foreground/20">{Math.round(progress)}%</span>
                 </div>

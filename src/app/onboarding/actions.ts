@@ -15,10 +15,15 @@ export async function completeOnboarding(prevState: any, formData: FormData) {
     const age = parseInt(formData.get('age') as string)
     const history = formData.get('history') as string
     const fullName = formData.get('fullName') as string
+    const gender = formData.get('gender') as string
 
     // Validate inputs
     if (!fullName || fullName.trim().length < 3) {
         return { message: 'Por favor, informe seu nome completo.' }
+    }
+
+    if (!gender) {
+        return { message: 'Por favor, informe como você se identifica.' }
     }
 
     if (!age || isNaN(age) || age < 10 || age > 100) {
@@ -35,6 +40,7 @@ export async function completeOnboarding(prevState: any, formData: FormData) {
             age,
             history,
             full_name: fullName,
+            gender: gender,
             onboarding_completed: true,
             updated_at: new Date().toISOString(),
         })

@@ -146,3 +146,49 @@
 .delay-5000 {
   animation-delay: 5000ms;
 }
+
+/* Element Mesh Backgrounds */
+.mesh-fogo {
+  background-color: hsla(15, 80%, 97%, 1);
+  background-image:
+    radial-gradient(at 0% 0%, hsla(15, 80%, 90%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(35, 90%, 85%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(0, 70%, 95%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(20, 85%, 90%, 0.5) 0px, transparent 50%);
+}
+
+.mesh-terra {
+  background-color: hsla(40, 60%, 97%, 1);
+  background-image:
+    radial-gradient(at 0% 0%, hsla(40, 60%, 85%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(30, 70%, 80%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(50, 50%, 90%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(35, 65%, 85%, 0.5) 0px, transparent 50%);
+}
+
+.mesh-madeira {
+  background-color: hsla(150, 60%, 97%, 1);
+  background-image:
+    radial-gradient(at 0% 0%, hsla(150, 60%, 90%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(160, 50%, 85%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(140, 70%, 95%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(155, 65%, 85%, 0.5) 0px, transparent 50%);
+}
+
+.mesh-metal {
+  background-color: hsla(210, 20%, 97%, 1);
+  background-image:
+    radial-gradient(at 0% 0%, hsla(210, 20%, 90%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(220, 15%, 85%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(200, 25%, 95%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(215, 20%, 85%, 0.5) 0px, transparent 50%);
+}
+
+.mesh-agua {
+  background-color: hsla(210, 80%, 97%, 1);
+  background-image:
+    radial-gradient(at 0% 0%, hsla(200, 80%, 90%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(220, 90%, 85%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(210, 70%, 95%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(230, 85%, 90%, 0.5) 0px, transparent 50%);
+}

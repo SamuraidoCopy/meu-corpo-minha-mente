@@ -6,9 +6,10 @@ import { cn } from "@/lib/utils"
 interface SafeSpaceTransitionProps {
     onComplete: () => void;
     isProcessing?: boolean;
+    userGender?: string;
 }
 
-export function SafeSpaceTransition({ onComplete, isProcessing }: SafeSpaceTransitionProps) {
+export function SafeSpaceTransition({ onComplete, isProcessing, userGender = 'Feminino' }: SafeSpaceTransitionProps) {
     const [step, setStep] = useState(0)
     const [animationDone, setAnimationDone] = useState(false)
 
@@ -51,7 +52,7 @@ export function SafeSpaceTransition({ onComplete, isProcessing }: SafeSpaceTrans
                         "text-3xl md:text-4xl font-serif text-wellness-sage italic transition-all duration-1000 delay-300",
                         step >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
                     )}>
-                        Agora você está segura.
+                        Agora você está segur{userGender === 'Masculino' ? 'o' : 'a'}.
                     </h2>
 
                     <h3 className={cn(

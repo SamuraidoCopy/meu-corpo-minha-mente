@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { SafeSpaceTransition } from "@/components/onboarding/safe-space-transition"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const initialState = {
     message: '',
@@ -36,7 +37,8 @@ export function OnboardingForm() {
     }
 
     if (showTransition) {
-        return <SafeSpaceTransition onComplete={handleTransitionComplete} isProcessing={isPending} />
+        const selectedGender = formData?.get('gender')?.toString() || 'Feminino'
+        return <SafeSpaceTransition onComplete={handleTransitionComplete} isProcessing={isPending} userGender={selectedGender} />
     }
 
     return (
@@ -48,10 +50,25 @@ export function OnboardingForm() {
                 <Input
                     id="fullName"
                     name="fullName"
-                    placeholder="Como gostaria de ser chamada?"
+                    placeholder="Como gostaria de ser chamado(a)?"
                     required
                     className="bg-white/50 border-white/30 focus:border-wellness-sage/50 focus:ring-4 focus:ring-wellness-sage/10 transition-all rounded-xl h-14 text-lg"
                 />
+            </div>
+
+            <div className="grid gap-2">
+                <Label htmlFor="gender" className="text-xs uppercase tracking-widest text-foreground/50 font-medium ml-1">
+                    Como você se identifica?
+                </Label>
+                <Select name="gender" required>
+                    <SelectTrigger className="h-14 rounded-xl bg-white/50 border-white/30 focus:border-wellness-sage/50 focus:ring-4 focus:ring-wellness-sage/10 transition-all text-lg">
+                        <SelectValue placeholder="Selecione..." />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl border-white/30 bg-white/90 shadow-2xl">
+                        <SelectItem value="Feminino" className="py-3 focus:bg-wellness-sage/10">Feminino</SelectItem>
+                        <SelectItem value="Masculino" className="py-3 focus:bg-wellness-sage/10">Masculino</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
 
             <div className="grid gap-2">

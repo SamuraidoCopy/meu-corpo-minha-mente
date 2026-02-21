@@ -7,10 +7,11 @@ import { cn } from '@/lib/utils'
 interface FacialMapProps {
     onSelectZone: (zone: FacialZone) => void;
     selectedZoneId?: string | null;
+    gender?: 'Feminino' | 'Masculino';
     className?: string;
 }
 
-export function FacialMap({ onSelectZone, selectedZoneId, className }: FacialMapProps) {
+export function FacialMap({ onSelectZone, selectedZoneId, gender = 'Feminino', className }: FacialMapProps) {
     return (
         <div className={cn("relative w-full max-w-[320px] mx-auto aspect-[3/4]", className)}>
             <svg
@@ -18,13 +19,20 @@ export function FacialMap({ onSelectZone, selectedZoneId, className }: FacialMap
                 className="w-full h-full drop-shadow-2xl overflow-visible"
                 xmlns="http://www.w3.org/2000/svg"
             >
-                {/* Face Outline - Generic - More elegant and soft */}
-                <ellipse
-                    cx="150" cy="200" rx="130" ry="180"
-                    fill="#F2E8E4"
-                    stroke="#D4B5A2"
-                    strokeWidth="1"
-                    className="animate-in fade-in zoom-in-90 duration-1000 ease-out"
+                <defs>
+                    <clipPath id="face-clip">
+                        <rect x="0" y="0" width="300" height="400" rx="150" ry="200" />
+                    </clipPath>
+                </defs>
+
+                {/* Real Face Image */}
+                <image
+                    href={gender === 'Masculino' ? '/images/rosto_masculino.png' : '/images/rosto_feminino.png'}
+                    x="0" y="0" width="300" height="400"
+                    preserveAspectRatio="xMidYMid slice"
+                    clipPath="url(#face-clip)"
+                    className="animate-in fade-in zoom-in-95 duration-1000 ease-out opacity-90 transition-all duration-700 delay-100"
+                    style={{ transitionProperty: 'background-image, opacity' }}
                 />
 
                 {/* Zones */}
@@ -47,6 +55,6 @@ export function FacialMap({ onSelectZone, selectedZoneId, className }: FacialMap
                     )
                 })}
             </svg>
-        </div>
+        </div >
     )
 }

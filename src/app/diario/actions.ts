@@ -15,6 +15,7 @@ export async function saveDiaryEntry(prevState: any, formData: FormData) {
     const notes = formData.get('notes') as string
     const symptoms = formData.get('symptoms') as string
     const date = formData.get('date') as string || new Date().toISOString().split('T')[0]
+    const did_breathing_exercise = formData.get('did_breathing_exercise') === 'true'
 
     const { error } = await (await supabase)
         .from('diary_entries')
@@ -26,6 +27,7 @@ export async function saveDiaryEntry(prevState: any, formData: FormData) {
             mood,
             notes,
             symptoms,
+            did_breathing_exercise,
             created_at: new Date().toISOString()
         }, { onConflict: 'user_id, entry_date' })
 

@@ -11,7 +11,7 @@ export function LoginContent() {
             <Card className="glass border-white/20">
                 <CardHeader className="text-center">
                     <CardTitle className="text-3xl font-serif text-foreground/90">
-                        Bem-vinda
+                        Boas-vindas
                     </CardTitle>
                     <CardDescription className="text-foreground/60">
                         Sua jornada de equilíbrio e autoconhecimento começa aqui.
