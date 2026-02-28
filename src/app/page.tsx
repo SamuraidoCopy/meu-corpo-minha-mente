@@ -17,6 +17,13 @@ const IconMap = {
   TreePine: WoodIcon,
 }
 
+const DICAS_DA_DOUTORA = [
+  "Lembre-se: seu fígado precisa de movimento e seu coração de pausas. Respire fundo e traga a atenção para o agora. — Dra. Ranieli & Dra. Cleucia",
+  "O corpo nunca mente. Quando a mente tenta disfarçar a exaustão, ele nos avisa através dos pequenos sinais. Honre seu cansaço. — Dra. Ranieli & Dra. Cleucia",
+  "A verdadeira saúde não é a ausência perfeita de desequilíbrios, mas a resiliência para voltar ao seu eixo. Você está no caminho seguro. — Dra. Ranieli & Dra. Cleucia",
+  "Observe seu corpo sem julgamentos. Cada sintoma é apenas um mensageiro tentando te proteger. Ouça-o com amor e compaixão. — Dra. Ranieli & Dra. Cleucia"
+];
+
 export default async function Home() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -111,7 +118,7 @@ export default async function Home() {
                 <h2 className="text-3xl font-serif text-foreground/80 italic">Ainda não encontramos sua Raiz.</h2>
                 <p className="text-foreground/50 max-w-md mx-auto">Complete sua investigação inicial para descobrir seu elemento dominante e começar a equilibrar seu corpo e mente.</p>
                 <Button asChild className="h-14 px-10 rounded-full text-lg shadow-xl shadow-primary/20 bg-primary">
-                  <Link href="/diagnostico">Iniciar Investigação</Link>
+                  <Link href="/mapa">Iniciar Investigação</Link>
                 </Button>
               </div>
             )}
@@ -166,9 +173,9 @@ export default async function Home() {
 
             <div className="p-8 rounded-3xl bg-primary text-white shadow-xl shadow-primary/30 relative overflow-hidden">
               <div className="absolute top-[-20%] right-[-20%] w-[60%] h-[60%] bg-white/10 rounded-full blur-2xl" />
-              <h3 className="text-xl font-serif relative z-10 mb-2 italic">Dica da Dra.</h3>
+              <h3 className="text-xl font-serif relative z-10 mb-2 italic">Dica das Doutoras</h3>
               <p className="text-sm text-white/80 relative z-10 leading-relaxed">
-                "O equilíbrio não é um destino, mas uma prática diária. Ouça o que seu corpo diz hoje."
+                &quot;{DICAS_DA_DOUTORA[Math.floor(Math.random() * DICAS_DA_DOUTORA.length)]}&quot;
               </p>
             </div>
           </div>

@@ -19,6 +19,7 @@ export interface ElementInfo {
     organ: string;
     emotion: string;
     description: string;
+    reflectionQuestions: string[];
 }
 
 export const ELEMENTS: Record<ElementType, ElementInfo> = {
@@ -42,6 +43,10 @@ export const ELEMENTS: Record<ElementType, ElementInfo> = {
         organ: 'Fígado/Vesícula',
         emotion: 'Raiva/Frustração',
         description: 'Associada ao crescimento, planejamento e visão. Em desequilíbrio, gera estagnação, irritabilidade e tensão muscular.',
+        reflectionQuestions: [
+            'Pense nas situações que recentemente serviram de gatilho para sua raiva ou frustração. Há um padrão?',
+            'Como você lida com imprevistos? O excesso de controle tem gerado tensão no seu corpo?'
+        ],
     },
     Fogo: {
         name: 'Fogo',
@@ -63,6 +68,10 @@ export const ELEMENTS: Record<ElementType, ElementInfo> = {
         organ: 'Coração/Intestino Delgado',
         emotion: 'Ansiedade/Euforia',
         description: 'Rege a mente (Shen) e a circulação. Em desequilíbrio, causa insônia, agitação e palpitações.',
+        reflectionQuestions: [
+            'Quais ambientes ou situações disparam sua ansiedade e aceleram seu coração?',
+            'A que ritmo sua mente está trabalhando? A agitação excessiva tem atrapalhado seu repouso?'
+        ],
     },
     Terra: {
         name: 'Terra',
@@ -84,6 +93,10 @@ export const ELEMENTS: Record<ElementType, ElementInfo> = {
         organ: 'Baço/Estômago',
         emotion: 'Preocupação/Pensamento Excessivo',
         description: 'Responsável pela digestão física e mental. O desequilíbrio traz cansaço, obsessão e problemas digestivos.',
+        reflectionQuestions: [
+            'Você tem remoído problemas do passado ou preocupações do futuro repetidamente?',
+            'Qual situação atual está difícil de "digerir" e tem sugado a sua energia mental?'
+        ],
     },
     Metal: {
         name: 'Metal',
@@ -105,6 +118,10 @@ export const ELEMENTS: Record<ElementType, ElementInfo> = {
         organ: 'Pulmão/Intestino Grosso',
         emotion: 'Tristeza/Apego',
         description: 'Ligado à defesa (imunidade) e ao deixar ir. Desequilíbrios geram baixa imunidade, tristeza profunda e problemas de pele.',
+        reflectionQuestions: [
+            'Há alguma situação, pessoa ou sentimento que você está tendo grande dificuldade em deixar ir?',
+            'Você tem sentido dificuldade em estabelecer limites de proteção e dizer "não"?'
+        ],
     },
     Água: {
         name: 'Água',
@@ -126,6 +143,10 @@ export const ELEMENTS: Record<ElementType, ElementInfo> = {
         organ: 'Rins/Bexiga',
         emotion: 'Medo/Insegurança',
         description: 'A reserva de energia vital ("bateria"). O desequilíbrio afeta a disposição, a libido e gera medos paralisantes.',
+        reflectionQuestions: [
+            'Quais medos profundos ou inseguranças estão limitando as suas decisões neste momento?',
+            'Você sente que exigiu além da conta da sua "bateria vital" sem recarregá-la adequadamente?'
+        ],
     },
 };
 
@@ -137,69 +158,76 @@ export interface FacialZone {
     description: string;
 }
 
-// Mapeamento Simplificado para MVP (ViewBox 0 0 300 400)
 export const FACIAL_ZONES: FacialZone[] = [
     {
-        id: 'testa',
-        name: 'Testa (Coração/Shen)',
+        id: 'testa_centro',
+        name: 'Centro da Testa (Intestino Delgado)',
         element: 'Fogo',
-        // Top area of face
-        svgPath: 'M 50,110 C 50,60 100,30 150,30 C 200,30 250,60 250,110 Z',
-        description: 'A testa reflete o estado do Coração e da mente (Shen). Marcas aqui indicam excesso de atividade mental ou ansiedade.',
+        svgPath: 'M 110,50 L 190,50 L 175,100 L 150,120 L 125,100 Z',
+        description: 'Conectada ao Intestino Delgado e Coração. Vermelhidão ou acne aqui podem indicar calor emocional, ansiedade ou problemas digestivos de absorção.',
+    },
+    {
+        id: 'testa_laterais',
+        name: 'Laterais da Testa (Bexiga)',
+        element: 'Água',
+        svgPath: 'M 60,70 L 110,50 L 125,100 L 80,110 Z M 240,70 L 190,50 L 175,100 L 220,110 Z',
+        description: 'Relacionada à Bexiga e vias urinárias. O Meridiano da Bexiga afeta o sistema nervoso. Tensão aponta para estresse crônico.',
     },
     {
         id: 'sobrancelhas',
+        name: 'Arcos das Sobrancelhas (Coração)',
+        element: 'Fogo',
+        svgPath: 'M 70,125 Q 105,105 135,120 Q 105,135 70,125 Z M 230,125 Q 195,105 165,120 Q 195,135 230,125 Z',
+        description: 'Sinaliza palpitações, insônia ou forte oscilação emocional ligada ao Shen (Mente) e ao Coração.',
+    },
+    {
+        id: 'ponto_figado',
         name: 'Entre Sobrancelhas (Fígado)',
         element: 'Madeira',
-        // Small area between eyebrows
-        svgPath: 'M 130,130 L 170,130 L 170,160 L 130,160 Z',
-        description: 'A "sede do governo". Linhas verticais aqui (ruga do leão) indicam frustração acumulada ou fígado sobrecarregado.',
+        svgPath: 'M 140, 120 A 10,10 0 1,1 140,140 A 10,10 0 1,1 140,120', // Literal centered circle
+        description: 'Conhecido como o assento da mente. Linhas verticais aqui (ruga do leão) indicam raiva retida, frustração excessiva ou fígado sobrecarregado.',
     },
     {
-        id: 'olhos_esq',
-        name: 'Olho Esquerdo',
+        id: 'temporas',
+        name: 'Laterais dos Olhos (Vesícula Biliar)',
         element: 'Madeira',
-        svgPath: 'M 60,160 Q 90,140 120,160 Q 90,180 60,160 Z',
-        description: 'O Fígado "abre-se nos olhos". Olheiras e bolsas também se relacionam aos Rins.',
+        svgPath: 'M 35, 125 A 10,10 0 1,1 35,145 A 10,10 0 1,1 35,125 M 245, 125 A 10,10 0 1,1 245,145 A 10,10 0 1,1 245,125', // Two prominent dots
+        description: 'Ligadas à Vesícula Biliar (decisão e coragem). Dor de cabeça temporal reflete estagnação do Qi do Fígado/Vesícula.',
     },
     {
-        id: 'olhos_dir',
-        name: 'Olho Direito',
-        element: 'Madeira',
-        svgPath: 'M 180,160 Q 210,140 240,160 Q 210,180 180,160 Z',
-        description: 'O Fígado "abre-se nos olhos". Olheiras e bolsas também se relacionam aos Rins.',
-    },
-    {
-        id: 'nariz',
-        name: 'Nariz (Baço/Estômago)',
-        element: 'Terra',
-        // Central nose area
-        svgPath: 'M 130,160 L 170,160 L 180,240 L 120,240 Z',
-        description: 'Reflete o Baço e Estômago. Vermelhidão ou espinhas aqui podem indicar calor no estômago.',
-    },
-    {
-        id: 'bochecha_esq',
-        name: 'Bochecha Esquerda (Fígado)',
-        element: 'Madeira',
-        // Left cheek (visual left)
-        svgPath: 'M 50,180 L 110,180 L 100,260 L 50,240 Z',
-        description: 'Ligada ao Fígado. Manchas ou acne aqui podem indicar estagnação de Qi.',
-    },
-    {
-        id: 'bochecha_dir',
-        name: 'Bochecha Direita (Pulmão)',
-        element: 'Metal',
-        // Right cheek
-        svgPath: 'M 190,180 L 250,180 L 250,240 L 200,260 Z',
-        description: 'Ligada ao Pulmão. Problemas aqui podem indicar tristeza ou baixa imunidade.',
-    },
-    {
-        id: 'boca',
-        name: 'Boca e Queixo (Rins)',
+        id: 'olheiras',
+        name: 'Abaixo dos Olhos (Rins)',
         element: 'Água',
-        // Bottom area including mouth
-        svgPath: 'M 110,280 L 190,280 L 180,350 Q 150,380 120,350 Z',
-        description: 'Reflete o sistema Reprodutor e Rins (Hormonal). Acne hormonal é comum aqui.',
+        svgPath: 'M 50,150 C 80,185 130,185 145,150 C 130,195 80,195 50,150 Z M 250,150 C 220,185 170,185 155,150 C 170,195 220,195 250,150 Z M 65,150 Q 100,170 120,150 Q 100,180 65,150 Z M 235,150 Q 200,170 180,150 Q 200,180 235,150 Z',
+        description: 'Os Rins guardam a energia vital. Escurecimento profundo (olheiras) indica exaustão celular, falta de sono reparador ou grande medo.',
+    },
+    {
+        id: 'bochechas_superiores',
+        name: 'Bochechas Superiores (Estômago)',
+        element: 'Terra',
+        svgPath: 'M 75,185 Q 100,200 125,185 L 125,230 Q 95,230 75,210 Z M 225,185 Q 200,200 175,185 L 175,230 Q 205,230 225,210 Z', // Smaller, closer to nose 
+        description: 'Reflete como "digerimos" os alimentos e pensamentos. Espinhas ou vermelhidão excessiva aqui mostram Calor (inflamação) no Estômago.',
+    },
+    {
+        id: 'bochechas_inferiores',
+        name: 'Bochechas Inferiores (Pulmão)',
+        element: 'Metal',
+        svgPath: 'M 55,210 Q 80,240 118,245 L 115,310 Q 60,290 55,210 Z M 245,210 Q 220,240 182,245 L 185,310 Q 240,290 245,210 Z',
+        description: 'Ligado aos Pulmões, à imunidade, tristeza profunda e melancolia. Marcas persistentes podem indicar baixa defesa energética.',
+    },
+    {
+        id: 'hormonal',
+        name: 'Nariz a Queixo (Problemas Hormonais)',
+        element: 'Fogo',
+        svgPath: 'M 135,170 L 165,170 L 185,320 Q 150,360 115,320 Z',
+        description: 'Área governada pelo fogo sexual e eixo endócrino. Cravos e acne cíclica evidenciam desequilíbrios hormonais, SOP, estresse reprodutivo.',
+    },
+    {
+        id: 'pescoco',
+        name: 'Linha do Pescoço (Intestino Grosso)',
+        element: 'Metal',
+        svgPath: 'M 100,340 Q 100,390 150,400 Q 200,390 200,340 C 190,370 150,380 110,340 Z',
+        description: 'Reflete a retenção de toxinas e o Intestino Grosso (dificuldade de desapegar). A congestão linfática evidencia o bloqueio no fluxo.',
     },
 ];
 

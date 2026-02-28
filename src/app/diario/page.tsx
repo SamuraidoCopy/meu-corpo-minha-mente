@@ -18,11 +18,13 @@ export default async function DiarioPage() {
 
     const { data: profile } = await (await supabase)
         .from('profiles')
-        .select('gender')
+        .select('gender, full_name, avatar_url')
         .eq('id', user.id)
         .single()
 
     const userGender = profile?.gender || 'Feminino'
+    const fullName = profile?.full_name || user.user_metadata.full_name || 'Usuário'
+    const avatarUrl = profile?.avatar_url || user.user_metadata.avatar_url || ''
 
     const todayDay = format(new Date(), "d", { locale: ptBR })
     const todayMonth = format(new Date(), "MMMM", { locale: ptBR })
@@ -69,7 +71,7 @@ export default async function DiarioPage() {
 
                     <section className="space-y-6">
                         <h2 className="text-xs uppercase tracking-widest text-foreground/40 font-bold ml-6 italic">Sua Jornada Recente</h2>
-                        <DiaryHistory />
+                        <DiaryHistory userName={fullName} userAvatar={avatarUrl} />
                     </section>
                 </div>
 

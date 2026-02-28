@@ -4,7 +4,9 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
-export default async function DiagnosticoPage() {
+import { ElementType } from '@/lib/tcm-data'
+
+export default async function DiagnosticoPage({ searchParams }: { searchParams: Promise<{ element?: string }> }) {
     const supabase = createClient()
     const { data: { user } } = await (await supabase).auth.getUser()
 
@@ -14,9 +16,13 @@ export default async function DiagnosticoPage() {
 
     const { data: profile } = await (await supabase)
         .from('profiles')
-        .select('gender')
+        .select('gender, dominant_element')
         .eq('id', user.id)
         .single()
+
+    const resolvedParams = await searchParams
+    const initialElement = resolvedParams?.element as ElementType | undefined
+    const hasCompletedInitialDiagnosis = !!profile?.dominant_element
 
     return (
         <main className="min-h-screen pt-32 pb-16 px-6 relative overflow-hidden flex flex-col items-center">
@@ -41,11 +47,15 @@ export default async function DiagnosticoPage() {
                     <p className="text-xs uppercase tracking-[0.3em] font-bold text-foreground/40">INVESTIGAÇÃO GUIADA</p>
                     <h1 className="text-6xl font-serif text-foreground/90 leading-tight">O Silêncio dos <span className="italic text-primary">Sintomas</span></h1>
                     <p className="text-foreground/50 text-lg max-w-xl mx-auto italic">
-                        "O que o corpo não fala, o sintoma grita. Responda com a verdade do seu momento."
+                        &quot;O que o corpo não fala, o sintoma grita. Responda com a verdade do seu momento.&quot;
                     </p>
                 </header>
 
-                <DiagnosisWizard userGender={profile?.gender || 'Feminino'} />
+                <DiagnosisWizard
+                    userGender={profile?.gender}
+                    initialElement={initialElement}
+                    hasCompletedInitialDiagnosis={hasCompletedInitialDiagnosis}
+                />
 
                 <footer className="mt-16 text-center">
                     <Button variant="ghost" className="text-foreground/30 hover:text-foreground/60 transition-colors" asChild>

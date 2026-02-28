@@ -8,7 +8,39 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Button } from "@/components/ui/button"
 
 export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Feminino' }) {
-    const [selectedZone, setSelectedZone] = useState<FacialZone | null>(null)
+    const [selectedZones, setSelectedZones] = useState<FacialZone[]>([])
+
+    const handleToggleZone = (zone: FacialZone) => {
+        setSelectedZones(prev => {
+            const exists = prev.find(z => z.id === zone.id)
+            if (exists) {
+                return prev.filter(z => z.id !== zone.id)
+            } else {
+                setTimeout(() => {
+                    document.getElementById('info-panel')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+                }, 100)
+                return [...prev, zone]
+            }
+        })
+    }
+
+    const dominantElementInfo = (() => {
+        if (selectedZones.length === 0) return null;
+        const counts = selectedZones.reduce((acc, zone) => {
+            acc[zone.element] = (acc[zone.element] || 0) + 1;
+            return acc;
+        }, {} as Record<string, number>);
+
+        let dominant = selectedZones[0].element;
+        let max = 0;
+        for (const [el, count] of Object.entries(counts)) {
+            if (count > max) {
+                max = count;
+                dominant = el as keyof typeof ELEMENTS;
+            }
+        }
+        return ELEMENTS[dominant];
+    })();
 
     return (
         <main className="flex flex-col lg:flex-row min-h-screen items-center justify-center pt-32 pb-10 px-6 lg:px-20 gap-12 relative overflow-hidden bg-gradient-to-br from-background via-background to-wellness-sage/5">
@@ -53,15 +85,15 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
                     <p
                         className="text-foreground/70 text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 animate-in fade-in slide-in-from-bottom-2 duration-700 delay-400 fill-mode-backwards mb-8"
                     >
-                        Seu rosto é um mapa da sua saúde interna. Toque nas áreas que apresentam sinais para revelar a origem emocional e física.
+                        Seu rosto é um mapa da sua saúde interna. <span className="font-semibold text-primary">Selecione uma ou mais áreas</span> que apresentam sinais (manchas, cor, linhas profundas) para revelar a origem.
                     </p>
                 </header>
 
                 <div className="glass rounded-[3rem] shadow-2xl p-8 lg:p-12 border-white/50 bg-white/20 backdrop-blur-md w-full max-w-lg mb-8 relative group cursor-pointer lg:hover:scale-[1.02] transition-transform duration-500 animate-in fade-in zoom-in-95 duration-1000 delay-600 fill-mode-backwards">
                     <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     <FacialMap
-                        onSelectZone={setSelectedZone}
-                        selectedZoneId={selectedZone?.id}
+                        onToggleZone={handleToggleZone}
+                        selectedZoneIds={selectedZones.map(z => z.id)}
                         gender={gender}
                         className="w-full h-auto drop-shadow-xl"
                     />
@@ -78,11 +110,12 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
 
             {/* Right Column: Info Panel */}
             <div
-                className="flex-1 w-full max-w-md min-h-[500px] flex items-center justify-center z-10 relative"
+                id="info-panel"
+                className="flex-1 w-full max-w-md min-h-[500px] flex items-center justify-center z-10 relative scroll-mt-24"
             >
-                {selectedZone ? (
+                {dominantElementInfo ? (
                     <div
-                        key={selectedZone.id}
+                        key={dominantElementInfo.name}
                         className="w-full animate-in fade-in slide-in-from-right-10 zoom-in-95 duration-500"
                     >
                         <Card className="glass border-white/40 shadow-2xl rounded-[2.5rem] overflow-hidden bg-white/60 backdrop-blur-xl">
@@ -90,35 +123,39 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
                                 <div
                                     className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-wellness-sage/10 text-wellness-sage text-[10px] font-bold uppercase tracking-widest mb-6 mx-auto animate-in zoom-in spin-in-180 duration-500"
                                 >
-                                    Zona Selecionada
+                                    Padrão Predominante ({selectedZones.length} região(ões))
                                 </div>
-                                <CardTitle className="text-4xl font-serif mb-3 text-foreground">{selectedZone.name}</CardTitle>
+                                <CardTitle className="text-4xl font-serif mb-3 text-foreground">Elemento {dominantElementInfo.name}</CardTitle>
                                 <div className="flex items-center justify-center gap-2 text-sm uppercase tracking-wide font-medium text-wellness-gold">
-                                    <span>Elemento {selectedZone.element}</span>
+                                    <span>{dominantElementInfo.organ}</span>
                                     <span className="w-1 h-1 rounded-full bg-wellness-gold" />
-                                    <span>{ELEMENTS[selectedZone.element].emotion}</span>
+                                    <span>{dominantElementInfo.emotion}</span>
                                 </div>
                             </CardHeader>
                             <CardContent className="pt-10 space-y-8 px-8 pb-10">
                                 <div className="space-y-4">
-                                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-foreground/40 font-bold">O que este sinal revela</h4>
-                                    <p className="text-lg text-foreground/80 leading-relaxed font-serif italic text-center">
-                                        "{selectedZone.description}"
-                                    </p>
+                                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-foreground/40 font-bold">Zonas Selecionadas</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {selectedZones.map(zone => (
+                                            <span key={zone.id} className="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors cursor-default" title={zone.description}>
+                                                {zone.name}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
 
                                 <div className="bg-wellness-sage/5 p-6 rounded-2xl border border-wellness-sage/10 space-y-3">
                                     <h4 className="text-[10px] uppercase tracking-[0.2em] text-wellness-sage font-bold flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 rounded-full bg-wellness-sage" />
-                                        Sinais Comuns
+                                        Interpretação
                                     </h4>
                                     <p className="text-sm text-foreground/70 leading-relaxed pl-3.5 border-l-2 border-wellness-sage/20">
-                                        Rugas profundas, mudanças de coloração, manchas ou tensão muscular persistente nesta região.
+                                        <strong>{dominantElementInfo.name}</strong>. {dominantElementInfo.description}
                                     </p>
                                 </div>
 
                                 <Button className="w-full h-14 rounded-2xl bg-wellness-sage hover:bg-wellness-sage/90 text-white shadow-lg shadow-wellness-sage/25 text-lg font-medium tracking-wide transition-all hover:translate-y-[-2px] active:translate-y-[1px]" asChild>
-                                    <Link href="/diagnostico">Investigar Sintomas Profundamente</Link>
+                                    <Link href={`/diagnostico?element=${dominantElementInfo.name}`}>Investigar Raiz Profundamente</Link>
                                 </Button>
                             </CardContent>
                         </Card>
@@ -131,7 +168,7 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
                         <div className="space-y-2">
                             <h3 className="text-2xl font-serif text-foreground/40 italic">Inicie sua análise</h3>
                             <p className="text-foreground/30 text-sm max-w-[200px] mx-auto leading-relaxed">
-                                Selecione uma região no mapa facial para descobrir as conexões com sua saúde interna.
+                                Selecione uma ou mais regiões no mapa facial para descobrir as conexões com sua saúde interna.
                             </p>
                         </div>
                     </div>

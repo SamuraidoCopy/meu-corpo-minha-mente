@@ -4,20 +4,26 @@ import { useState, useTransition } from 'react'
 import { getTcmQuestions, ELEMENTS, ElementType } from '@/lib/tcm-data'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
+import { Textarea } from '@/components/ui/textarea'
 import { saveDiagnosis } from './actions'
 import { useRouter } from 'next/navigation'
 
 interface DiagnosisWizardProps {
     userGender?: string
+    initialElement?: ElementType
+    hasCompletedInitialDiagnosis?: boolean
 }
 
-export function DiagnosisWizard({ userGender = 'Feminino' }: DiagnosisWizardProps) {
+export function DiagnosisWizard({ userGender = 'Feminino', initialElement, hasCompletedInitialDiagnosis = false }: DiagnosisWizardProps) {
     const router = useRouter()
+    const shouldSkipQuestions = !!initialElement && hasCompletedInitialDiagnosis;
     const questions = getTcmQuestions(userGender)
     const [currentStep, setCurrentStep] = useState(0)
     const [answers, setAnswers] = useState<Record<string, number>>({}) // element -> score
     const [showResult, setShowResult] = useState(false)
-    const [resultElement, setResultElement] = useState<ElementType | null>(null)
+    const [showReflection, setShowReflection] = useState(shouldSkipQuestions)
+    const [resultElement, setResultElement] = useState<ElementType | null>(shouldSkipQuestions ? initialElement : null)
+    const [reflectionAnswers, setReflectionAnswers] = useState<Record<number, string>>({})
     const [isPending, startTransition] = useTransition()
 
     const progress = ((currentStep) / questions.length) * 100
@@ -59,9 +65,9 @@ export function DiagnosisWizard({ userGender = 'Feminino' }: DiagnosisWizardProp
         const finalDominant = dominant || 'Terra'
 
         setResultElement(finalDominant)
-        setShowResult(true)
+        setShowReflection(true)
 
-        // Save to server
+        // Save to server (if bypassing reflection? No, reflection is next)
         startTransition(async () => {
             await saveDiagnosis(finalDominant)
         })
@@ -89,7 +95,7 @@ export function DiagnosisWizard({ userGender = 'Feminino' }: DiagnosisWizardProp
                         <div className="max-w-md mx-auto aspect-square rounded-full bg-wellness-sage/5 flex items-center justify-center relative">
                             <div className="absolute inset-0 rounded-full border border-wellness-sage/10 animate-spin-slow" />
                             <p className="text-lg text-foreground/70 leading-relaxed px-8">
-                                "{info.description}"
+                                &quot;{info.description}&quot;
                             </p>
                         </div>
 
@@ -104,10 +110,80 @@ export function DiagnosisWizard({ userGender = 'Feminino' }: DiagnosisWizardProp
                             </div>
                         </div>
 
-                        <Button onClick={() => router.push('/')} className="w-full h-16 rounded-[2rem] bg-wellness-sage hover:bg-primary transition-all text-xl shadow-xl shadow-wellness-sage/20">
-                            Começar minha Jornada
-                        </Button>
+                        <div className="space-y-4 pt-4 border-t border-foreground/5">
+                            <h3 className="text-xl font-serif text-foreground/80 italic mb-6">Você já fez o seu Check-in Diário hoje?</h3>
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <Button onClick={() => router.push('/')} variant="outline" className="w-full h-16 rounded-[2rem] text-lg font-medium border-wellness-sage text-wellness-sage hover:bg-wellness-sage/10 transition-all border-2">
+                                    Sim, já fiz
+                                </Button>
+                                <Button onClick={() => router.push('/diario')} className="w-full h-16 rounded-[2rem] bg-wellness-sage hover:bg-primary text-white transition-all text-lg shadow-xl shadow-wellness-sage/20 font-medium">
+                                    Não, ir para o Check-in
+                                </Button>
+                            </div>
+                        </div>
                     </div>
+                </Card>
+            </div>
+        )
+    }
+
+    if (showReflection && resultElement) {
+        const info = ELEMENTS[resultElement]
+        return (
+            <div className="max-w-2xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <Card className="glass border-white/20 shadow-2xl rounded-[3rem] overflow-hidden">
+                    <CardHeader className="text-center pt-12 pb-6">
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-wellness-sage/10 text-wellness-sage text-xs font-bold uppercase tracking-[0.2em] mb-4 mx-auto">
+                            Reflexão Profunda
+                        </div>
+                        <CardTitle className="text-3xl font-serif text-foreground/90">
+                            Padrão {resultElement} Identificado
+                        </CardTitle>
+                        <CardDescription className="text-lg text-foreground/60 mt-4 max-w-md mx-auto">
+                            Antes de ver o seu resultado completo, reserve um momento para refletir sobre estas questões:
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="px-10 pb-8 space-y-6">
+                        <div className="space-y-4">
+                            {info.reflectionQuestions.map((q, i) => (
+                                <div key={i} className="bg-white/40 p-5 rounded-2xl border border-white/50 space-y-4 shadow-sm">
+                                    <p className="text-foreground/80 font-medium italic text-center text-lg">
+                                        &ldquo;{q}&rdquo;
+                                    </p>
+                                    <Textarea
+                                        placeholder="Suas reflexões sobre essa questão (opcional)..."
+                                        value={reflectionAnswers[i] || ''}
+                                        onChange={(e) => setReflectionAnswers(prev => ({ ...prev, [i]: e.target.value }))}
+                                        className="min-h-[100px] resize-none bg-white/50 border-white/60 focus:bg-white transition-colors text-foreground/80"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                        <p className="text-xs text-center text-foreground/40 mt-8 max-w-sm mx-auto font-medium">
+                            Aviso de Apoio: Esta é uma ferramenta de autoconhecimento e não substitui avaliação ou acompanhamento profissional (médico/psicológico).
+                        </p>
+                    </CardContent>
+                    <CardFooter className="pb-12 px-10">
+                        <Button
+                            onClick={() => {
+                                setShowReflection(false);
+                                setShowResult(true);
+
+                                const answersPayload = info.reflectionQuestions.map((question, i) => ({
+                                    question,
+                                    answer: reflectionAnswers[i] || ''
+                                })).filter(a => a.answer.trim() !== '')
+
+                                startTransition(async () => {
+                                    await saveDiagnosis(resultElement, answersPayload.length > 0 ? answersPayload : undefined)
+                                })
+                            }}
+                            className="w-full h-16 rounded-[2rem] bg-wellness-sage hover:bg-wellness-sage/90 text-white transition-all text-xl shadow-xl shadow-wellness-sage/20 font-serif"
+                            disabled={isPending}
+                        >
+                            {isPending ? 'Salvando...' : 'Ver Minha Essência Revelada'}
+                        </Button>
+                    </CardFooter>
                 </Card>
             </div>
         )
@@ -137,7 +213,7 @@ export function DiagnosisWizard({ userGender = 'Feminino' }: DiagnosisWizardProp
                 <Card className="glass border-white/20 shadow-2xl rounded-[3rem] p-12 md:p-16 min-h-[400px] flex flex-col justify-between">
                     <CardHeader className="p-0 text-center">
                         <CardTitle className="text-3xl md:text-4xl font-serif leading-tight text-foreground/90 italic">
-                            "{question.text}"
+                            &quot;{question.text}&quot;
                         </CardTitle>
                     </CardHeader>
 

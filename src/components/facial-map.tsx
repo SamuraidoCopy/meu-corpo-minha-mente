@@ -5,18 +5,18 @@ import { FACIAL_ZONES, FacialZone } from '@/lib/tcm-data'
 import { cn } from '@/lib/utils'
 
 interface FacialMapProps {
-    onSelectZone: (zone: FacialZone) => void;
-    selectedZoneId?: string | null;
+    onToggleZone: (zone: FacialZone) => void;
+    selectedZoneIds: string[];
     gender?: 'Feminino' | 'Masculino';
     className?: string;
 }
 
-export function FacialMap({ onSelectZone, selectedZoneId, gender = 'Feminino', className }: FacialMapProps) {
+export function FacialMap({ onToggleZone, selectedZoneIds = [], gender = 'Feminino', className }: FacialMapProps) {
     return (
         <div className={cn("relative w-full max-w-[320px] mx-auto aspect-[3/4]", className)}>
             <svg
                 viewBox="0 0 300 400"
-                className="w-full h-full drop-shadow-2xl overflow-visible"
+                className="w-full h-full drop-shadow-2xl overflow-visible pointer-events-none"
                 xmlns="http://www.w3.org/2000/svg"
             >
                 <defs>
@@ -37,7 +37,18 @@ export function FacialMap({ onSelectZone, selectedZoneId, gender = 'Feminino', c
 
                 {/* Zones */}
                 {FACIAL_ZONES.map((zone, index) => {
-                    const isSelected = selectedZoneId === zone.id;
+                    const isSelected = selectedZoneIds.includes(zone.id);
+
+                    const getElementColorClass = (element: string, isSelected: boolean) => {
+                        switch (element) {
+                            case 'Madeira': return isSelected ? "fill-emerald-500/70 stroke-emerald-500 stroke-[3px]" : "fill-emerald-500/30 hover:fill-emerald-500/50 stroke-emerald-500/40 hover:stroke-emerald-500";
+                            case 'Fogo': return isSelected ? "fill-red-500/70 stroke-red-500 stroke-[3px]" : "fill-red-500/30 hover:fill-red-500/50 stroke-red-500/40 hover:stroke-red-500";
+                            case 'Terra': return isSelected ? "fill-yellow-400/80 stroke-yellow-400 stroke-[3px]" : "fill-yellow-400/30 hover:fill-yellow-400/60 stroke-yellow-400/50 hover:stroke-yellow-400";
+                            case 'Metal': return isSelected ? "fill-white/80 stroke-white stroke-[3px]" : "fill-white/30 hover:fill-white/60 stroke-white/50 hover:stroke-white";
+                            case 'Água': return isSelected ? "fill-slate-500/70 stroke-slate-500 stroke-[3px]" : "fill-slate-500/40 hover:fill-slate-500/60 stroke-slate-500/60 hover:stroke-slate-500";
+                            default: return isSelected ? "fill-primary/60 stroke-primary stroke-[3px]" : "fill-primary/20 hover:fill-primary/40 stroke-primary/30 hover:stroke-primary/50";
+                        }
+                    }
 
                     return (
                         <path
@@ -45,13 +56,11 @@ export function FacialMap({ onSelectZone, selectedZoneId, gender = 'Feminino', c
                             d={zone.svgPath}
                             style={{ animationDelay: `${index * 50 + 500}ms` }}
                             className={cn(
-                                "cursor-pointer transition-all duration-300 outline-none animate-in fade-in fill-mode-both origin-center",
-                                isSelected ? "fill-primary/40 stroke-primary stroke-[3px]" : "fill-transparent hover:fill-primary/10 stroke-primary/5 hover:stroke-primary/40 hover:scale-[1.01]"
+                                "cursor-pointer transition-all duration-300 outline-none animate-in fade-in fill-mode-both origin-center mix-blend-overlay hover:scale-[1.01] pointer-events-auto",
+                                getElementColorClass(zone.element, isSelected)
                             )}
-                            onClick={() => onSelectZone(zone)}
-                        >
-                            <title>{zone.name}</title>
-                        </path>
+                            onClick={() => onToggleZone(zone)}
+                        />
                     )
                 })}
             </svg>

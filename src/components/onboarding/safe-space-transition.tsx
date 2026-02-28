@@ -14,27 +14,37 @@ export function SafeSpaceTransition({ onComplete, isProcessing, userGender = 'Fe
     const [animationDone, setAnimationDone] = useState(false)
 
     useEffect(() => {
+        let mounted = true;
+
         const sequence = async () => {
             // Step 1: "Entendo o que você passou..."
             await new Promise(r => setTimeout(r, 800))
+            if (!mounted) return;
             setStep(1)
 
             // Step 2: "Agora você está segura."
             await new Promise(r => setTimeout(r, 2200))
+            if (!mounted) return;
             setStep(2)
 
             // Step 3: "Tudo mudará."
             await new Promise(r => setTimeout(r, 2200))
+            if (!mounted) return;
             setStep(3)
 
             // Complete animation part
             await new Promise(r => setTimeout(r, 2200))
+            if (!mounted) return;
             setAnimationDone(true)
             onComplete()
         }
 
         sequence()
-    }, [onComplete])
+
+        return () => {
+            mounted = false;
+        }
+    }, [])
 
     return (
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#F9F6F1] animate-breathe">

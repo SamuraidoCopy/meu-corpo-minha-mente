@@ -10,16 +10,22 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale/pt-BR"
 
-const getMoods = (gender: string) => [
-    'Radiante',
-    'Feliz',
-    `Calm${gender === 'Masculino' ? 'o' : 'a'}`,
-    `Neutr${gender === 'Masculino' ? 'o' : 'a'}`,
-    `Cansad${gender === 'Masculino' ? 'o' : 'a'}`,
-    `Irritad${gender === 'Masculino' ? 'o' : 'a'}`,
-    `Ansios${gender === 'Masculino' ? 'o' : 'a'}`,
-    'Triste',
-]
+const getMoods = (gender: string) => {
+    const isM = gender === 'Masculino'
+    return [
+        'Radiante',
+        'Feliz',
+        isM ? 'Calmo' : 'Calma',
+        isM ? 'Neutro' : 'Neutra',
+        isM ? 'Cansado' : 'Cansada',
+        isM ? 'Irritado' : 'Irritada',
+        isM ? 'Ansioso' : 'Ansiosa',
+        'Triste',
+        isM ? 'Frustrado' : 'Frustrada',
+        isM ? 'Inseguro' : 'Insegura',
+        'Com Medo'
+    ]
+}
 
 const initialState = {
     message: '',
@@ -43,34 +49,50 @@ export function DiaryForm({ userGender = 'Feminino' }: DiaryFormProps) {
             <div className="space-y-6">
                 <div className="space-y-4">
                     <Label className="text-xs uppercase tracking-[0.2em] font-bold text-foreground/40 italic">Nível de Energia</Label>
-                    <div className="flex items-center gap-6 px-4 py-6 rounded-2xl bg-foreground/5 border border-foreground/5">
-                        <span className="text-4xl font-serif text-primary w-8 text-center">{energy[0]}</span>
-                        <Slider
-                            name="energy"
-                            min={1}
-                            max={5}
-                            step={1}
-                            value={energy}
-                            onValueChange={setEnergy}
-                            className="flex-1"
-                        />
+                    <div className="flex items-center justify-between px-4 py-6 rounded-2xl bg-foreground/5 border border-foreground/5 overflow-x-auto gap-2">
+                        {[
+                            { val: 1, emoji: '😫', label: 'Muito Baixa' },
+                            { val: 2, emoji: '🙁', label: 'Baixa' },
+                            { val: 3, emoji: '😐', label: 'Média' },
+                            { val: 4, emoji: '🙂', label: 'Boa' },
+                            { val: 5, emoji: '🤩', label: 'Excelente' }
+                        ].map(({ val, emoji, label }) => (
+                            <button
+                                key={val}
+                                type="button"
+                                onClick={() => setEnergy([val])}
+                                title={label}
+                                className={`flex flex-col items-center gap-2 transition-all duration-300 hover:scale-110 min-w-[60px] ${energy[0] === val ? 'scale-110 opacity-100 filter drop-shadow-md' : 'opacity-40 grayscale hover:grayscale-0'}`}
+                            >
+                                <span className="text-4xl md:text-5xl">{emoji}</span>
+                                <span className={`text-[10px] font-bold uppercase tracking-wider ${energy[0] === val ? 'text-primary' : 'text-foreground/50'}`}>{label}</span>
+                            </button>
+                        ))}
                     </div>
                     <input type="hidden" name="energy" value={energy[0]} />
                 </div>
 
                 <div className="space-y-4">
                     <Label className="text-xs uppercase tracking-[0.2em] font-bold text-foreground/40 italic">Qualidade do Sono</Label>
-                    <div className="flex items-center gap-6 px-4 py-6 rounded-2xl bg-foreground/5 border border-foreground/5">
-                        <span className="text-4xl font-serif text-wellness-gold w-8 text-center">{sleep[0]}</span>
-                        <Slider
-                            name="sleep"
-                            min={1}
-                            max={5}
-                            step={1}
-                            value={sleep}
-                            onValueChange={setSleep}
-                            className="flex-1"
-                        />
+                    <div className="flex items-center justify-between px-4 py-6 rounded-2xl bg-foreground/5 border border-foreground/5 overflow-x-auto gap-2">
+                        {[
+                            { val: 1, emoji: '😫', label: 'Muito Ruim' },
+                            { val: 2, emoji: '🙁', label: 'Ruim' },
+                            { val: 3, emoji: '😐', label: 'Regular' },
+                            { val: 4, emoji: '🙂', label: 'Bom' },
+                            { val: 5, emoji: '🤩', label: 'Excelente' }
+                        ].map(({ val, emoji, label }) => (
+                            <button
+                                key={val}
+                                type="button"
+                                onClick={() => setSleep([val])}
+                                title={label}
+                                className={`flex flex-col items-center gap-2 transition-all duration-300 hover:scale-110 min-w-[60px] ${sleep[0] === val ? 'scale-110 opacity-100 filter drop-shadow-md' : 'opacity-40 grayscale hover:grayscale-0'}`}
+                            >
+                                <span className="text-4xl md:text-5xl">{emoji}</span>
+                                <span className={`text-[10px] font-bold uppercase tracking-wider ${sleep[0] === val ? 'text-wellness-gold' : 'text-foreground/50'}`}>{label}</span>
+                            </button>
+                        ))}
                     </div>
                     <input type="hidden" name="sleep" value={sleep[0]} />
                 </div>
