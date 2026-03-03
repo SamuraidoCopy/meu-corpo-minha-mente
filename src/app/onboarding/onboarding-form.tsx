@@ -18,7 +18,9 @@ export function OnboardingForm() {
     const [showTransition, setShowTransition] = useState(false)
     const [formData, setFormData] = useState<FormData | null>(null)
 
-    const handleSubmit = (payload: FormData) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const payload = new FormData(e.currentTarget)
         setFormData(payload)
         setShowTransition(true)
     }
@@ -42,7 +44,7 @@ export function OnboardingForm() {
     }
 
     return (
-        <form action={handleSubmit} className="grid gap-6">
+        <form onSubmit={handleSubmit} className="grid gap-6">
             <div className="grid gap-2">
                 <Label htmlFor="fullName" className="text-xs uppercase tracking-widest text-foreground/50 font-medium ml-1">
                     Nome Completo

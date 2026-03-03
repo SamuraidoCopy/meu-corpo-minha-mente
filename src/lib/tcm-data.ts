@@ -158,76 +158,77 @@ export interface FacialZone {
     description: string;
 }
 
+// Topology matched to the smooth, organic reference image
 export const FACIAL_ZONES: FacialZone[] = [
     {
         id: 'testa_centro',
         name: 'Centro da Testa (Intestino Delgado)',
         element: 'Fogo',
-        svgPath: 'M 110,50 L 190,50 L 175,100 L 150,120 L 125,100 Z',
-        description: 'Conectada ao Intestino Delgado e Coração. Vermelhidão ou acne aqui podem indicar calor emocional, ansiedade ou problemas digestivos de absorção.',
+        svgPath: 'M 120,50 L 180,50 L 165,85 L 135,85 Z',
+        description: 'Conectada ao Intestino Delgado e Coração. Vermelhidão ou acne aqui podem indicar calor emocional.',
     },
     {
         id: 'testa_laterais',
         name: 'Laterais da Testa (Bexiga)',
         element: 'Água',
-        svgPath: 'M 60,70 L 110,50 L 125,100 L 80,110 Z M 240,70 L 190,50 L 175,100 L 220,110 Z',
-        description: 'Relacionada à Bexiga e vias urinárias. O Meridiano da Bexiga afeta o sistema nervoso. Tensão aponta para estresse crônico.',
+        svgPath: 'M 80,80 L 115,50 L 130,85 L 95,90 Z M 220,80 L 185,50 L 170,85 L 205,90 Z',
+        description: 'Relacionada à Bexiga e vias urinárias. Tensão aponta para estresse crônico.',
     },
     {
         id: 'sobrancelhas',
         name: 'Arcos das Sobrancelhas (Coração)',
         element: 'Fogo',
-        svgPath: 'M 70,125 Q 105,105 135,120 Q 105,135 70,125 Z M 230,125 Q 195,105 165,120 Q 195,135 230,125 Z',
-        description: 'Sinaliza palpitações, insônia ou forte oscilação emocional ligada ao Shen (Mente) e ao Coração.',
+        svgPath: 'M 70,115 C 90,105 110,105 130,115 C 110,125 90,125 70,115 Z M 230,115 C 210,105 190,105 170,115 C 190,125 210,125 230,115 Z',
+        description: 'Sinaliza palpitações, insônia ou forte oscilação emocional ligada ao Shen (Mente).',
     },
     {
         id: 'ponto_figado',
         name: 'Entre Sobrancelhas (Fígado)',
         element: 'Madeira',
-        svgPath: 'M 140, 120 A 10,10 0 1,1 140,140 A 10,10 0 1,1 140,120', // Literal centered circle
-        description: 'Conhecido como o assento da mente. Linhas verticais aqui (ruga do leão) indicam raiva retida, frustração excessiva ou fígado sobrecarregado.',
+        svgPath: 'M 150,113 A 12,12 0 1,1 150,137 A 12,12 0 1,1 150,113 Z',
+        description: 'Conhecido como o assento da mente. Linhas verticais aqui indicam raiva retida.',
     },
     {
         id: 'temporas',
         name: 'Laterais dos Olhos (Vesícula Biliar)',
         element: 'Madeira',
-        svgPath: 'M 35, 125 A 10,10 0 1,1 35,145 A 10,10 0 1,1 35,125 M 245, 125 A 10,10 0 1,1 245,145 A 10,10 0 1,1 245,125', // Two prominent dots
-        description: 'Ligadas à Vesícula Biliar (decisão e coragem). Dor de cabeça temporal reflete estagnação do Qi do Fígado/Vesícula.',
+        svgPath: 'M 50,115 A 12,12 0 1,1 50,139 A 12,12 0 1,1 50,115 Z M 250,115 A 12,12 0 1,1 250,139 A 12,12 0 1,1 250,115 Z',
+        description: 'Ligadas à Vesícula Biliar (decisão e coragem). Dor de cabeça temporal reflete estagnação.',
     },
     {
         id: 'olheiras',
         name: 'Abaixo dos Olhos (Rins)',
         element: 'Água',
-        svgPath: 'M 50,150 C 80,185 130,185 145,150 C 130,195 80,195 50,150 Z M 250,150 C 220,185 170,185 155,150 C 170,195 220,195 250,150 Z M 65,150 Q 100,170 120,150 Q 100,180 65,150 Z M 235,150 Q 200,170 180,150 Q 200,180 235,150 Z',
-        description: 'Os Rins guardam a energia vital. Escurecimento profundo (olheiras) indica exaustão celular, falta de sono reparador ou grande medo.',
+        svgPath: 'M 75,145 C 95,165 115,165 135,145 C 115,175 95,175 75,145 Z M 225,145 C 205,165 185,165 165,145 C 185,175 205,175 225,145 Z',
+        description: 'Os Rins guardam a energia vital. Escurecimento profundo (olheiras) indica exaustão celular.',
     },
     {
         id: 'bochechas_superiores',
-        name: 'Bochechas Superiores (Estômago)',
+        name: 'Bochechas Superiores e Metade do Nariz (Estômago)',
         element: 'Terra',
-        svgPath: 'M 75,185 Q 100,200 125,185 L 125,230 Q 95,230 75,210 Z M 225,185 Q 200,200 175,185 L 175,230 Q 205,230 225,210 Z', // Smaller, closer to nose 
-        description: 'Reflete como "digerimos" os alimentos e pensamentos. Espinhas ou vermelhidão excessiva aqui mostram Calor (inflamação) no Estômago.',
+        svgPath: 'M 60,180 Q 90,175 120,180 Q 150,195 180,180 Q 210,175 240,180 L 235,220 Q 205,225 180,220 Q 150,210 120,220 Q 95,225 65,220 Z',
+        description: 'Reflete como "digerimos" os alimentos e pensamentos. Passa pela metade do nariz conectando as bochechas.',
+    },
+    {
+        id: 'hormonal',
+        name: 'Ponta do Nariz ao Queixo (Hormonal)',
+        element: 'Fogo',
+        svgPath: 'M 145,210 L 175,240 L 180,310 Q 150,330 120,310 L 125,240 Z',
+        description: 'Área governada pelo fogo sexual e eixo endócrino. Cravos e acne cíclica evidenciam desequilíbrios.',
     },
     {
         id: 'bochechas_inferiores',
         name: 'Bochechas Inferiores (Pulmão)',
         element: 'Metal',
-        svgPath: 'M 55,210 Q 80,240 118,245 L 115,310 Q 60,290 55,210 Z M 245,210 Q 220,240 182,245 L 185,310 Q 240,290 245,210 Z',
-        description: 'Ligado aos Pulmões, à imunidade, tristeza profunda e melancolia. Marcas persistentes podem indicar baixa defesa energética.',
-    },
-    {
-        id: 'hormonal',
-        name: 'Nariz a Queixo (Problemas Hormonais)',
-        element: 'Fogo',
-        svgPath: 'M 135,170 L 165,170 L 185,320 Q 150,360 115,320 Z',
-        description: 'Área governada pelo fogo sexual e eixo endócrino. Cravos e acne cíclica evidenciam desequilíbrios hormonais, SOP, estresse reprodutivo.',
+        svgPath: 'M 65,230 L 115,230 L 105,300 L 70,280 Z M 235,230 L 185,230 L 195,300 L 230,280 Z',
+        description: 'Ligado aos Pulmões, à imunidade e melancolia. Marcas persistentes podem indicar baixa defesa energética.',
     },
     {
         id: 'pescoco',
         name: 'Linha do Pescoço (Intestino Grosso)',
         element: 'Metal',
-        svgPath: 'M 100,340 Q 100,390 150,400 Q 200,390 200,340 C 190,370 150,380 110,340 Z',
-        description: 'Reflete a retenção de toxinas e o Intestino Grosso (dificuldade de desapegar). A congestão linfática evidencia o bloqueio no fluxo.',
+        svgPath: 'M 120,340 C 140,360 160,360 180,340 L 170,370 C 155,380 145,380 130,370 Z',
+        description: 'Reflete a retenção de toxinas e o Intestino Grosso (dificuldade de desapegar).',
     },
 ];
 

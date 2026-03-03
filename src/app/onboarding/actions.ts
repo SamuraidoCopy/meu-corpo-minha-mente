@@ -1,56 +1,61 @@
-'use server'
+"use server";
 
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 
 export async function completeOnboarding(prevState: any, formData: FormData) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-    if (!user) {
-        redirect('/login')
-    }
+  if (!user) {
+    redirect("/login");
+  }
 
-    const age = parseInt(formData.get('age') as string)
-    const history = formData.get('history') as string
-    const fullName = formData.get('fullName') as string
-    const gender = formData.get('gender') as string
+  const age = parseInt(formData.get("age") as string);
+  const history = formData.get("history") as string;
+  const fullName = formData.get("fullName") as string;
+  const gender = formData.get("gender") as string;
 
-    // Validate inputs
-    if (!fullName || fullName.trim().length < 3) {
-        return { message: 'Por favor, informe seu nome completo.' }
-    }
+  // Validate inputs
+  if (!fullName || fullName.trim().length < 3) {
+    return { message: "Por favor, informe seu nome completo." };
+  }
 
-    if (!gender) {
-        return { message: 'Por favor, informe como você se identifica.' }
-    }
+  if (!gender) {
+    return { message: "Por favor, informe como você se identifica." };
+  }
 
-    if (!age || isNaN(age) || age < 10 || age > 100) {
-        return { message: 'Por favor, informe uma idade válida.' }
-    }
+  if (!age || isNaN(age) || age < 10 || age > 100) {
+    return { message: "Por favor, informe uma idade válida." };
+  }
 
-    if (!history || history.trim().length < 10) {
-        return { message: 'Por favor, conte um pouco mais sobre sua história (mínimo 10 caracteres).' }
-    }
+  if (!history || history.trim().length < 10) {
+    return {
+      message:
+        "Por favor, conte um pouco mais sobre sua história (mínimo 10 caracteres).",
+    };
+  }
 
-    const { error } = await supabase
-        .from('profiles')
-        .update({
-            age,
-            history,
-            full_name: fullName,
-            gender: gender,
-            onboarding_completed: true,
-            updated_at: new Date().toISOString(),
-        })
-        .eq('id', user.id)
+  const { error } = await supabase
+    .from("profiles")
+    .upsert({
+      id: user.id,
+      age,
+      history,
+      full_name: fullName,
+      gender: gender,
+      onboarding_completed: true,
+      updated_at: new Date().toISOString(),
+    });
 
-    if (error) {
-        console.error('Onboarding error:', error)
-        return { message: 'Erro ao salvar perfil. Tente novamente.' }
-    }
+  if (error) {
+    console.error("Onboarding error:", error);
+    return { message: "Erro ao salvar perfil. Tente novamente." };
+  }
 
-    revalidatePath('/', 'layout')
-    redirect('/')
+  revalidatePath("/", "layout");
+  redirect("/");
 }

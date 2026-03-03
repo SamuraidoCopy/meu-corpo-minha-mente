@@ -126,13 +126,17 @@ export default async function Home() {
             {/* Sub-grid for actions */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Mapa da Raiz */}
-              <Link href="/mapa" className="group">
+              <Link href={diagnosis ? "/mapa/v2" : "/mapa"} className="group">
                 <div className="glass rounded-3xl p-8 h-full border-white/30 group-hover:bg-white/60 transition-all group-hover:-translate-y-1">
                   <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
                     <MapIcon size={24} strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-xl font-serif mb-2">O Mapa da Raiz</h3>
-                  <p className="text-sm text-foreground/50 leading-relaxed">Analise os sinais que o seu rosto revela sobre sua saúde interna.</p>
+                  <h3 className="text-xl font-serif mb-2">{diagnosis ? 'O Mapa das Expressões' : 'O Mapa da Raiz'}</h3>
+                  <p className="text-sm text-foreground/50 leading-relaxed">
+                    {diagnosis
+                      ? "Aprofunde na sua Raiz e dores através das suas marcas de expressão facial."
+                      : "Analise os sinais que o seu rosto revela sobre sua saúde interna."}
+                  </p>
                 </div>
               </Link>
 

@@ -72,7 +72,7 @@ function PrintOnlyReport({ userName, userAvatar, entries, feedback }: {
 
             {/* Vital Energy Chart Molecule */}
             <div className="mb-12 break-inside-avoid">
-                <h2 className="text-xl font-serif font-bold mb-6 border-b border-slate-100 pb-2 text-slate-800">Tendência de Energia Vital</h2>
+                <h2 className="text-xl font-serif font-bold mb-6 border-b border-slate-100 pb-2 text-slate-800">Tendência do Nível de Vitalidade Energética (NVE)</h2>
                 <div className="h-40 w-full flex items-end justify-between gap-1 border-b border-slate-200 pb-2 relative mb-2">
                     {/* Simplified Grid Lines */}
                     {[100, 79, 59, 39].map(line => (
@@ -253,7 +253,7 @@ export function DiaryHistory({ userName = 'Usuário', userAvatar = '' }: { userN
                     {entries.length > 0 && (
                         <Card className="glass border-white/20 rounded-[2.5rem] shadow-xl overflow-hidden">
                             <CardHeader className="text-center pt-8 pb-4">
-                                <CardTitle className="text-xl font-serif">Fluxo de Energia Vital</CardTitle>
+                                <CardTitle className="text-xl font-serif">Nível de Vitalidade Energética (NVE)</CardTitle>
                                 <CardDescription className="text-xs uppercase tracking-[0.2em] mt-2">
                                     Seu score com base nas Faixas Estratégicas
                                 </CardDescription>

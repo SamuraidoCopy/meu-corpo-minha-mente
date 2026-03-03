@@ -41,12 +41,12 @@ export function FacialMap({ onToggleZone, selectedZoneIds = [], gender = 'Femini
 
                     const getElementColorClass = (element: string, isSelected: boolean) => {
                         switch (element) {
-                            case 'Madeira': return isSelected ? "fill-emerald-500/70 stroke-emerald-500 stroke-[3px]" : "fill-emerald-500/30 hover:fill-emerald-500/50 stroke-emerald-500/40 hover:stroke-emerald-500";
-                            case 'Fogo': return isSelected ? "fill-red-500/70 stroke-red-500 stroke-[3px]" : "fill-red-500/30 hover:fill-red-500/50 stroke-red-500/40 hover:stroke-red-500";
-                            case 'Terra': return isSelected ? "fill-yellow-400/80 stroke-yellow-400 stroke-[3px]" : "fill-yellow-400/30 hover:fill-yellow-400/60 stroke-yellow-400/50 hover:stroke-yellow-400";
-                            case 'Metal': return isSelected ? "fill-white/80 stroke-white stroke-[3px]" : "fill-white/30 hover:fill-white/60 stroke-white/50 hover:stroke-white";
-                            case 'Água': return isSelected ? "fill-slate-500/70 stroke-slate-500 stroke-[3px]" : "fill-slate-500/40 hover:fill-slate-500/60 stroke-slate-500/60 hover:stroke-slate-500";
-                            default: return isSelected ? "fill-primary/60 stroke-primary stroke-[3px]" : "fill-primary/20 hover:fill-primary/40 stroke-primary/30 hover:stroke-primary/50";
+                            case 'Madeira': return isSelected ? "fill-[#00ff00]/85" : "fill-[#00ff00]/65 hover:fill-[#00ff00]/95";
+                            case 'Fogo': return isSelected ? "fill-[#ff0000]/85" : "fill-[#ff0000]/65 hover:fill-[#ff0000]/95";
+                            case 'Terra': return isSelected ? "fill-[#ffff00]/85" : "fill-[#ffff00]/65 hover:fill-[#ffff00]/95";
+                            case 'Metal': return isSelected ? "fill-[#ffffff]/85" : "fill-[#ffffff]/65 hover:fill-[#ffffff]/95";
+                            case 'Água': return isSelected ? "fill-[#808080]/85" : "fill-[#808080]/65 hover:fill-[#808080]/95";
+                            default: return isSelected ? "fill-primary/85" : "fill-primary/65 hover:fill-primary/95";
                         }
                     }
 
@@ -56,7 +56,7 @@ export function FacialMap({ onToggleZone, selectedZoneIds = [], gender = 'Femini
                             d={zone.svgPath}
                             style={{ animationDelay: `${index * 50 + 500}ms` }}
                             className={cn(
-                                "cursor-pointer transition-all duration-300 outline-none animate-in fade-in fill-mode-both origin-center mix-blend-overlay hover:scale-[1.01] pointer-events-auto",
+                                "cursor-pointer transition-all duration-300 outline-none animate-in fade-in fill-mode-both origin-center pointer-events-auto",
                                 getElementColorClass(zone.element, isSelected)
                             )}
                             onClick={() => onToggleZone(zone)}
