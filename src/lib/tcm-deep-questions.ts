@@ -33,13 +33,13 @@ export const FACIAL_MARKS: FacialMark[] = [
 export const DEEP_QUESTIONS: Record<ElementType, string[]> = {
     Madeira: [
         "Onde você sente que perdeu o controle ao tentar abraçar o mundo inteiro, forçando o seu fígado a tentar purificar toda a toxina dos outros?",
-        "Qual foi a última vez que o sentimento de injustiça paralisou suas ações e virou pura cólera silenciada?",
-        "O que você está segurando com tanta força, tentando ter a razão, que na verdade o atrapalha de simplesmente avançar?"
+        "Quantas vezes você deixou de agir por medo do confronto ou de decepcionar?",
+        "O que você está segurando com tanta força, tentando ter a razão, que na verdade o(a) atrapalha de simplesmente avançar?"
     ],
     Fogo: [
         "Para onde você está correndo tão rápido que se esquece de viver o agora e permite que seu coração acelere sem destino?",
         "O que silencia a sua paixão de forma a te deixar apático(a) e sem conseguir expressar sua verdadeira alegria?",
-        "Qual é o vazio profundo que a pressa, a ansiedade e essa falação toda tentam esconder?"
+        "Que vazio é esse que você tenta calar com pressa, ansiedade e palavras que não param?"
     ],
     Terra: [
         "De quem você está cuidando o tempo todo enquanto negligencia a si mesmo(a)?",

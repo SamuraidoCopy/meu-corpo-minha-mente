@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale/pt-BR"
+import { BreathingGuide } from "@/components/breathing-guide"
 
 const getMoods = (gender: string) => {
     const isM = gender === 'Masculino'
@@ -124,34 +125,9 @@ export function DiaryForm({ userGender = 'Feminino' }: DiaryFormProps) {
                 </div>
             </div>
 
-            <div className="space-y-4">
-                <Label htmlFor="did_breathing_exercise" className="text-xs uppercase tracking-[0.2em] font-bold text-foreground/40 italic ml-1">Exercício de Respiração</Label>
-                <Select name="did_breathing_exercise" defaultValue="false">
-                    <SelectTrigger className="h-14 rounded-2xl border-foreground/10 bg-white/50 focus:ring-primary/20">
-                        <SelectValue placeholder="Você praticou a respiração guiada hoje?" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-2xl border-foreground/5 shadow-2xl">
-                        <SelectItem value="true" className="py-3 rounded-lg focus:bg-primary/10">Sim, eu pratiquei</SelectItem>
-                        <SelectItem value="false" className="py-3 rounded-lg focus:bg-primary/10">Não pratiquei hoje</SelectItem>
-                    </SelectContent>
-                </Select>
-
-                <details className="group border border-foreground/10 rounded-2xl bg-white/30 overflow-hidden">
-                    <summary className="cursor-pointer p-4 font-medium text-sm text-foreground/70 outline-none flex justify-between items-center group-open:bg-foreground/5 transition-colors">
-                        Como realizar o exercício "Respirar no Órgão"? (Guia de Primeiro Passo)
-                        <span className="transition-transform group-open:rotate-180">↓</span>
-                    </summary>
-                    <div className="p-4 pt-2 text-sm text-foreground/60 space-y-3 bg-white/50">
-                        <p><strong>1. Identifique seu órgão alvo:</strong> Fígado (Raiva), Coração (Ansiedade), Estômago (Preocupação), Pulmão (Tristeza), Rins (Medo).</p>
-                        <p><strong>2. Posição:</strong> Sente-se confortavelmente e coloque as mãos sobre a região do órgão.</p>
-                        <p><strong>3. Respire com intenção (Ritmo 4-4-6):</strong><br />
-                            - INSPIRE contando até 4<br />
-                            - SEGURE a respiração contando até 4<br />
-                            - EXPIRE contando até 6</p>
-                        <p><strong>4. Visualize:</strong> Imagine que o ar desce até o órgão, levando luz, calor e cura.</p>
-                        <p><strong>5. Repetições:</strong> Faça 5 ciclos completos de respiração.</p>
-                    </div>
-                </details>
+            <div className="space-y-3">
+                <Label className="text-xs uppercase tracking-[0.2em] font-bold text-foreground/40 italic ml-1">Exercício de Respiração</Label>
+                <BreathingGuide />
             </div>
 
             <div className="space-y-3">

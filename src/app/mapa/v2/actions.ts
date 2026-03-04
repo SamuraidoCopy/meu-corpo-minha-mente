@@ -31,7 +31,7 @@ export async function saveFacialMarks(marks: string[]) {
             return { success: false, error: 'Erro ao salvar no banco de dados.' }
         }
 
-        revalidatePath('/mapa/v2')
+        // revalidatePath('/mapa/v2') - Removido para evitar conflitos de cache no Client Transition
         return { success: true }
     } catch (e: any) {
         return { success: false, error: e?.message || 'Payload inválido.' }

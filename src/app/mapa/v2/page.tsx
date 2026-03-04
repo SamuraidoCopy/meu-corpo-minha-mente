@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Brain, Map as MapIcon, ArrowLeft } from 'lucide-react'
-import { ExpressionsSelector } from './expressions-selector'
+import { ExpressionsSelectorB } from './expressions-selector-b'
 import { ELEMENTS, ElementType } from '@/lib/tcm-data'
 
 export default async function MapaV2Page() {
@@ -16,7 +16,7 @@ export default async function MapaV2Page() {
     // Load user profile to get dominant element
     const { data: profile } = await supabase
         .from('profiles')
-        .select('dominant_element, onboarding_completed')
+        .select('dominant_element, onboarding_completed, gender')
         .eq('id', user.id)
         .single()
 
@@ -58,7 +58,7 @@ export default async function MapaV2Page() {
                     </div>
                 </header>
 
-                <ExpressionsSelector dominantElement={dominantElement} />
+                <ExpressionsSelectorB dominantElement={dominantElement} gender={profile.gender as 'Feminino' | 'Masculino'} />
             </div>
         </main>
     )

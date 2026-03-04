@@ -162,6 +162,7 @@ export function DiaryHistory({ userName = 'Usuário', userAvatar = '' }: { userN
     const [date, setDate] = useState<Date | undefined>(new Date())
     const [entries, setEntries] = useState<Entry[]>([])
     const [feedback, setFeedback] = useState<string | null>(null)
+    const [selectedEntryIndex, setSelectedEntryIndex] = useState<number | null>(null)
     const contentRef = useRef<HTMLDivElement>(null)
 
     const handlePrint = useReactToPrint({
@@ -259,7 +260,7 @@ export function DiaryHistory({ userName = 'Usuário', userAvatar = '' }: { userN
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="p-8 pt-4">
-                                <div className="h-40 w-full flex items-end justify-between gap-1 mt-4 border-b border-foreground/10 pb-4 relative">
+                                <div className="h-48 w-full flex items-end justify-between gap-1 mt-4 border-b border-foreground/10 pb-8 relative">
                                     {/* Y-axis indicators */}
                                     <div className="absolute left-0 bottom-1/4 w-full h-[1px] border-t border-dashed border-red-500/20 z-0">
                                         <span className="absolute -top-4 -left-2 text-[8px] text-red-500/50">39</span>
@@ -278,16 +279,36 @@ export function DiaryHistory({ userName = 'Usuário', userAvatar = '' }: { userN
                                         const level = getStrategicLevel(entry.vital_energy_score);
 
                                         return (
-                                            <div key={i} className="relative flex flex-col items-center flex-1 group z-10 h-full justify-end cursor-pointer">
+                                            <div
+                                                key={i}
+                                                className="relative flex flex-col items-center flex-1 group z-10 h-full justify-end cursor-pointer"
+                                                onClick={() => setSelectedEntryIndex(selectedEntryIndex === i ? null : i)}
+                                            >
+                                                {/* Tooltip Popover (Ao Clicar) */}
+                                                {selectedEntryIndex === i && (
+                                                    <div className="absolute bottom-[calc(100%+12px)] bg-white border border-gray-100 shadow-2xl rounded-2xl p-3 z-50 text-center flex flex-col items-center min-w-[130px] animate-in slide-in-from-bottom-2 fade-in">
+                                                        <span className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest mb-1">Dia {entry.entry_date.split('-')[2]}/{entry.entry_date.split('-')[1]}</span>
+                                                        <span className="text-3xl font-serif text-foreground/90">{entry.vital_energy_score}</span>
+                                                        <span className={`text-[9px] font-bold uppercase tracking-wider mt-2 px-2.5 py-1 text-center rounded-full ${level.color} text-white`}>{level.name}</span>
+                                                        {/* Flechinha do Balão */}
+                                                        <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-b border-r border-gray-100 rotate-45"></div>
+                                                    </div>
+                                                )}
+
                                                 <div
-                                                    className={`w-full max-w-[12px] md:max-w-[20px] transition-all rounded-t-sm opacity-80 hover:opacity-100 ${level.color} shadow-sm border border-black/5`}
+                                                    className={`w-full max-w-[12px] md:max-w-[20px] transition-all duration-300 rounded-t-sm ${selectedEntryIndex === i ? 'opacity-100 scale-110' : 'opacity-80 group-hover:opacity-100'} ${level.color} shadow-sm border border-black/5`}
                                                     style={{ height: `${entry.vital_energy_score}%` }}
                                                 ></div>
+
+                                                {/* Marcador Fixo de Dia */}
+                                                <div className={`absolute -bottom-6 text-[10px] font-bold text-center w-full pt-2 transition-colors ${selectedEntryIndex === i ? 'text-primary' : 'text-foreground/40'}`}>
+                                                    {entry.entry_date.split('-')[2]}/{entry.entry_date.split('-')[1]}
+                                                </div>
                                             </div>
                                         )
                                     })}
                                 </div>
-                                <div className="flex justify-between text-[10px] text-foreground/40 mt-4 font-bold tracking-wider">
+                                <div className="flex justify-between text-[10px] text-foreground/30 mt-6 font-bold tracking-wider uppercase">
                                     <span>INÍCIO DO MÊS</span>
                                     <span>ATUAL/FIM</span>
                                 </div>

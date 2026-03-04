@@ -6,6 +6,7 @@ import { FacialMap } from '@/components/facial-map'
 import { FACIAL_ZONES, FacialZone, ELEMENTS } from '@/lib/tcm-data'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { ChevronDown } from 'lucide-react'
 
 export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Feminino' }) {
     const [selectedZones, setSelectedZones] = useState<FacialZone[]>([])
@@ -16,9 +17,6 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
             if (exists) {
                 return prev.filter(z => z.id !== zone.id)
             } else {
-                setTimeout(() => {
-                    document.getElementById('info-panel')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-                }, 100)
                 return [...prev, zone]
             }
         })
@@ -98,6 +96,19 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
                         className="w-full h-auto drop-shadow-xl"
                     />
                 </div>
+
+                {/* Seta Móvel (Visível Apenas no Mobile caso haja áreas selecionadas) */}
+                {selectedZones.length > 0 && (
+                    <div
+                        className="lg:hidden flex flex-col items-center justify-center gap-2 mb-8 text-primary animate-bounce cursor-pointer opacity-90 hover:opacity-100 transition-opacity"
+                        onClick={() => document.getElementById('info-panel')?.scrollIntoView({ behavior: 'smooth' })}
+                    >
+                        <span className="text-[10px] uppercase font-bold tracking-widest bg-primary/10 text-primary px-4 py-1.5 rounded-full border border-primary/20">Deslize para o Diagnóstico</span>
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                            <ChevronDown size={18} strokeWidth={2.5} />
+                        </div>
+                    </div>
+                )}
 
                 <div className="animate-in fade-in duration-700 delay-700 fill-mode-backwards">
                     <Button variant="ghost" className="text-foreground/50 hover:text-foreground/80 hover:bg-transparent -ml-4 gap-2 group" asChild>
