@@ -89,6 +89,7 @@ export function BreathingGuide({ onCompleteAction }: { onCompleteAction?: () => 
     // Determine circle CSS based on phase
     let circleTransform = 'scale(1)'
     let circleTransition = 'transition-all ease-in-out'
+    let circleDuration = 0
 
     if (phase === 'inspire') {
         circleTransform = 'scale(1.5)'
