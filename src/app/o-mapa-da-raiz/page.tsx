@@ -113,7 +113,9 @@ export default function SalesPage() {
                         </div>
 
                         <Button className="h-16 md:h-20 px-10 md:px-14 rounded-full text-lg md:text-xl bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-xl shadow-wellness-gold/20 transition-all hover:scale-105 active:scale-95 group">
-                            SIM, QUERO DESCOBRIR A RAIZ DO MEU PROBLEMA AGORA <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform" />
+                            <span className="md:hidden">QUERO DESCOBRIR A RAIZ</span>
+                            <span className="hidden md:inline">SIM, QUERO DESCOBRIR A RAIZ DO MEU PROBLEMA AGORA</span>
+                            <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform" />
                         </Button>
 
                         <p className="text-sm text-slate-500 italic">
@@ -304,7 +306,8 @@ export default function SalesPage() {
                         </ul>
 
                         <Button className="w-full h-18 md:h-24 rounded-full text-xl md:text-2xl bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-2xl shadow-wellness-gold/20 transform hover:-translate-y-1 transition-all">
-                            LIBERAR MEU ACESSO COM DESCONTO AGORA
+                            <span className="md:hidden">QUERO ACESSAR</span>
+                            <span className="hidden md:inline">LIBERAR MEU ACESSO COM DESCONTO AGORA</span>
                         </Button>
                     </div>
 
@@ -366,7 +369,8 @@ export default function SalesPage() {
                     <div className="mt-20 text-center space-y-6">
                         <p className="text-slate-600 font-medium">Ainda indeciso?</p>
                         <Button variant="outline" className="rounded-full px-10 h-14 border-slate-300 hover:bg-white text-slate-700">
-                            QUERO SABER A RAÍZ DA MINHA DOR
+                            <span className="md:hidden">QUERO O DESCONTO</span>
+                            <span className="hidden md:inline">QUERO SABER A RAÍZ DA MINHA DOR</span>
                         </Button>
                     </div>
                 </div>
