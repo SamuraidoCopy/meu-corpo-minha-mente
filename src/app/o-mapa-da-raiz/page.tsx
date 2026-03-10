@@ -173,7 +173,8 @@ export default function SalesPage() {
 
                     <div className="mt-16 text-center">
                         <Button className="bg-wellness-sage text-white rounded-full px-10 h-14 text-lg">
-                            QUERO ACESSAR O APP E O CURSO AGORA!
+                            <span className="md:hidden">QUERO ACESSAR</span>
+                            <span className="hidden md:inline">QUERO ACESSAR O APP E O CURSO AGORA!</span>
                         </Button>
                     </div>
                 </div>
@@ -306,7 +307,7 @@ export default function SalesPage() {
                         </ul>
 
                         <Button className="w-full h-18 md:h-24 rounded-full text-xl md:text-2xl bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-2xl shadow-wellness-gold/20 transform hover:-translate-y-1 transition-all">
-                            <span className="md:hidden">QUERO ACESSAR</span>
+                            <span className="md:hidden">QUERO O DESCONTO</span>
                             <span className="hidden md:inline">LIBERAR MEU ACESSO COM DESCONTO AGORA</span>
                         </Button>
                     </div>
