@@ -22,7 +22,7 @@ export default function SalesPageVersionB() {
             <div className="fixed inset-0 mesh-gradient pointer-events-none opacity-40 z-0" />
 
             {/* Top Warning Bar */}
-            <div className="bg-wellness-sage text-white text-center py-4 px-4 text-xs md:text-sm font-medium tracking-widest relative z-50 shadow-sm">
+            <div className="bg-wellness-gold text-white text-center py-4 px-4 text-xs md:text-sm font-bold tracking-widest relative z-50 shadow-md">
                 LEIA COM ATENÇÃO: Se você faz terapia ou toma medicação há meses e ainda sente aquele peso no peito...
             </div>
 
@@ -54,11 +54,11 @@ export default function SalesPageVersionB() {
                     </h1>
 
                     <h2 className="text-xl md:text-2xl lg:text-3xl text-slate-700 font-serif leading-relaxed max-w-3xl mx-auto animate-fade-in-up delay-300 opacity-0" style={{ animationFillMode: 'forwards' }}>
-                        Conheça o Mapa da Raiz, o método que quebrou de vez o ciclo de tomar 17 remédios diários e tratamentos sem fim que a Cleucia Venancio enfrentou.
+                        Conheça o <strong>Mapa da Raiz</strong>, o método que quebrou de vez o ciclo de tomar 17 <strong>comprimidos</strong> diários e tratamentos sem fim que a Cleucia Venancio enfrentou.
                     </h2>
 
                     <p className="text-base md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed pt-4 animate-fade-in-up delay-500 opacity-0" style={{ animationFillMode: 'forwards' }}>
-                        Não importa quanto tempo e dinheiro você já gastou pulando de psicólogo em psicólogo. Se a terapia só trata os sintomas (os galhos), a doença nunca vai embora. Descubra agora de forma prática qual é o idioma secreto do seu corpo e entenda, enfim, qual órgão está carregando a dor que você guarda há 1, 5 ou até 10 anos.
+                        Não importa quanto tempo e dinheiro você já gastou pulando de <strong>profissional em profissional</strong>. Se a terapia só trata os sintomas (os galhos), a doença nunca vai embora. Descubra agora de forma prática qual é o idioma secreto do seu corpo e entenda, enfim, qual órgão está carregando a dor que você guarda há 1, 5 ou até 10 anos.
                     </p>
 
                     <div className="pt-8 flex justify-center">
@@ -79,7 +79,7 @@ export default function SalesPageVersionB() {
                     <div className="relative aspect-[16/9] w-full rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl group">
                         <Image
                             src="/images/cleucia-raniele-escrevendo.png"
-                            alt="Cleucia e Dra. Raniele escrevendo a carta"
+                            alt="Cleucia e Dra. Ranieli escrevendo a carta"
                             fill
                             className="object-cover transition-transform duration-700 group-hover:scale-105"
                         />
@@ -92,13 +92,13 @@ export default function SalesPageVersionB() {
             <section className="py-16 md:py-20 px-6 bg-white relative">
                 <div className="container mx-auto max-w-3xl space-y-12 text-lg md:text-xl text-slate-700 leading-relaxed font-serif">
                     <div className="p-8 bg-wellness-cream rounded-2xl border border-wellness-sage/20 mb-12 shadow-sm">
-                        <p className="font-bold mb-2">De: Esp. Cleucia Venancio e Dra. Raniele</p>
+                        <p className="font-bold mb-2">De: Esp. Cleucia Venancio e Dra. Ranieli</p>
                         <p className="font-bold">Para: Você que não aguenta mais lutar contra você mesma(o).</p>
                     </div>
 
                     <p>Pode ser difícil ler o que eu vou te dizer.<br />Mas eu preciso abrir o jogo com você.</p>
 
-                    <p>Se você já foi ao psicólogo por anos a fio, tentou fazer aulas de yoga, comprou livros de autoajuda... e mesmo <strong>tomando certinho seus remédios todos os dias</strong>, você ainda acaba voltando para o quarto escuro da tristeza profunda ou da ansiedade que aperta o peito.</p>
+                    <p>Se você já foi ao <strong>profissional</strong> por anos a fio, tentou fazer aulas de yoga, comprou livros de autoajuda... e mesmo <strong>tomando certinho seus comprimidos todos os dias</strong>, você ainda acaba voltando para o quarto escuro da tristeza profunda ou da ansiedade que aperta o peito.</p>
 
                     <p>Tem algo de muito errado por aí, e o sistema tradicional de saúde nunca te contou.<br />E eu posso falar isso de boca cheia, porque eu passei exatamente 9 anos sendo refém da <strong>&quot;Terapia Sem Fim&quot;</strong>.</p>
 
@@ -108,11 +108,11 @@ export default function SalesPageVersionB() {
                         </p>
                     </div>
 
-                    <p>Dezessete remédios... todos os dias. Só para conseguir levantar da cama e funcionar.</p>
+                    <p>Dezessete <strong>comprimidos</strong>... todos os dias. Só para conseguir levantar da cama e funcionar.</p>
 
                     <p>Eu fingia que estava tudo bem. Sorria para as amigas e ia trabalhar. Mas, por dentro, parecia que a vida tinha perdido a cor. Estava tudo cinza, sem graça.</p>
 
-                    <p>Até que a Dra. Raniele, minha filha, trouxe o conhecimento profundo da Medicina Tradicional Chinesa para a nossa clínica... e nós finalmente entendemos a peça do quebra-cabeça que nenhuma conversa no psicólogo tinha enxergado.</p>
+                    <p>Até que a Dra. Ranieli, minha filha, trouxe o conhecimento profundo da Terapia Integrativa e eu aprofundei nos estudos das terapias integrativas para compreender meu corpo e minha mente para a nossa clínica... e nós finalmente entendemos a peça do quebra-cabeça que nenhuma conversa no <strong>profissional</strong> tinha enxergado.</p>
 
                     <blockquote className="border-l-4 border-wellness-sage pl-6 italic text-xl md:text-2xl text-slate-800 font-medium my-12 py-2">
                         &quot;Eles passavam o tempo todo podando as folhas de uma árvore doente... e esqueceram de tratar a verdadeira raiz do problema.&quot;
@@ -125,7 +125,7 @@ export default function SalesPageVersionB() {
             {/* Seção 2: A Solução */}
             <section className="py-16 md:py-20 px-6 bg-wellness-sage/5 relative">
                 <div className="container mx-auto max-w-3xl space-y-8 text-lg md:text-xl text-slate-700 leading-relaxed font-serif">
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-10 text-center leading-tight">Quando unimos a leitura do nosso Corpo Físico com a sabedoria milenar da Medicina Tradicional Chinesa, tudo fez sentido.</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-10 text-center leading-tight">Quando unimos a leitura do nosso Corpo Físico com a sabedoria milenar da Terapia Integrativa, tudo fez sentido.</h2>
 
                     <p className="text-center text-xl md:text-2xl font-bold text-wellness-sage">Nós desvendamos o mapa.</p>
 
@@ -146,17 +146,17 @@ export default function SalesPageVersionB() {
 
                     <div className="bg-white p-10 rounded-[2rem] shadow-xl border border-slate-100 my-16">
                         <p className="text-2xl font-bold text-slate-900 mb-6 leading-tight">Quando achei isso, foi como tirar um piano das costas. Voltei a respirar.</p>
-                        <p><strong>Já faz quase 6 anos que eu durmo bem, com a mente leve e o corpo saudável... Sem tomar UM remédio sequer.</strong> E sem aquele medo constante de ter recaídas. Foi a cura profunda do órgão que mudou a minha vida.</p>
+                        <p><strong>Já faz quase 6 anos que eu durmo bem, com a mente leve e o corpo saudável... Sem tomar UM comprimido sequer.</strong> E sem aquele medo constante de ter recaídas. Foi a autocura profunda do órgão que mudou a minha vida.</p>
                     </div>
 
-                    <p>A Medicina Chinesa é clara nisso há milhares de anos: as 5 grandes emoções (Raiva, Ansiedade, Preocupação Exagerada, Tristeza Profunda e Aquela Sensação de Medo/Cansaço Existencial) adoecem pouco a pouco os seus 5 órgãos principais. Não adianta nada tentar cobrir o sol com a peneira.</p>
+                    <p>A Terapia Integrativa é clara nisso há milhares de anos: as 5 grandes emoções (Raiva, Ansiedade, Preocupação Exagerada, Tristeza Profunda e Aquela Sensação de Medo/Cansaço Existencial) adoecem pouco a pouco os seus 5 órgãos principais. Não adianta nada tentar cobrir o sol com a peneira.</p>
 
                     <div className="p-10 bg-wellness-gold/10 text-slate-900 rounded-[2rem] border border-wellness-gold/20 mt-16 shadow-sm animate-fade-in-up">
                         <p className="font-bold text-2xl mb-6 flex items-center gap-3">
                             <Lock className="text-wellness-gold" size={24} />
                             Só que temos um grande problema:
                         </p>
-                        <p>Nesta nossa clínica, nós cobramos exatamente <strong>R$ 697,00 por UMA ÚNICA SESSÃO</strong> dessas... e simplesmente não temos mais espaço na agenda da Dra. Raniele.</p>
+                        <p>Nesta nossa clínica, nós cobramos exatamente <strong>R$ 697,00 por UMA ÚNICA SESSÃO</strong> dessas... e simplesmente não temos mais espaço na nossa agenda.</p>
                         <p className="mt-4">Mas, diante de um país onde quase todo mundo sofre hoje de ansiedade e depressão, nós achamos injusto guardar isso só para quem pode pagar.</p>
                     </div>
                 </div>
@@ -171,7 +171,7 @@ export default function SalesPageVersionB() {
                     </div>
 
                     <p className="text-center text-lg md:text-xl text-slate-600 max-w-2xl mx-auto mb-20 font-serif">
-                        O Mapa da Raiz <strong>não é mais um &quot;cursinho online&quot; para você ver a primeira aula e nunca mais acessar</strong>. É uma ferramenta prática dividida em duas partes muito importantes.
+                        O <strong>Mapa da Raiz</strong> <strong>não é mais um &quot;cursinho online&quot; para você ver a primeira aula e nunca mais acessar</strong>. É uma ferramenta prática dividida em duas partes muito importantes.
                     </p>
 
                     <div className="space-y-16">
@@ -215,7 +215,7 @@ export default function SalesPageVersionB() {
                             <h3 className="text-2xl md:text-3xl font-bold text-center mb-8 mt-4 font-serif text-wellness-gold">PARTE 2: O APLICATIVO INTERATIVO 📲</h3>
                             <p className="text-lg md:text-xl text-center text-slate-700 leading-relaxed font-serif">
                                 Como um grande presente para os alunos focados... no oitavo dia depois de sua compra, nós vamos liberar para você o seu acesso ao &quot;Mapa Facial Interativo&quot;.<br /><br />
-                                É um aplicativo onde, pelo seu próprio celular, de frente para o espelho, você clica e aponta onde tem marcas no seu corpo e rosto (ex: olheiras escuras, vermelhidões e rugas). O app vai cruzar essas informações com a Medicina Chinesa e te devolver NA HORA a resposta: qual órgão de fato está em pane e precisa de atenção para te arrancar dessa tristeza.
+                                É um aplicativo onde, pelo seu próprio celular, de frente para o espelho, você clica e aponta onde tem marcas no seu rosto (ex: olheiras escuras, vermelhidões e rugas). O app vai cruzar essas informações com a Terapia Integrativa e te devolver NA HORA a resposta: qual órgão de fato está em pane e precisa de atenção para te arrancar dessa tristeza.
                             </p>
                         </div>
                     </div>
@@ -229,7 +229,7 @@ export default function SalesPageVersionB() {
                 <div className="container mx-auto max-w-3xl relative z-10 space-y-12 font-serif text-lg md:text-xl leading-relaxed text-white/90">
                     <p>Se a gente fosse fazer as contas, se você sentasse cara a cara com a gente hoje, presencial ou online... essa consulta não sairia por menos de R$ 697,00.</p>
 
-                    <p>Ou, pior, a grana que as pessoas passam uma vida inteira gastando na farmácia com remédios todo mês (que, dependendo da receita, passa fácil dos R$ 250 mensais), além das consultas em terapias que nunca acabam, que passam, facilmente, dos R$ 2.000,00 por ano (isso se você fizer uma sessão por mês).</p>
+                    <p>Ou, pior, a grana que as pessoas passam uma vida inteira gastando na farmácia com <strong>comprimidos</strong> todo mês (que, dependendo da receita, passa fácil dos R$ 250 mensais), além das consultas em terapias que nunca acabam, que passam, facilmente, dos R$ 2.000,00 por ano (isso se você fizer uma sessão por mês).</p>
 
                     <p>Mas nós criamos O Mapa da Raiz focando em VOCÊ, para ser simples e acessível.</p>
 
@@ -255,7 +255,7 @@ export default function SalesPageVersionB() {
                         <ul className="text-left max-w-md mx-auto space-y-4 mb-12 font-sans text-base">
                             <li className="flex items-center gap-3 text-slate-700">
                                 <CheckCircle2 className="text-wellness-gold shrink-0" size={20} />
-                                <strong>Treinamento O Mapa da Raiz</strong> (Módulos Rápidos)
+                                <strong>Treinamento <strong>O Mapa da Raiz</strong></strong> (Módulos Rápidos)
                             </li>
                             <li className="flex items-center gap-3 text-slate-700">
                                 <CheckCircle2 className="text-wellness-gold shrink-0" size={20} />
@@ -277,27 +277,27 @@ export default function SalesPageVersionB() {
                     </div>
 
                     <p className="text-center text-base text-white/50 pt-8 font-sans">
-                        Um mês desses tratamentos convencionais cheios de remédio, que não consertam a base, sai muito mais caro que isso. O Mapa Da Raiz resolve a causa por um investimento menor que R$ 10 ao mês.
+                        Um mês desses tratamentos convencionais cheios de <strong>comprimido</strong>, que não consertam a base, sai muito mais caro que isso. O <strong>Mapa Da Raiz</strong> traz respostas por um investimento menor que R$ 10 ao mês.
                     </p>
                 </div>
             </section>
 
             {/* Garantia */}
-            <section className="py-16 md:py-20 px-6 bg-wellness-sage text-white text-center">
+            <section className="py-16 md:py-24 px-6 bg-[#2D3E35] text-white text-center">
                 <div className="container mx-auto max-w-3xl space-y-8">
-                    <ShieldCheck size={64} className="mx-auto text-wellness-cream opacity-80" />
-                    <h2 className="text-3xl md:text-5xl font-serif font-bold">A Regra dos "7 Dias no Espelho"</h2>
-                    <p className="text-xl md:text-2xl font-serif text-wellness-cream">Ou a gente te mostra uma luz de verdade, ou não ficamos com 1 centavo seu.</p>
+                    <ShieldCheck size={64} className="mx-auto text-wellness-cream" />
+                    <h2 className="text-3xl md:text-5xl font-serif font-bold text-white">A Regra dos &quot;7 Dias no Espelho&quot;</h2>
+                    <p className="text-xl md:text-2xl font-serif text-wellness-cream brightness-110">Ou a gente te mostra uma luz de verdade, ou não ficamos com 1 centavo seu.</p>
 
-                    <div className="text-left font-serif text-lg leading-relaxed space-y-6 pt-8 text-white/90">
+                    <div className="text-left font-serif text-lg leading-relaxed space-y-6 pt-8 text-white">
                         <p>Entre agora. Assista às aulas de imediato, e comece seu tratamento com os Exercícios de Primeiros Socorros. Faça isso por até 7 dias corridos.</p>
                         <p>Se essa imersão não lhe trouxer <strong>a maior verdadeira e inegável clareza sobre o corpo e a mente humana que já te ensinaram até hoje</strong>, nós devolvemos o seu dinheiro.</p>
                         <p>Basta nos enviar um simples e-mail para a equipe. Nós vamos reembolsar tudo o que você pagou, direto no seu cartão ou PIX. Sem burocracia, sem perguntas chatas. E continuamos amigos.</p>
                     </div>
 
                     <div className="pt-8 flex justify-center">
-                        <Button className="h-auto py-4 px-8 md:px-14 rounded-full text-lg md:text-xl bg-white text-wellness-sage hover:bg-wellness-cream shadow-2xl shadow-black/20 transition-all hover:scale-105 active:scale-95">
-                            QUERO MERGULHAR NA RAIZ AGORA »
+                        <Button className="h-auto py-5 px-10 md:px-16 rounded-full text-lg md:text-xl bg-wellness-gold text-white hover:bg-wellness-gold/90 shadow-2xl shadow-wellness-gold/30 transition-all hover:scale-105 active:scale-95 font-bold uppercase tracking-wider">
+                            QUERO A MINHA AUTOCURA AGORA »
                         </Button>
                     </div>
                 </div>

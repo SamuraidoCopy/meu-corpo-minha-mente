@@ -39,7 +39,7 @@ function App() {
 
             <header className="relative z-10 mb-12 text-center max-w-lg animate-fade-in">
                 <span className="inline-block py-1 px-3 rounded-full bg-white/40 border border-white/50 backdrop-blur-md text-xs font-bold tracking-widest text-gray-600 uppercase mb-4 shadow-sm">
-                    Método Dra. Raniele e Cleucia
+                    Método Dra. Ranieli e Cleucia
                 </span>
                 <h1 className="text-5xl md:text-6xl font-serif text-gray-900 mb-6 tracking-tight leading-tight">
                     O Mapa da <span className="text-transparent bg-clip-text bg-gradient-to-r from-wood to-earth">Raiz</span>

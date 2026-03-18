@@ -80,7 +80,7 @@ export default function SalesPage() {
             {/* Hero Section */}
             <section className="relative pt-24 pb-20 md:pt-32 md:pb-32 px-6 overflow-hidden">
                 <div className="container mx-auto max-w-5xl relative z-10 text-center space-y-8">
-                    <div className="inline-block px-4 py-1.5 rounded-full bg-wellness-sage/10 text-wellness-sage text-xs md:text-sm font-bold tracking-widest uppercase animate-fade-in-up">
+                    <div className="inline-block px-4 py-1.5 rounded-full bg-wellness-gold text-white text-xs md:text-sm font-bold tracking-widest uppercase animate-fade-in-up">
                         ATENÇÃO: PARA QUEM BUSCA DAR UM PONTO FINAL NA TERAPIA &quot;SEM FIM&quot;
                     </div>
 
@@ -119,7 +119,7 @@ export default function SalesPage() {
                         </Button>
 
                         <p className="text-sm text-slate-500 italic">
-                            17 comprimidos diários não pararam a minha depressão, mas sim o que descobri com a MTC.
+                            17 comprimidos diários não pararam a minha depressão, mas sim o que descobri com a Terapia Integrativa.
                         </p>
                     </div>
                 </div>
@@ -143,7 +143,7 @@ export default function SalesPage() {
                             </div>
                             <h3 className="text-xl font-serif mb-4">A Anatomia da Sua Dor</h3>
                             <p className="text-slate-600 leading-relaxed">
-                                Entenda os 5 Elementos da MTC e qual órgão do seu corpo está sofrendo por emoções guardadas.
+                                Entenda os 5 Elementos da Terapia Integrativa e qual órgão do seu corpo está sofrendo por emoções guardadas.
                             </p>
                         </Card>
 
@@ -190,7 +190,7 @@ export default function SalesPage() {
                                 <div className="relative rounded-[3rem] shadow-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
                                     <Image
                                         src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=600"
-                                        alt="Dra. Raniele"
+                                        alt="Dra. Ranieli"
                                         fill
                                         sizes="(max-width: 768px) 50vw, 25vw"
                                         className="object-cover"
@@ -216,7 +216,7 @@ export default function SalesPage() {
                             </h2>
 
                             <p className="text-lg text-slate-600 leading-relaxed">
-                                Somos a <strong>Dra. Raniele</strong> e a <strong>Esp. Cleucia Venancio</strong>, fundadoras da clínica <em>Meu Corpo, Minha Mente</em> e criadoras do Método &quot;Cortando o Mal pela Raiz™&quot;.
+                                Somos a <strong>Dra. Ranieli</strong> e a <strong>Esp. Cleucia Venancio</strong>, fundadoras da clínica <em>Meu Corpo, Minha Mente</em> e criadoras do Método &quot;Cortando o Mal pela Raiz™&quot;.
                             </p>
 
                             <div className="space-y-6">
@@ -230,7 +230,7 @@ export default function SalesPage() {
                                     {[
                                         "Ambas experimentaram o método na própria vida",
                                         "Método validado em centenas de sessões",
-                                        "Baseado em Medicina Tradicional Chinesa",
+                                        "Baseado em Terapia Integrativa",
                                         "Foco em Saúde Física, Mental e Espiritual"
                                     ].map((item, i) => (
                                         <li key={i} className="flex items-center gap-3 text-slate-700 font-medium">
@@ -324,7 +324,7 @@ export default function SalesPage() {
                             </div>
                         </div>
                         <p className="text-sm text-white/80 max-w-sm text-left">
-                            Se em 7 dias você não achar que esse método te mostrou o caminho da cura, nós devolvemos cada centavo investido, sem perguntas. Envie apenas um e-mail.
+                            Se em 7 dias você não achar que esse método te mostrou o caminho da autocura, nós devolvemos cada centavo investido, sem perguntas. Envie apenas um e-mail.
                         </p>
                     </div>
                 </div>
@@ -350,7 +350,7 @@ export default function SalesPage() {
                             },
                             {
                                 q: "E se eu não me adaptar ao método?",
-                                a: "Você tem 7 dias de garantia total. Se você não achar que esse método te mostrou o caminho da cura, devolvemos seu dinheiro sem perguntas. Envie apenas um e-mail."
+                                a: "Você tem 7 dias de garantia total. Se você não achar que esse método te mostrou o caminho da autocura, devolvemos seu dinheiro sem perguntas. Envie apenas um e-mail."
                             }
                         ].map((faq, i) => (
                             <details key={i} className="group glass rounded-3xl overflow-hidden border-none cursor-pointer">
@@ -369,9 +369,9 @@ export default function SalesPage() {
 
                     <div className="mt-20 text-center space-y-6">
                         <p className="text-slate-600 font-medium">Ainda indeciso?</p>
-                        <Button variant="outline" className="rounded-full px-10 h-14 border-slate-300 hover:bg-white text-slate-700">
-                            <span className="md:hidden">QUERO O DESCONTO</span>
-                            <span className="hidden md:inline">QUERO SABER A RAÍZ DA MINHA DOR</span>
+                        <Button className="rounded-full px-12 h-16 bg-wellness-sage hover:bg-wellness-sage/90 text-white shadow-lg shadow-wellness-sage/20 transition-all hover:scale-105">
+                            <span className="md:hidden">QUERO A AUTOCURA</span>
+                            <span className="hidden md:inline">SIM, QUERO A MINHA AUTOCURA AGORA</span>
                         </Button>
                     </div>
                 </div>
