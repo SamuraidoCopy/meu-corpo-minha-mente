@@ -236,25 +236,19 @@ export default function SalesPageVersionB() {
                                                 
                                                 {/* The Screen Layer */}
                                                 <div className="w-full h-full rounded-[2.5rem] overflow-hidden bg-white relative">
-                                                    {/* Notch / Dynamic Island */}
-                                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-slate-900 rounded-b-xl z-30 flex items-center justify-center gap-1.5">
-                                                        <div className="w-7 h-1.5 bg-slate-800 rounded-full" />
-                                                        <div className="w-1.5 h-1.5 bg-slate-800 rounded-full" />
-                                                    </div>
-
                                                     <Image
                                                         src={`/images/app-screen-${num}.jpg`}
                                                         alt={`Tela do Aplicativo ${num}`}
                                                         fill
-                                                        className="object-cover object-top"
+                                                        className="object-contain"
                                                         unoptimized
                                                     />
                                                     
                                                     {/* Bottom Home Indicator */}
-                                                    <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-20 h-1 bg-slate-900/10 rounded-full z-20" />
+                                                    <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-20 h-1 bg-slate-900/5 rounded-full z-20" />
                                                     
                                                     {/* Screen Gloss Overlay */}
-                                                    <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-40 pointer-events-none group-hover:opacity-60 transition-opacity" />
+                                                    <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity" />
                                                 </div>
                                             </div>
                                         </div>

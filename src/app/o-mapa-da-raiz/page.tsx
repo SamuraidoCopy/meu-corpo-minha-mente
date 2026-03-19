@@ -189,25 +189,19 @@ export default function SalesPage() {
                                         
                                         {/* The Screen Layer */}
                                         <div className="w-full h-full rounded-[2.8rem] overflow-hidden bg-white relative">
-                                            {/* Notch / Dynamic Island */}
-                                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-7 bg-slate-900 rounded-b-2xl z-30 flex items-center justify-center gap-2">
-                                                <div className="w-8 h-2 bg-slate-800 rounded-full" />
-                                                <div className="w-2 h-2 bg-slate-800 rounded-full" />
-                                            </div>
-
                                             <Image
                                                 src={`/images/app-screen-${num}.jpg`}
                                                 alt={`Tela do Aplicativo ${num}`}
                                                 fill
-                                                className="object-cover object-top"
+                                                className="object-contain"
                                                 unoptimized
                                             />
                                             
                                             {/* Bottom Home Indicator */}
-                                            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-24 h-1 bg-slate-900/10 rounded-full z-20" />
+                                            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-24 h-1 bg-slate-900/5 rounded-full z-20" />
                                             
                                             {/* Screen Reflection Overlay */}
-                                            <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-40 pointer-events-none" />
+                                            <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-30 pointer-events-none" />
                                         </div>
                                     </div>
                                 </div>
