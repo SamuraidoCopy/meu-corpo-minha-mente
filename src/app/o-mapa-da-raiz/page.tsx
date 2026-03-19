@@ -171,6 +171,29 @@ export default function SalesPage() {
                         </Card>
                     </div>
 
+                    {/* App Screenshots Carousel */}
+                    <div className="mt-16 w-full relative">
+                        {/* Fade edges para induzir o scroll */}
+                        <div className="absolute top-0 bottom-0 left-0 w-8 md:w-24 bg-gradient-to-r from-white/30 to-transparent z-10 pointer-events-none rounded-l-[2rem]" />
+                        <div className="absolute top-0 bottom-0 right-0 w-8 md:w-24 bg-gradient-to-l from-white/30 to-transparent z-10 pointer-events-none rounded-r-[2rem]" />
+                        
+                        <div className="flex gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-8 md:px-24 py-4 items-center">
+                            {[1, 2, 3, 4].map((num) => (
+                                <div key={num} className="snap-center shrink-0 w-[220px] md:w-[280px] aspect-[9/19] relative rounded-[2.5rem] border-[6px] md:border-[8px] border-slate-900 overflow-hidden shadow-2xl bg-white group hover:scale-[1.02] transition-transform duration-500">
+                                    <Image
+                                        src={`/images/app-screen-${num}.jpg`}
+                                        alt={`Tela do Aplicativo ${num}`}
+                                        fill
+                                        className="object-cover"
+                                        unoptimized
+                                    />
+                                    {/* Glass reflection effect */}
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/30 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                     <div className="mt-16 text-center">
                         <Button className="bg-wellness-sage text-white rounded-full px-10 h-14 text-lg">
                             <span className="md:hidden">QUERO ACESSAR</span>

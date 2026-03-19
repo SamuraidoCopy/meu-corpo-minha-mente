@@ -217,6 +217,29 @@ export default function SalesPageVersionB() {
                                 Como um grande presente para os alunos focados... no oitavo dia depois de sua compra, nós vamos liberar para você o seu acesso ao &quot;Mapa Facial Interativo&quot;.<br /><br />
                                 É um aplicativo onde, pelo seu próprio celular, de frente para o espelho, você clica e aponta onde tem marcas no seu rosto (ex: olheiras escuras, vermelhidões e rugas). O app vai cruzar essas informações com a Terapia Integrativa e te devolver NA HORA a resposta: qual órgão de fato está em pane e precisa de atenção para te arrancar dessa tristeza.
                             </p>
+
+                            {/* App Screenshots Carousel */}
+                            <div className="mt-12 w-full relative -mx-8 md:-mx-14 px-4 md:px-0">
+                                {/* Fade edges para UX visual hint de rolagem */}
+                                <div className="absolute top-0 bottom-0 left-0 w-8 md:w-16 bg-gradient-to-r from-wellness-gold/5 to-transparent z-10 pointer-events-none rounded-l-[3rem]" />
+                                <div className="absolute top-0 bottom-0 right-0 w-8 md:w-16 bg-gradient-to-l from-wellness-gold/5 to-transparent z-10 pointer-events-none rounded-r-[3rem]" />
+                                
+                                <div className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-8 md:px-14 py-4 items-center">
+                                    {[1, 2, 3, 4].map((num) => (
+                                        <div key={num} className="snap-center shrink-0 w-[200px] md:w-[260px] aspect-[9/19] relative rounded-[2.5rem] border-[6px] md:border-[8px] border-slate-900 overflow-hidden shadow-2xl bg-white group hover:-translate-y-2 transition-transform duration-500">
+                                            <Image
+                                                src={`/images/app-screen-${num}.jpg`}
+                                                alt={`Tela do Aplicativo ${num}`}
+                                                fill
+                                                className="object-cover"
+                                                unoptimized
+                                            />
+                                            {/* Micro-interação de brilho na tela */}
+                                            <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none transform -translate-x-full group-hover:translate-x-full duration-1000 ease-in-out" />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
