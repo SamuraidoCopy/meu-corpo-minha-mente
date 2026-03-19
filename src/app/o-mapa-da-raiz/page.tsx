@@ -179,16 +179,37 @@ export default function SalesPage() {
                         
                         <div className="flex gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-8 md:px-24 py-4 items-center">
                             {[1, 2, 3, 4].map((num) => (
-                                <div key={num} className="snap-center shrink-0 w-[220px] md:w-[280px] aspect-[9/19] relative rounded-[2.5rem] border-[6px] md:border-[8px] border-slate-900 overflow-hidden shadow-2xl bg-white group hover:scale-[1.02] transition-transform duration-500">
-                                    <Image
-                                        src={`/images/app-screen-${num}.jpg`}
-                                        alt={`Tela do Aplicativo ${num}`}
-                                        fill
-                                        className="object-cover"
-                                        unoptimized
-                                    />
-                                    {/* Glass reflection effect */}
-                                    <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/30 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                                <div key={num} className="snap-center shrink-0 w-[240px] md:w-[300px] relative animate-fade-in-right">
+                                    {/* Phone Hardware Frame */}
+                                    <div className="relative aspect-[9/19] bg-slate-900 rounded-[3.5rem] p-3 shadow-2xl border-x-[4px] border-slate-800 group hover:scale-[1.03] transition-transform duration-700">
+                                        {/* Side Buttons (Vol/Power) */}
+                                        <div className="absolute -left-[3px] top-24 w-[3px] h-12 bg-slate-700 rounded-l-full" />
+                                        <div className="absolute -left-[3px] top-40 w-[3px] h-12 bg-slate-700 rounded-l-full" />
+                                        <div className="absolute -right-[3px] top-32 w-[3px] h-16 bg-slate-700 rounded-r-full" />
+                                        
+                                        {/* The Screen Layer */}
+                                        <div className="w-full h-full rounded-[2.8rem] overflow-hidden bg-white relative">
+                                            {/* Notch / Dynamic Island */}
+                                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-7 bg-slate-900 rounded-b-2xl z-30 flex items-center justify-center gap-2">
+                                                <div className="w-8 h-2 bg-slate-800 rounded-full" />
+                                                <div className="w-2 h-2 bg-slate-800 rounded-full" />
+                                            </div>
+
+                                            <Image
+                                                src={`/images/app-screen-${num}.jpg`}
+                                                alt={`Tela do Aplicativo ${num}`}
+                                                fill
+                                                className="object-cover object-top"
+                                                unoptimized
+                                            />
+                                            
+                                            {/* Bottom Home Indicator */}
+                                            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-24 h-1 bg-slate-900/10 rounded-full z-20" />
+                                            
+                                            {/* Screen Reflection Overlay */}
+                                            <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-40 pointer-events-none" />
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
                         </div>

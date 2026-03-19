@@ -226,16 +226,37 @@ export default function SalesPageVersionB() {
                                 
                                 <div className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-8 md:px-14 py-4 items-center">
                                     {[1, 2, 3, 4].map((num) => (
-                                        <div key={num} className="snap-center shrink-0 w-[200px] md:w-[260px] aspect-[9/19] relative rounded-[2.5rem] border-[6px] md:border-[8px] border-slate-900 overflow-hidden shadow-2xl bg-white group hover:-translate-y-2 transition-transform duration-500">
-                                            <Image
-                                                src={`/images/app-screen-${num}.jpg`}
-                                                alt={`Tela do Aplicativo ${num}`}
-                                                fill
-                                                className="object-cover"
-                                                unoptimized
-                                            />
-                                            {/* Micro-interação de brilho na tela */}
-                                            <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none transform -translate-x-full group-hover:translate-x-full duration-1000 ease-in-out" />
+                                        <div key={num} className="snap-center shrink-0 w-[220px] md:w-[280px] relative animate-fade-in-up">
+                                            {/* Phone Hardware Frame */}
+                                            <div className="relative aspect-[9/19] bg-slate-900 rounded-[3.2rem] p-2.5 shadow-2xl border-x-[3px] border-slate-800/50 group hover:-translate-y-3 transition-all duration-700 ease-out">
+                                                {/* Side Buttons (Vol/Power) */}
+                                                <div className="absolute -left-[2px] top-20 w-[2px] h-10 bg-slate-700/50 rounded-l-full" />
+                                                <div className="absolute -left-[2px] top-32 w-[2px] h-10 bg-slate-700/50 rounded-l-full" />
+                                                <div className="absolute -right-[2px] top-24 w-[2px] h-14 bg-slate-700/50 rounded-r-full" />
+                                                
+                                                {/* The Screen Layer */}
+                                                <div className="w-full h-full rounded-[2.5rem] overflow-hidden bg-white relative">
+                                                    {/* Notch / Dynamic Island */}
+                                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-slate-900 rounded-b-xl z-30 flex items-center justify-center gap-1.5">
+                                                        <div className="w-7 h-1.5 bg-slate-800 rounded-full" />
+                                                        <div className="w-1.5 h-1.5 bg-slate-800 rounded-full" />
+                                                    </div>
+
+                                                    <Image
+                                                        src={`/images/app-screen-${num}.jpg`}
+                                                        alt={`Tela do Aplicativo ${num}`}
+                                                        fill
+                                                        className="object-cover object-top"
+                                                        unoptimized
+                                                    />
+                                                    
+                                                    {/* Bottom Home Indicator */}
+                                                    <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-20 h-1 bg-slate-900/10 rounded-full z-20" />
+                                                    
+                                                    {/* Screen Gloss Overlay */}
+                                                    <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-40 pointer-events-none group-hover:opacity-60 transition-opacity" />
+                                                </div>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
