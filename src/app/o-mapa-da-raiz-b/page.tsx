@@ -226,31 +226,29 @@ export default function SalesPageVersionB() {
                                 
                                 <div className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-8 md:px-14 py-4 items-center">
                                     {[1, 2, 3, 4].map((num) => {
-                                        const bgColors = ["bg-[#F9F9F9]", "bg-[#F2FBF6]", "bg-[#F9F9F9]", "bg-[#FBFBFB]"];
                                         return (
-                                            <div key={num} className="snap-center shrink-0 w-[220px] md:w-[280px] relative animate-fade-in-up">
-                                                {/* Phone Hardware Frame */}
-                                                <div className="relative aspect-[9/19] bg-slate-900 rounded-[3.2rem] p-2.5 shadow-2xl border-x-[3px] border-slate-800/50 group hover:-translate-y-3 transition-all duration-700 ease-out">
-                                                    {/* Side Buttons (Vol/Power) */}
-                                                    <div className="absolute -left-[2px] top-20 w-[2px] h-10 bg-slate-700/50 rounded-l-full" />
-                                                    <div className="absolute -left-[2px] top-32 w-[2px] h-10 bg-slate-700/50 rounded-l-full" />
-                                                    <div className="absolute -right-[2px] top-24 w-[2px] h-14 bg-slate-700/50 rounded-r-full" />
+                                            <div key={num} className="snap-center shrink-0 w-[220px] md:w-[280px] relative animate-fade-in-up group">
+                                                {/* Ultra-Thin Hardware Bezel */}
+                                                <div className="relative aspect-[9/19.5] bg-slate-950 rounded-[3rem] p-1.5 shadow-2xl ring-1 ring-white/10 group-hover:-translate-y-3 transition-all duration-700 ease-out">
+                                                    {/* Hardware Details */}
+                                                    <div className="absolute -left-[2px] top-20 w-[2.5px] h-10 bg-slate-800 rounded-l-full" />
+                                                    <div className="absolute -right-[2px] top-24 w-[2.5px] h-14 bg-slate-800 rounded-r-full" />
                                                     
-                                                    {/* The Screen Layer */}
-                                                    <div className={`w-full h-full rounded-[2.5rem] overflow-hidden relative ${bgColors[num-1] || 'bg-white'}`}>
+                                                    {/* Screen Layer (Full Space) */}
+                                                    <div className="w-full h-full rounded-[2.6rem] overflow-hidden bg-white relative">
                                                         <Image
                                                             src={`/images/app-screen-${num}.jpg`}
                                                             alt={`Tela do Aplicativo ${num}`}
                                                             fill
-                                                            className="object-contain p-1"
+                                                            className="object-cover object-top"
                                                             unoptimized
                                                         />
                                                         
-                                                        {/* Bottom Home Indicator */}
-                                                        <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-20 h-1 bg-slate-900/5 rounded-full z-20" />
+                                                        {/* Home Indicator */}
+                                                        <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-20 h-1 bg-black/5 rounded-full z-20" />
                                                         
-                                                        {/* Screen Gloss Overlay */}
-                                                        <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity" />
+                                                        {/* Screen Gloss */}
+                                                        <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-30 pointer-events-none group-hover:opacity-10 transition-opacity" />
                                                     </div>
                                                 </div>
                                             </div>

@@ -179,31 +179,29 @@ export default function SalesPage() {
                         
                         <div className="flex gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-8 md:px-24 py-4 items-center">
                             {[1, 2, 3, 4].map((num) => {
-                                const bgColors = ["bg-[#F9F9F9]", "bg-[#F2FBF6]", "bg-[#F9F9F9]", "bg-[#FBFBFB]"];
                                 return (
-                                    <div key={num} className="snap-center shrink-0 w-[240px] md:w-[300px] relative animate-fade-in-right">
-                                        {/* Phone Hardware Frame */}
-                                        <div className="relative aspect-[9/19] bg-slate-900 rounded-[3.5rem] p-3 shadow-2xl border-x-[4px] border-slate-800 group hover:scale-[1.03] transition-transform duration-700">
-                                            {/* Side Buttons (Vol/Power) */}
-                                            <div className="absolute -left-[3px] top-24 w-[3px] h-12 bg-slate-700 rounded-l-full" />
-                                            <div className="absolute -left-[3px] top-40 w-[3px] h-12 bg-slate-700 rounded-l-full" />
-                                            <div className="absolute -right-[3px] top-32 w-[3px] h-16 bg-slate-700 rounded-r-full" />
+                                    <div key={num} className="snap-center shrink-0 w-[240px] md:w-[300px] relative animate-fade-in-right group">
+                                        {/* Ultra Thin Hardware Frame */}
+                                        <div className="relative aspect-[9/19.5] bg-slate-950 rounded-[3rem] p-1.5 shadow-2xl ring-1 ring-white/10 group-hover:scale-[1.03] transition-all duration-700 ease-out">
+                                            {/* Minimalist Side Buttons */}
+                                            <div className="absolute -left-[2px] top-20 w-[2.5px] h-10 bg-slate-800 rounded-l-full" />
+                                            <div className="absolute -right-[2px] top-24 w-[2.5px] h-14 bg-slate-800 rounded-r-full" />
                                             
-                                            {/* The Screen Layer */}
-                                            <div className={`w-full h-full rounded-[2.8rem] overflow-hidden relative ${bgColors[num-1] || 'bg-white'}`}>
+                                            {/* The Screen (Edge-to-Edge) */}
+                                            <div className="w-full h-full rounded-[2.6rem] overflow-hidden bg-white relative">
                                                 <Image
                                                     src={`/images/app-screen-${num}.jpg`}
                                                     alt={`Tela do Aplicativo ${num}`}
                                                     fill
-                                                    className="object-contain p-1"
+                                                    className="object-cover object-top"
                                                     unoptimized
                                                 />
                                                 
                                                 {/* Bottom Home Indicator */}
-                                                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-24 h-1 bg-slate-900/5 rounded-full z-20" />
+                                                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-20 h-1 bg-black/10 rounded-full z-20" />
                                                 
-                                                {/* Screen Reflection Overlay */}
-                                                <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-30 pointer-events-none" />
+                                                {/* Subtle Vibrant Overlay */}
+                                                <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-40 pointer-events-none group-hover:opacity-20 transition-opacity" />
                                             </div>
                                         </div>
                                     </div>
