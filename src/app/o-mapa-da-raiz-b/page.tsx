@@ -225,34 +225,37 @@ export default function SalesPageVersionB() {
                                 <div className="absolute top-0 bottom-0 right-0 w-8 md:w-16 bg-gradient-to-l from-wellness-gold/5 to-transparent z-10 pointer-events-none rounded-r-[3rem]" />
                                 
                                 <div className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-8 md:px-14 py-4 items-center">
-                                    {[1, 2, 3, 4].map((num) => (
-                                        <div key={num} className="snap-center shrink-0 w-[220px] md:w-[280px] relative animate-fade-in-up">
-                                            {/* Phone Hardware Frame */}
-                                            <div className="relative aspect-[9/19] bg-slate-900 rounded-[3.2rem] p-2.5 shadow-2xl border-x-[3px] border-slate-800/50 group hover:-translate-y-3 transition-all duration-700 ease-out">
-                                                {/* Side Buttons (Vol/Power) */}
-                                                <div className="absolute -left-[2px] top-20 w-[2px] h-10 bg-slate-700/50 rounded-l-full" />
-                                                <div className="absolute -left-[2px] top-32 w-[2px] h-10 bg-slate-700/50 rounded-l-full" />
-                                                <div className="absolute -right-[2px] top-24 w-[2px] h-14 bg-slate-700/50 rounded-r-full" />
-                                                
-                                                {/* The Screen Layer */}
-                                                <div className="w-full h-full rounded-[2.5rem] overflow-hidden bg-white relative">
-                                                    <Image
-                                                        src={`/images/app-screen-${num}.jpg`}
-                                                        alt={`Tela do Aplicativo ${num}`}
-                                                        fill
-                                                        className="object-contain"
-                                                        unoptimized
-                                                    />
+                                    {[1, 2, 3, 4].map((num) => {
+                                        const bgColors = ["bg-[#F9F9F9]", "bg-[#F2FBF6]", "bg-[#F9F9F9]", "bg-[#FBFBFB]"];
+                                        return (
+                                            <div key={num} className="snap-center shrink-0 w-[220px] md:w-[280px] relative animate-fade-in-up">
+                                                {/* Phone Hardware Frame */}
+                                                <div className="relative aspect-[9/19] bg-slate-900 rounded-[3.2rem] p-2.5 shadow-2xl border-x-[3px] border-slate-800/50 group hover:-translate-y-3 transition-all duration-700 ease-out">
+                                                    {/* Side Buttons (Vol/Power) */}
+                                                    <div className="absolute -left-[2px] top-20 w-[2px] h-10 bg-slate-700/50 rounded-l-full" />
+                                                    <div className="absolute -left-[2px] top-32 w-[2px] h-10 bg-slate-700/50 rounded-l-full" />
+                                                    <div className="absolute -right-[2px] top-24 w-[2px] h-14 bg-slate-700/50 rounded-r-full" />
                                                     
-                                                    {/* Bottom Home Indicator */}
-                                                    <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-20 h-1 bg-slate-900/5 rounded-full z-20" />
-                                                    
-                                                    {/* Screen Gloss Overlay */}
-                                                    <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity" />
+                                                    {/* The Screen Layer */}
+                                                    <div className={`w-full h-full rounded-[2.5rem] overflow-hidden relative ${bgColors[num-1] || 'bg-white'}`}>
+                                                        <Image
+                                                            src={`/images/app-screen-${num}.jpg`}
+                                                            alt={`Tela do Aplicativo ${num}`}
+                                                            fill
+                                                            className="object-contain p-1"
+                                                            unoptimized
+                                                        />
+                                                        
+                                                        {/* Bottom Home Indicator */}
+                                                        <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-20 h-1 bg-slate-900/5 rounded-full z-20" />
+                                                        
+                                                        {/* Screen Gloss Overlay */}
+                                                        <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity" />
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>
