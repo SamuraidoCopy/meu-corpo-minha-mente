@@ -226,28 +226,37 @@ export default function SalesPageVersionB() {
                                 
                                 <div className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-8 md:px-14 py-4 items-center">
                                     {[1, 2, 3, 4].map((num) => {
-                                        // Mapeamento preciso para eliminar o aspecto de "colagem"
-                                        const specificBgs = ["bg-[#FFFFFF]", "bg-[#EEF9F2]", "bg-[#FDF8F3]", "bg-[#FFFFFF]"];
+                                        // Cromia absoluta para Seamless Blending (Gelo, Mint pastel, Creme)
+                                        const specificBgs = ["bg-[#F8F9FA]", "bg-[#EBF9F1]", "bg-[#FEF9F5]", "bg-[#F8F9FA]"];
                                         return (
-                                            <div key={num} className="snap-center shrink-0 w-[220px] md:w-[280px] relative animate-fade-in-up group">
-                                                {/* Ultra-Thin Hardware Bezel */}
-                                                <div className="relative aspect-[9/19.5] bg-slate-950 rounded-[3rem] p-1.5 shadow-2xl ring-1 ring-white/10 group-hover:-translate-y-3 transition-all duration-700 ease-out">
-                                                    {/* Screen Layer with Perfect Blend Background */}
-                                                    <div className={`w-full h-full rounded-[2.6rem] overflow-hidden relative ${specificBgs[num-1]}`}>
+                                            <div key={num} className="snap-center shrink-0 w-[220px] md:w-[300px] relative animate-fade-in-up group py-8">
+                                                {/* Ultra-Thin Premium Hardware Bezel with Glow */}
+                                                <div className="relative aspect-[9/19.5] bg-slate-950 rounded-[3.2rem] p-[5px] shadow-[0_25px_60px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.1)] group-hover:-translate-y-4 transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]">
+                                                    {/* Screen Layer with Perfect Blend Background and Depth */}
+                                                    <div className={`w-full h-full rounded-[2.8rem] overflow-hidden relative ${specificBgs[num-1]} shadow-[inset_0_0_30px_rgba(0,0,0,0.05)]`}>
+                                                        {/* Optimized Internal Image - Using object-cover to Fill Screen while 'Respiro' protects content */}
                                                         <Image
-                                                            src={`/images/app-screen-${num}.jpg`}
+                                                            src={`/images/app-screen-${num}.png`}
                                                             alt={`Tela do Aplicativo ${num}`}
                                                             fill
-                                                            className="object-contain"
+                                                            className="object-cover object-top opacity-0 animate-fade-in transition-transform duration-700 group-hover:scale-[1.02]"
+                                                            onLoadingComplete={(img) => img.classList.add('opacity-100')}
                                                             unoptimized
                                                         />
                                                         
-                                                        {/* Home Indicator */}
-                                                        <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-20 h-1 bg-black/5 rounded-full z-20" />
+                                                        {/* Home Indicator - Ultra Subtle */}
+                                                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-20 h-1 bg-black/10 rounded-full z-20" />
                                                         
-                                                        {/* High-Fidelity Glass Reflection */}
-                                                        <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-10 pointer-events-none group-hover:opacity-30 transition-opacity" />
+                                                        {/* High-Fidelity Glass Reflection & Seamless Bloom */}
+                                                        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity duration-700" />
+                                                        <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(255,255,255,1)] pointer-events-none z-10" />
+
+                                                        {/* Hardware Bezel Highlight */}
+                                                        <div className="absolute inset-0 border-[1px] border-white/10 rounded-[2.8rem] pointer-events-none z-30" />
                                                     </div>
+
+                                                    {/* Hardware Side Buttons */}
+                                                    <div className="absolute right-[-2px] top-24 w-[3px] h-12 bg-slate-800 rounded-l-sm opacity-50" />
                                                 </div>
                                             </div>
                                         );
