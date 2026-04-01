@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { AdminDashboard } from './admin-dashboard'
 
 export const dynamic = 'force-dynamic'
 
@@ -54,54 +54,7 @@ export default async function AdminPage() {
                     </div>
                 </div>
 
-                <div className="glass rounded-[2rem] overflow-hidden border-white/20 shadow-2xl">
-                    <div className="p-8 border-b border-foreground/5 bg-white/10">
-                        <h2 className="text-2xl font-serif">Alunas Cadastradas</h2>
-                    </div>
-                    <div className="p-4">
-                        <Table>
-                            <TableHeader>
-                                <TableRow className="border-foreground/5 hover:bg-transparent">
-                                    <TableHead className="uppercase tracking-widest text-[10px] font-bold py-6">Nome</TableHead>
-                                    <TableHead className="uppercase tracking-widest text-[10px] font-bold">Idade</TableHead>
-                                    <TableHead className="uppercase tracking-widest text-[10px] font-bold">Elemento</TableHead>
-                                    <TableHead className="uppercase tracking-widest text-[10px] font-bold">Status</TableHead>
-                                    <TableHead className="uppercase tracking-widest text-[10px] font-bold">Cadastro</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {users?.map((u) => (
-                                    <TableRow key={u.id} className="border-foreground/5 hover:bg-white/40 transition-colors group">
-                                        <TableCell className="py-6 font-medium text-foreground/90">{u.full_name || 'Anônima'}</TableCell>
-                                        <TableCell className="text-foreground/70">{u.age || '-'}</TableCell>
-                                        <TableCell>
-                                            {u.dominant_element ? (
-                                                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-wellness-sage/10 text-wellness-sage">
-                                                    {u.dominant_element}
-                                                </span>
-                                            ) : (
-                                                <span className="text-foreground/30 italic text-sm">Pendente</span>
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            {u.onboarding_completed ?
-                                                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-tighter text-wellness-sage">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-wellness-sage animate-pulse" /> Ativo
-                                                </span> :
-                                                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-tighter text-wellness-gold">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-wellness-gold" /> Pendente
-                                                </span>
-                                            }
-                                        </TableCell>
-                                        <TableCell className="text-foreground/60 text-sm">
-                                            {new Date(u.created_at).toLocaleDateString('pt-BR')}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </div>
-                </div>
+                <AdminDashboard users={users || []} />
             </div>
         </div>
     )

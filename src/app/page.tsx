@@ -24,9 +24,10 @@ const DICAS_DA_DOUTORA = [
   "Observe seu corpo sem julgamentos. Cada sintoma é apenas um mensageiro tentando te proteger. Ouça-o com amor e compaixão. — Dra. Ranieli & Dra. Cleucia"
 ];
 
-export default async function Home() {
+export default async function Home({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+  const { element: elementOverride } = await searchParams
 
   if (!user) {
     redirect('/login')
@@ -35,15 +36,29 @@ export default async function Home() {
   // Check valid profile
   const { data: profile } = await supabase
     .from('profiles')
-    .select('onboarding_completed, dominant_element, gender, full_name, avatar_url')
+    .select('onboarding_completed, dominant_element, gender, full_name, avatar_url, role')
     .eq('id', user.id)
     .single()
 
-  if (!profile || !profile.onboarding_completed) {
+  const isAdmin = profile?.role === 'admin'
+  const isInspectMode = elementOverride || (await searchParams).inspect === 'true'
+
+  if (isAdmin && !isInspectMode) {
+    // If admin is on root, redirect to admin panel unless they are specifically inspecting an element or in inspect mode
+    redirect('/admin')
+  }
+
+  if (!isAdmin && (!profile || !profile.onboarding_completed)) {
     redirect('/onboarding')
   }
 
-  const diagnosis = profile.dominant_element as ElementType | null
+  // Determine which element to show (Priority: Override > Profile)
+  let diagnosis = profile?.dominant_element as ElementType | null
+  
+  if (isAdmin && elementOverride && typeof elementOverride === 'string') {
+    diagnosis = elementOverride as ElementType
+  }
+
   const elementInfo = diagnosis ? ELEMENTS[diagnosis] : null
 
   const firstName = profile?.full_name?.split(' ')[0] || user.user_metadata.full_name?.split(' ')[0] || (profile?.gender === 'Masculino' ? 'Aluno' : 'Aluna')
@@ -84,18 +99,18 @@ export default async function Home() {
           {/* Main Status / Element Badge */}
           <div className="lg:col-span-8 space-y-8">
             {diagnosis && elementInfo ? (
-              <div className={`rounded-[2rem] p-10 relative overflow-hidden group hover:shadow-2xl hover:scale-[1.01] transition-all duration-500 border backdrop-blur-md ${elementInfo.theme.gradientBorder} ${elementInfo.theme.cardBg}`}>
-                <div className={`absolute top-6 right-6 p-2 transition-all group-hover:scale-110 duration-700 drop-shadow-xl`}>
+              <div className={`rounded-[2rem] p-10 relative group hover:shadow-2xl hover:scale-[1.01] transition-all duration-500 border backdrop-blur-md ${elementInfo.theme.gradientBorder} ${elementInfo.theme.cardBg}`}>
+                <div className={`absolute top-4 right-4 transition-all duration-1000 z-0 text-primary opacity-25 group-hover:opacity-80 group-hover:scale-110 group-hover:rotate-6`}>
                   {(() => {
                     const ElementIcon = IconMap[elementInfo.icon]
-                    return <ElementIcon className="w-28 h-28" />
+                    return <ElementIcon className="w-20 md:w-28 h-auto" />
                   })()}
                 </div>
                 <div className="relative z-10 space-y-6 flex flex-col items-center text-center">
-                  <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${elementInfo.theme.badgeBg} ${elementInfo.theme.badgeText} self-start md:self-center`}>
+                  <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${elementInfo.theme.badgeBg} text-primary self-start md:self-center`}>
                     Elemento Dominante
                   </div>
-                  <h2 className={`text-6xl font-serif leading-tight ${elementInfo.theme.titleColor}`}>
+                  <h2 className={`text-6xl font-serif leading-tight text-primary`}>
                     {elementInfo.name}
                   </h2>
                   <p className="text-xl text-foreground/60 max-w-xl leading-relaxed mx-auto">
