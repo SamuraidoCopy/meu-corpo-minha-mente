@@ -8,11 +8,11 @@ import { ELEMENTS, ElementType } from '@/lib/tcm-data'
 export default async function MapaV2Page({
     searchParams
 }: {
-    searchParams: Promise<{ inspect?: string }>
+    searchParams: Promise<{ inspect?: string, element?: string }>
 }) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    const { inspect } = await searchParams
+    const { inspect, element: elementOverride } = await searchParams
 
     if (!user) {
         redirect('/login')
@@ -21,11 +21,12 @@ export default async function MapaV2Page({
     // Load user profile to get dominant element
     const { data: profile } = await supabase
         .from('profiles')
-        .select('dominant_element, onboarding_completed, gender')
+        .select('dominant_element, onboarding_completed, gender, role')
         .eq('id', user.id)
         .single()
 
-    const isInspecting = inspect === 'true'
+    const isAdmin = profile?.role === 'admin'
+    const isInspecting = inspect === 'true' || (isAdmin && !!elementOverride)
 
     if (!profile || (!profile.onboarding_completed && !isInspecting)) {
         redirect('/onboarding')
@@ -36,7 +37,12 @@ export default async function MapaV2Page({
         redirect('/mapa')
     }
 
-    const dominantElement = (profile?.dominant_element as ElementType) || 'Madeira'
+    let dominantElement = (profile?.dominant_element as ElementType) || 'Madeira'
+    
+    // Override dominant element if admin is inspecting
+    if (isAdmin && elementOverride && Object.keys(ELEMENTS).includes(elementOverride)) {
+        dominantElement = elementOverride as ElementType
+    }
 
     // Check if user already submitted the facial marks today
     // For simplicity, we can let them do it multiple times or restrict. 
@@ -50,6 +56,13 @@ export default async function MapaV2Page({
             </Link>
 
             <div className="max-w-4xl mx-auto space-y-12 relative animate-in fade-in slide-in-from-bottom-8 duration-700">
+                {isInspecting && (
+                    <div className="bg-primary/5 border border-primary/20 rounded-2xl p-4 text-center">
+                        <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary">
+                            Visualização Master: {dominantElement}
+                        </p>
+                    </div>
+                )}
                 <header className="text-center space-y-6">
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-primary/10 text-primary mb-4 ring-1 ring-primary/20 shadow-xl">
                         <MapIcon size={32} strokeWidth={1.5} />
