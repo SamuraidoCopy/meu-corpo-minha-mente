@@ -238,21 +238,21 @@ export default function SalesPage() {
                             <div className="grid grid-cols-2 gap-4 h-full">
                                 <div className="relative rounded-[3rem] shadow-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
                                     <Image
-                                        src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=600"
+                                        src="/images/dra-ranieli-portrait-pva.jpg"
                                         alt="Dra. Ranieli"
                                         fill
                                         sizes="(max-width: 768px) 50vw, 25vw"
-                                        className="object-cover"
+                                        className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                                         priority
                                     />
                                 </div>
                                 <div className="relative rounded-[3rem] shadow-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 mt-8 md:mt-12">
                                     <Image
-                                        src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=600"
+                                        src="/images/cleucia-portrait.jpg"
                                         alt="Cleucia Venancio"
                                         fill
                                         sizes="(max-width: 768px) 50vw, 25vw"
-                                        className="object-cover"
+                                        className="object-cover transition-transform duration-700 group-hover:scale-105"
                                         priority
                                     />
                                 </div>

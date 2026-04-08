@@ -76,9 +76,9 @@ export default function SalesPageVersionB() {
             {/* Foto Autoras - Escrita da Carta */}
             <section className="bg-white pt-16 px-6">
                 <div className="container mx-auto max-w-4xl">
-                    <div className="relative aspect-[16/9] w-full rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl group">
+                    <div className="relative aspect-[3/2] w-full rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl group">
                         <Image
-                            src="/images/cleucia-raniele-escrevendo.png"
+                            src="/images/cleucia-raniele-vsl-carta.jpg"
                             alt="Cleucia e Dra. Ranieli escrevendo a carta"
                             fill
                             className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -129,12 +129,12 @@ export default function SalesPageVersionB() {
 
                     <p className="text-center text-xl md:text-2xl font-bold text-wellness-sage">Nós desvendamos o mapa.</p>
 
-                    <div className="w-full h-[400px] md:h-[500px] relative rounded-[3rem] overflow-hidden my-16 shadow-2xl grayscale hover:grayscale-0 transition-all duration-700">
+                    <div className="max-w-2xl mx-auto aspect-[4/5] relative rounded-[3rem] overflow-hidden my-16 shadow-2xl group transition-all duration-700 grayscale hover:grayscale-0">
                         <Image
-                            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=1200"
-                            alt="Especialistas"
+                            src="/images/dra-ranieli-portrait.jpg"
+                            alt="Dra. Ranieli"
                             fill
-                            className="object-cover"
+                            className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                         />
                     </div>
 
