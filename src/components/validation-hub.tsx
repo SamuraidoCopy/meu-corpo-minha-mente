@@ -13,7 +13,9 @@ import {
   ChevronRight,
   ChevronLeft,
   X,
-  Palette
+  Palette,
+  BookOpen,
+  Megaphone
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ElementType } from '@/lib/tcm-data'
@@ -22,9 +24,13 @@ const ROUTES = [
   { name: 'Home/Dashboard', path: '/o-mapa-da-raiz?inspect=true', icon: LayoutDashboard },
   { name: 'Onboarding', path: '/onboarding?inspect=true', icon: UserCircle },
   { name: 'Investigação (Mapa)', path: '/mapa?inspect=true', icon: MapIcon },
+  { name: 'Mapa das Expressões (v2)', path: '/mapa/v2?inspect=true', icon: MapIcon },
   { name: 'Diagnóstico', path: '/diagnostico?inspect=true', icon: ClipboardCheck },
+  { name: 'Diário das Emoções', path: '/diario?inspect=true', icon: BookOpen },
   { name: 'Safe Space Preview', path: '/preview-safe-space?inspect=true', icon: Eye },
   { name: 'Painel Admin', path: '/admin', icon: Settings },
+  { name: 'Página de Vendas A (PVA)', path: '/o-mapa-da-raiz-pva', icon: Megaphone },
+  { name: 'Página de Vendas B (PVB)', path: '/o-mapa-da-raiz-pvb', icon: Megaphone },
 ]
 
 const ELEMENTS_LIST: { name: string; key: ElementType; color: string }[] = [
