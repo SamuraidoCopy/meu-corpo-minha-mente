@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button'
 import { ElementType } from '@/lib/tcm-data'
 
 const ROUTES = [
-  { name: 'Home/Dashboard', path: '/?inspect=true', icon: LayoutDashboard },
+  { name: 'Home/Dashboard', path: '/o-mapa-da-raiz?inspect=true', icon: LayoutDashboard },
   { name: 'Onboarding', path: '/onboarding?inspect=true', icon: UserCircle },
   { name: 'Investigação (Mapa)', path: '/mapa?inspect=true', icon: MapIcon },
   { name: 'Diagnóstico', path: '/diagnostico?inspect=true', icon: ClipboardCheck },
