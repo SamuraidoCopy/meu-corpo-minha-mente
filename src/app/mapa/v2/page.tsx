@@ -8,10 +8,11 @@ import { ELEMENTS, ElementType } from '@/lib/tcm-data'
 export default async function MapaV2Page({
     searchParams
 }: {
-    searchParams: { inspect?: string }
+    searchParams: Promise<{ inspect?: string }>
 }) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
+    const { inspect } = await searchParams
 
     if (!user) {
         redirect('/login')
@@ -24,7 +25,7 @@ export default async function MapaV2Page({
         .eq('id', user.id)
         .single()
 
-    const isInspecting = searchParams.inspect === 'true'
+    const isInspecting = inspect === 'true'
 
     if (!profile || (!profile.onboarding_completed && !isInspecting)) {
         redirect('/onboarding')
