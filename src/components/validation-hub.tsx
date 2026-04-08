@@ -81,9 +81,9 @@ export function ValidationHub({ isAdmin }: ValidationHubProps) {
           </div>
 
           {/* Quick Navigation */}
-          <div className="space-y-2">
+          <div className="space-y-2 flex-1 overflow-hidden flex flex-col">
             <p className="text-[10px] uppercase tracking-widest font-bold text-foreground/30 ml-1 mb-3">Navegação Direta</p>
-            <div className="grid grid-cols-1 gap-1">
+            <div className="grid grid-cols-1 gap-1 overflow-y-auto max-h-[320px] pr-2 custom-scrollbar">
               {ROUTES.map((route) => {
                 const Icon = route.icon
                 // Compare path without query params for active state

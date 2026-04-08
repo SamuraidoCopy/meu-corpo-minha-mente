@@ -5,7 +5,11 @@ import { Brain, Map as MapIcon, ArrowLeft } from 'lucide-react'
 import { ExpressionsSelectorB } from './expressions-selector-b'
 import { ELEMENTS, ElementType } from '@/lib/tcm-data'
 
-export default async function MapaV2Page() {
+export default async function MapaV2Page({
+    searchParams
+}: {
+    searchParams: { inspect?: string }
+}) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -20,16 +24,18 @@ export default async function MapaV2Page() {
         .eq('id', user.id)
         .single()
 
-    if (!profile || !profile.onboarding_completed) {
+    const isInspecting = searchParams.inspect === 'true'
+
+    if (!profile || (!profile.onboarding_completed && !isInspecting)) {
         redirect('/onboarding')
     }
 
-    if (!profile.dominant_element) {
+    if (!profile?.dominant_element && !isInspecting) {
         // Redireciona para o Mapa V1 se não tiver elemento dominante
         redirect('/mapa')
     }
 
-    const dominantElement = profile.dominant_element as ElementType
+    const dominantElement = (profile?.dominant_element as ElementType) || 'Madeira'
 
     // Check if user already submitted the facial marks today
     // For simplicity, we can let them do it multiple times or restrict. 
