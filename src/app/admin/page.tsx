@@ -19,7 +19,7 @@ export default async function AdminPage() {
         .single()
 
     if (currentUserProfile?.role !== 'admin') {
-        redirect('/')
+        redirect('/o-mapa-da-raiz')
     }
 
     // Fetch all users with profile data

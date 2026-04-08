@@ -31,7 +31,7 @@ export default async function DiarioPage() {
 
     return (
         <main className="min-h-screen pt-32 pb-16 px-6 relative overflow-hidden flex flex-col items-center">
-            <Link href="/" className="absolute top-6 left-6 md:top-8 md:left-8 z-50">
+            <Link href="/o-mapa-da-raiz" className="absolute top-6 left-6 md:top-8 md:left-8 z-50">
                 <img
                     src="/images/logo-mapa-raiz.png"
                     alt="O Mapa da Raiz"
@@ -40,7 +40,7 @@ export default async function DiarioPage() {
             </Link>
 
             <Button variant="ghost" size="icon" className="absolute top-6 right-6 md:top-8 md:right-8 z-50 rounded-full bg-white/50 backdrop-blur-sm border border-white/20 hover:bg-white text-foreground/50 hover:text-foreground shadow-sm" asChild>
-                <Link href="/">
+                <Link href="/o-mapa-da-raiz">
                     <span className="sr-only">Fechar</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
                 </Link>
@@ -77,10 +77,11 @@ export default async function DiarioPage() {
 
                 <footer className="text-center pt-8">
                     <Button variant="ghost" className="text-foreground/30 hover:text-foreground/60" asChild>
-                        <Link href="/">← Voltar ao Início</Link>
+                        <Link href="/o-mapa-da-raiz">← Voltar ao Início</Link>
                     </Button>
                 </footer>
             </div>
         </main>
     )
 }
+

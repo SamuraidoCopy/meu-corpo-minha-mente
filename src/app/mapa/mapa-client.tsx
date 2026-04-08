@@ -42,7 +42,7 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
 
     return (
         <main className="flex flex-col lg:flex-row min-h-screen items-center justify-center pt-32 pb-10 px-6 lg:px-20 gap-12 relative overflow-hidden bg-gradient-to-br from-background via-background to-wellness-sage/5">
-            <Link href="/" className="absolute top-6 left-6 md:top-8 md:left-12 z-50">
+            <Link href="/o-mapa-da-raiz" className="absolute top-6 left-6 md:top-8 md:left-12 z-50">
                 <img
                     src="/images/logo-mapa-raiz.png"
                     alt="O Mapa da Raiz"
@@ -51,7 +51,7 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
             </Link>
 
             <Button variant="ghost" size="icon" className="absolute top-6 right-6 md:top-8 md:right-12 z-50 rounded-full bg-white/50 backdrop-blur-sm border border-white/20 hover:bg-white text-foreground/50 hover:text-foreground shadow-sm" asChild>
-                <Link href="/">
+                <Link href="/o-mapa-da-raiz">
                     <span className="sr-only">Fechar</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
                 </Link>
@@ -112,7 +112,7 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
 
                 <div className="animate-in fade-in duration-700 delay-700 fill-mode-backwards">
                     <Button variant="ghost" className="text-foreground/50 hover:text-foreground/80 hover:bg-transparent -ml-4 gap-2 group" asChild>
-                        <Link href="/">
+                        <Link href="/o-mapa-da-raiz">
                             <span className="group-hover:-translate-x-1 transition-transform">←</span> Voltar ao Início
                         </Link>
                     </Button>
@@ -188,3 +188,4 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
         </main>
     )
 }
+

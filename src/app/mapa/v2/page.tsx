@@ -37,7 +37,7 @@ export default async function MapaV2Page() {
 
     return (
         <main className="min-h-screen bg-[#F9F6F1] mesh-gradient pt-24 pb-12 px-6 overflow-hidden">
-            <Link href="/" className="fixed top-8 left-8 text-foreground/40 hover:text-primary transition-colors flex items-center gap-2 z-50">
+            <Link href="/o-mapa-da-raiz" className="fixed top-8 left-8 text-foreground/40 hover:text-primary transition-colors flex items-center gap-2 z-50">
                 <ArrowLeft size={20} />
                 <span className="font-medium text-sm tracking-wide uppercase">Voltar ao Início</span>
             </Link>
@@ -63,3 +63,4 @@ export default async function MapaV2Page() {
         </main>
     )
 }
+

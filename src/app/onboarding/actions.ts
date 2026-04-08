@@ -57,5 +57,5 @@ export async function completeOnboarding(prevState: any, formData: FormData) {
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/o-mapa-da-raiz");
 }

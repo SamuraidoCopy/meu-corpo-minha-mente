@@ -23,7 +23,7 @@ export default async function OnboardingPage({ searchParams }: { searchParams: P
     // Only redirect non-admins if they finished or admins if they didn't ask for inspection
     if (!isAdmin) {
         if (profile?.onboarding_completed) {
-            redirect('/')
+            redirect('/o-mapa-da-raiz')
         }
     } else if (inspect !== 'true') {
         // Admins go to dashboard by default if they just hit the URL normally
