@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { AdminDashboard } from './admin-dashboard'
+import { LogoutButton } from './logout-button'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,10 +32,13 @@ export default async function AdminPage() {
         <div className="min-h-screen py-12 px-6 lg:px-12 relative overflow-hidden">
 
             <div className="max-w-7xl mx-auto space-y-12 z-10 relative">
-                <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-foreground/5 pb-8">
+                <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-foreground/5 pb-8">
                     <div className="space-y-1">
                         <p className="text-sm uppercase tracking-[0.2em] text-foreground/40 font-medium">GESTÃO DE ALUNAS</p>
                         <h1 className="text-5xl font-serif text-foreground/90">Painel Administrativo</h1>
+                    </div>
+                    <div>
+                        <LogoutButton />
                     </div>
                 </header>
 
