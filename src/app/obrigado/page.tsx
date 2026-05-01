@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { CheckCircle2, MailOpen, Lock, MonitorPlay } from 'lucide-react';
 import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -11,9 +12,25 @@ export default async function ObrigadoPage(props: PageProps) {
   const searchParams = await props.searchParams;
   const isFromHotmart = searchParams.transaction || searchParams.prod || searchParams.off;
 
-  // Se não houver nenhum parâmetro da Hotmart, redireciona para a home
+  // Admins podem visualizar a página sem parâmetros da Hotmart (para preview)
   if (!isFromHotmart) {
-    redirect('/');
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+
+      if (profile?.role !== 'admin') {
+        redirect('/');
+      }
+      // Admin autenticado — permite visualização da página
+    } else {
+      redirect('/');
+    }
   }
 
   return (
