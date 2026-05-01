@@ -42,3 +42,7 @@ next-env.d.ts
 
 # scratch
 /scratch/
+
+# sensitive files - NEVER commit
+senhas-admin.txt
+*.passwords.txt

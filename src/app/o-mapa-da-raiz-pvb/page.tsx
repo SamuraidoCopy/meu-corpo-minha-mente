@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { sendGTMEvent } from '@next/third-parties/google';
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,23 @@ import {
 
 export default function SalesPageVersionB() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const handleCheckoutClick = () => {
+        sendGTMEvent({ 
+            event: 'begin_checkout',
+            ecommerce: {
+                currency: 'BRL',
+                value: 97.00,
+                items: [{
+                    item_id: 'mapa_da_raiz_b',
+                    item_name: 'O Mapa da Raiz - B',
+                    price: 97.00,
+                    quantity: 1
+                }]
+            }
+        });
+        window.location.href = "https://pay.hotmart.com/Y105537373Q";
+    };
 
     return (
         <div className="min-h-screen bg-wellness-cream text-slate-900 selection:bg-wellness-sage/20 font-sans">
@@ -39,7 +57,10 @@ export default function SalesPageVersionB() {
                     </div>
 
                     <div className="hidden md:flex items-center gap-8 font-medium text-slate-600">
-                        <Button className="bg-wellness-sage hover:bg-wellness-sage/90 text-white rounded-full px-8">
+                        <Button 
+                            onClick={handleCheckoutClick}
+                            className="bg-wellness-sage hover:bg-wellness-sage/90 text-white rounded-full px-8"
+                        >
                             Acessar Agora
                         </Button>
                     </div>
@@ -62,7 +83,10 @@ export default function SalesPageVersionB() {
                     </p>
 
                     <div className="pt-8 flex justify-center">
-                        <Button className="h-auto py-3 px-6 md:py-4 md:px-12 flex flex-col items-center justify-center rounded-full bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-xl shadow-wellness-gold/20 transition-all hover:scale-105 active:scale-95 group">
+                        <Button 
+                            onClick={handleCheckoutClick}
+                            className="h-auto py-3 px-6 md:py-4 md:px-12 flex flex-col items-center justify-center rounded-full bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-xl shadow-wellness-gold/20 transition-all hover:scale-105 active:scale-95 group"
+                        >
                             <span className="font-bold text-base md:text-lg flex items-center text-center">
                                 SIM, QUERO ENCONTRAR MINHA RAIZ
                                 <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform hidden md:block" />
@@ -313,7 +337,10 @@ export default function SalesPageVersionB() {
                             </li>
                         </ul>
 
-                        <Button className="w-full h-auto py-4 md:py-5 flex-col rounded-full bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-2xl shadow-wellness-gold/20 transform hover:-translate-y-1 transition-all group">
+                        <Button 
+                            onClick={handleCheckoutClick}
+                            className="w-full h-auto py-4 md:py-5 flex-col rounded-full bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-2xl shadow-wellness-gold/20 transform hover:-translate-y-1 transition-all group"
+                        >
                             <span className="font-bold text-lg md:text-xl flex items-center justify-center gap-2">
                                 QUERO MEU ACESSO AGORA
                                 <ArrowRight className="group-hover:translate-x-1 transition-transform hidden md:block" />
@@ -342,7 +369,10 @@ export default function SalesPageVersionB() {
                     </div>
 
                     <div className="pt-8 flex justify-center">
-                        <Button className="h-auto py-5 px-10 md:px-16 rounded-full text-lg md:text-xl bg-wellness-gold text-white hover:bg-wellness-gold/90 shadow-2xl shadow-wellness-gold/30 transition-all hover:scale-105 active:scale-95 font-bold uppercase tracking-wider">
+                        <Button 
+                            onClick={handleCheckoutClick}
+                            className="h-auto py-5 px-10 md:px-16 rounded-full text-lg md:text-xl bg-wellness-gold text-white hover:bg-wellness-gold/90 shadow-2xl shadow-wellness-gold/30 transition-all hover:scale-105 active:scale-95 font-bold uppercase tracking-wider"
+                        >
                             QUERO A MINHA AUTOCURA AGORA »
                         </Button>
                     </div>
