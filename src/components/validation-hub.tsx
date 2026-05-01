@@ -31,6 +31,8 @@ const ROUTES = [
   { name: 'Painel Admin', path: '/admin', icon: Settings },
   { name: 'Página de Vendas A (PVA)', path: '/o-mapa-da-raiz-pva', icon: Megaphone },
   { name: 'Página de Vendas B (PVB)', path: '/o-mapa-da-raiz-pvb', icon: Megaphone },
+  { name: 'Obrigado (Aprovada)', path: '/obrigado', icon: ClipboardCheck },
+  { name: 'Obrigado (Aguardando)', path: '/obrigado-aguardando', icon: ClipboardCheck },
 ]
 
 const ELEMENTS_LIST: { name: string; key: ElementType; color: string }[] = [
