@@ -1,11 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-// Inicializa o cliente do Supabase com a Service Role Key para operações administrativas
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ""
-);
+// ⚠️ LAZY INIT: O cliente é criado apenas em tempo de execução (runtime),
+// nunca durante o build. Isso evita o erro "supabaseKey is required" na Vercel.
+function getSupabaseAdmin(): SupabaseClient {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !key) {
+    throw new Error(
+      "[Hotmart Webhook] Variáveis NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY são obrigatórias em runtime."
+    );
+  }
+
+  return createClient(url, key);
+}
 
 /**
  * Endpoint de Webhook para integração com a Hotmart.
@@ -17,7 +26,7 @@ export async function POST(req: NextRequest) {
     const hotmartToken = req.headers.get("h-hotmart-token");
 
     // Validação básica de segurança via Token da Hotmart
-    // IMPORTANTE: Configurar HOTMART_WEBHOOK_TOKEN no .env.local
+    // IMPORTANTE: Configurar HOTMART_WEBHOOK_TOKEN no .env.local e nas envs da Vercel
     if (process.env.HOTMART_WEBHOOK_TOKEN && hotmartToken !== process.env.HOTMART_WEBHOOK_TOKEN) {
       console.warn("[Hotmart Webhook] Token de segurança inválido.");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -30,7 +39,7 @@ export async function POST(req: NextRequest) {
     switch (event) {
       case "PURCHASE_APPROVED":
         return await handlePurchaseApproved(data);
-      
+
       case "PURCHASE_REFUNDED":
       case "PURCHASE_CHARGEBACK":
       case "PURCHASE_CANCELED":
@@ -49,17 +58,20 @@ export async function POST(req: NextRequest) {
 /**
  * Cria ou ativa o acesso do usuário no App após a compra.
  */
-async function handlePurchaseApproved(data: any) {
-  const email = data.buyer?.email;
-  const fullName = data.buyer?.name;
+async function handlePurchaseApproved(data: Record<string, unknown>) {
+  const buyer = data.buyer as { email?: string; name?: string } | undefined;
+  const email = buyer?.email;
+  const fullName = buyer?.name;
 
   if (!email) {
     return NextResponse.json({ error: "Email não encontrado no payload" }, { status: 400 });
   }
 
+  const supabaseAdmin = getSupabaseAdmin();
+
   // 1. Verificar se o usuário já existe no Auth
   const { data: existingUser } = await supabaseAdmin.auth.admin.listUsers();
-  const user = existingUser.users.find(u => u.email === email);
+  const user = existingUser.users.find((u) => u.email === email);
 
   let userId: string;
 
@@ -89,7 +101,6 @@ async function handlePurchaseApproved(data: any) {
       id: userId,
       full_name: fullName,
       updated_at: new Date().toISOString(),
-      // Outros campos podem ser inicializados aqui
     });
 
   if (profileError) {
@@ -103,27 +114,30 @@ async function handlePurchaseApproved(data: any) {
 /**
  * Remove ou bloqueia o acesso do usuário em caso de reembolso/cancelamento.
  */
-async function handlePurchaseRevoked(data: any) {
-  const email = data.buyer?.email;
+async function handlePurchaseRevoked(data: Record<string, unknown>) {
+  const buyer = data.buyer as { email?: string } | undefined;
+  const email = buyer?.email;
 
   if (!email) return NextResponse.json({ received: true });
 
+  const supabaseAdmin = getSupabaseAdmin();
+
   // Buscar o ID do usuário pelo email
   const { data: users } = await supabaseAdmin.auth.admin.listUsers();
-  const user = users.users.find(u => u.email === email);
+  const user = users.users.find((u) => u.email === email);
 
   if (user) {
-    // Opção A: Desativar o usuário (bloqueia login)
+    // Desativar o usuário (bloqueia login)
     await supabaseAdmin.auth.admin.updateUserById(user.id, {
-      ban_duration: "infinite" // Ou uma flag customizada no profile
+      ban_duration: "infinite",
     });
 
-    // Opção B: Atualizar perfil com flag de acesso
+    // Atualizar perfil com flag de acesso
     await supabaseAdmin
       .from("profiles")
-      .update({ onboarding_completed: false }) // Ou uma flag 'has_access'
+      .update({ onboarding_completed: false })
       .eq("id", user.id);
-    
+
     console.log(`[Hotmart Webhook] Acesso revogado para: ${email}`);
   }
 
