@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { sendGTMEvent } from '@next/third-parties/google';
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
-    Play,
+    Volume2,
     CheckCircle2,
     ArrowRight,
     Smartphone,
@@ -21,6 +22,8 @@ import {
 export default function SalesPage() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMuted, setIsMuted] = useState(true);
+    const videoRef = useRef<HTMLIFrameElement>(null);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -29,6 +32,23 @@ export default function SalesPage() {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    const handleCheckoutClick = () => {
+        sendGTMEvent({ 
+            event: 'begin_checkout',
+            ecommerce: {
+                currency: 'BRL',
+                value: 97.00,
+                items: [{
+                    item_id: 'mapa_da_raiz',
+                    item_name: 'O Mapa da Raiz',
+                    price: 97.00,
+                    quantity: 1
+                }]
+            }
+        });
+        window.location.href = "https://pay.hotmart.com/Y105537373Q";
+    };
 
     return (
         <div className="min-h-screen bg-wellness-cream text-slate-900 selection:bg-wellness-sage/20 font-sans">
@@ -54,7 +74,10 @@ export default function SalesPage() {
                         <a href="#metodo" className="hover:text-wellness-sage transition-colors">O Método</a>
                         <a href="#autores" className="hover:text-wellness-sage transition-colors">As Autoras</a>
                         <a href="#faqs" className="hover:text-wellness-sage transition-colors">Dúvidas</a>
-                        <Button className="bg-wellness-sage hover:bg-wellness-sage/90 text-white rounded-full px-8">
+                        <Button 
+                            onClick={handleCheckoutClick}
+                            className="bg-wellness-sage hover:bg-wellness-sage/90 text-white rounded-full px-8"
+                        >
                             Acessar Agora
                         </Button>
                     </div>
@@ -71,7 +94,10 @@ export default function SalesPage() {
                     <a href="#metodo" onClick={() => setIsMenuOpen(false)} className="text-2xl font-serif">O Método</a>
                     <a href="#autores" onClick={() => setIsMenuOpen(false)} className="text-2xl font-serif">As Autoras</a>
                     <a href="#faqs" onClick={() => setIsMenuOpen(false)} className="text-2xl font-serif">Dúvidas</a>
-                    <Button className="bg-wellness-sage text-white rounded-full px-12 py-6 text-xl">
+                    <Button 
+                        onClick={handleCheckoutClick}
+                        className="bg-wellness-sage text-white rounded-full px-12 py-6 text-xl"
+                    >
                         Acessar Agora
                     </Button>
                 </div>
@@ -94,25 +120,43 @@ export default function SalesPage() {
                     </p>
 
                     <div className="animate-fade-in-up [animation-delay:600ms] flex flex-col items-center gap-6">
-                        <div className="relative group max-w-4xl w-full aspect-video rounded-2xl md:rounded-[2rem] overflow-hidden shadow-2xl glass border-white/50">
-                            <div className="absolute inset-0 bg-slate-900/40 group-hover:bg-slate-900/30 transition-all flex items-center justify-center z-20">
-                                <div className="w-20 h-20 md:w-28 md:h-28 rounded-full bg-wellness-gold/90 text-white flex items-center justify-center shadow-2xl animate-breathe cursor-pointer">
-                                    <Play size={40} className="fill-current ml-2" />
+                        <div className="relative group max-w-4xl w-full aspect-video rounded-2xl md:rounded-[2rem] overflow-hidden shadow-2xl glass border-white/50 bg-black">
+                            <iframe
+                                ref={videoRef}
+                                className="absolute inset-0 w-full h-full z-10 pointer-events-none"
+                                src="https://www.youtube.com/embed/ajQNlQDdDzc?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&showinfo=0&disablekb=1&enablejsapi=1"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            ></iframe>
+                            
+                            {/* Unmute Overlay */}
+                            {isMuted && (
+                                <div 
+                                    className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px] cursor-pointer group/unmute"
+                                    onClick={() => {
+                                        if (videoRef.current) {
+                                            videoRef.current.contentWindow?.postMessage(JSON.stringify({ event: "command", func: "unMute", args: "" }), "*");
+                                            videoRef.current.contentWindow?.postMessage(JSON.stringify({ event: "command", func: "playVideo", args: "" }), "*");
+                                        }
+                                        setIsMuted(false);
+                                    }}
+                                >
+                                    <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-wellness-gold text-white flex items-center justify-center shadow-[0_0_60px_rgba(196,164,132,0.6)] animate-pulse border-4 border-white/20 transform group-hover/unmute:scale-110 transition-all duration-500">
+                                        <Volume2 className="w-12 h-12 md:w-16 md:h-16" />
+                                    </div>
+                                    <div className="mt-8 bg-wellness-gold text-white px-8 py-3 rounded-full font-serif text-xl md:text-2xl shadow-2xl transform group-hover/unmute:translate-y-[-4px] transition-all flex items-center gap-3">
+                                        <span>Clique para ativar o som</span>
+                                        <ArrowRight size={20} />
+                                    </div>
                                 </div>
-                            </div>
-                            <Image
-                                src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1200"
-                                alt="Thumbnail VSL"
-                                fill
-                                className="object-cover"
-                            />
-                            {/* Bottom bar overlay */}
-                            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/20 backdrop-blur-md px-6 py-2 rounded-full border border-white/20 text-white text-sm font-medium z-10">
-                                Por Que a Terapia Falhou Com Você?
-                            </div>
+                            )}
                         </div>
 
-                        <Button className="h-16 md:h-20 px-10 md:px-14 rounded-full text-lg md:text-xl bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-xl shadow-wellness-gold/20 transition-all hover:scale-105 active:scale-95 group">
+                        <Button 
+                            onClick={handleCheckoutClick}
+                            className="h-16 md:h-20 px-10 md:px-14 rounded-full text-lg md:text-xl bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-xl shadow-wellness-gold/20 transition-all hover:scale-105 active:scale-95 group"
+                        >
                             <span className="md:hidden">QUERO DESCOBRIR A RAIZ</span>
                             <span className="hidden md:inline">SIM, QUERO DESCOBRIR A RAIZ DO MEU PROBLEMA AGORA</span>
                             <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform" />
@@ -132,7 +176,7 @@ export default function SalesPage() {
                         <h2 className="text-3xl md:text-5xl font-serif text-slate-800">O Que Você Vai Receber no &quot;Mapa da Raiz&quot;</h2>
                         <p className="text-lg text-slate-600 max-w-2xl mx-auto">
                             Se você só tenta curar os sintomas (as folhas), elas sempre voltarão a secar. <br className="hidden md:block" />
-                            Chegou a hora de tratar a Raiz e resolver o problem.
+                            Chegou a hora de tratar a Raiz e resolver o problema.
                         </p>
                     </div>
 
@@ -221,7 +265,10 @@ export default function SalesPage() {
                     </div>
 
                     <div className="mt-16 text-center">
-                        <Button className="bg-wellness-sage text-white rounded-full px-10 h-14 text-lg">
+                        <Button 
+                            onClick={handleCheckoutClick}
+                            className="bg-wellness-sage text-white rounded-full px-10 h-14 text-lg"
+                        >
                             <span className="md:hidden">QUERO ACESSAR</span>
                             <span className="hidden md:inline">QUERO ACESSAR O APP E O CURSO AGORA!</span>
                         </Button>
@@ -238,21 +285,21 @@ export default function SalesPage() {
                             <div className="grid grid-cols-2 gap-4 h-full">
                                 <div className="relative rounded-[3rem] shadow-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
                                     <Image
-                                        src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=600"
+                                        src="/images/dra-ranieli-portrait-pva.jpg"
                                         alt="Dra. Ranieli"
                                         fill
                                         sizes="(max-width: 768px) 50vw, 25vw"
-                                        className="object-cover"
+                                        className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                                         priority
                                     />
                                 </div>
                                 <div className="relative rounded-[3rem] shadow-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 mt-8 md:mt-12">
                                     <Image
-                                        src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=600"
+                                        src="/images/cleucia-portrait.jpg"
                                         alt="Cleucia Venancio"
                                         fill
                                         sizes="(max-width: 768px) 50vw, 25vw"
-                                        className="object-cover"
+                                        className="object-cover transition-transform duration-700 group-hover:scale-105"
                                         priority
                                     />
                                 </div>
@@ -355,7 +402,10 @@ export default function SalesPage() {
                             </li>
                         </ul>
 
-                        <Button className="w-full h-18 md:h-24 rounded-full text-xl md:text-2xl bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-2xl shadow-wellness-gold/20 transform hover:-translate-y-1 transition-all">
+                        <Button 
+                            onClick={handleCheckoutClick}
+                            className="w-full h-18 md:h-24 rounded-full text-xl md:text-2xl bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-2xl shadow-wellness-gold/20 transform hover:-translate-y-1 transition-all"
+                        >
                             <span className="md:hidden">QUERO O DESCONTO</span>
                             <span className="hidden md:inline">LIBERAR MEU ACESSO COM DESCONTO AGORA</span>
                         </Button>
@@ -418,7 +468,10 @@ export default function SalesPage() {
 
                     <div className="mt-20 text-center space-y-6">
                         <p className="text-slate-600 font-medium">Ainda indeciso?</p>
-                        <Button className="rounded-full px-12 h-16 bg-wellness-sage hover:bg-wellness-sage/90 text-white shadow-lg shadow-wellness-sage/20 transition-all hover:scale-105">
+                        <Button 
+                            onClick={handleCheckoutClick}
+                            className="rounded-full px-12 h-16 bg-wellness-sage hover:bg-wellness-sage/90 text-white shadow-lg shadow-wellness-sage/20 transition-all hover:scale-105"
+                        >
                             <span className="md:hidden">QUERO A AUTOCURA</span>
                             <span className="hidden md:inline">SIM, QUERO A MINHA AUTOCURA AGORA</span>
                         </Button>
