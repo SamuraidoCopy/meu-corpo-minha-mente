@@ -56,12 +56,13 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * Cria ou ativa o acesso do usuário no App após a compra.
+ * Cria ou ativa o acesso do usuário no App após a compra (Regra D+8: registra compra para liberação posterior).
  */
 async function handlePurchaseApproved(data: Record<string, unknown>) {
   const buyer = data.buyer as { email?: string; name?: string } | undefined;
   const email = buyer?.email;
   const fullName = buyer?.name;
+  const transactionCode = data.transaction as string | undefined;
 
   if (!email) {
     return NextResponse.json({ error: "Email não encontrado no payload" }, { status: 400 });
@@ -69,46 +70,25 @@ async function handlePurchaseApproved(data: Record<string, unknown>) {
 
   const supabaseAdmin = getSupabaseAdmin();
 
-  // 1. Verificar se o usuário já existe no Auth
-  const { data: existingUser } = await supabaseAdmin.auth.admin.listUsers();
-  const user = existingUser.users.find((u) => u.email === email);
-
-  let userId: string;
-
-  if (!user) {
-    // 2. Criar novo usuário no Auth (sem senha inicial, usará Magic Link ou Reset)
-    const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
-      email,
-      email_confirm: true,
-      user_metadata: { full_name: fullName },
-    });
-
-    if (createError) {
-      console.error("[Hotmart Webhook] Erro ao criar usuário:", createError);
-      throw createError;
-    }
-    userId = newUser.user.id;
-    console.log(`[Hotmart Webhook] Novo usuário criado: ${userId}`);
-  } else {
-    userId = user.id;
-    console.log(`[Hotmart Webhook] Usuário já existente: ${userId}`);
-  }
-
-  // 3. Upsert no perfil público (tabela profiles)
-  const { error: profileError } = await supabaseAdmin
-    .from("profiles")
+  // Registrar a compra na tabela purchases com access_granted = false
+  const { error: purchaseError } = await supabaseAdmin
+    .from("purchases")
     .upsert({
-      id: userId,
+      email,
       full_name: fullName,
-      updated_at: new Date().toISOString(),
-    });
+      hotmart_transaction_code: transactionCode,
+      purchase_date: new Date().toISOString(),
+      access_granted: false,
+    }, { onConflict: "email" });
 
-  if (profileError) {
-    console.error("[Hotmart Webhook] Erro ao atualizar perfil:", profileError);
-    throw profileError;
+  if (purchaseError) {
+    console.error("[Hotmart Webhook] Erro ao registrar compra:", purchaseError);
+    throw purchaseError;
   }
 
-  return NextResponse.json({ success: true, userId });
+  console.log(`[Hotmart Webhook] Compra registrada para: ${email} (Aguardando liberação D+8)`);
+
+  return NextResponse.json({ success: true, message: "Compra registrada com sucesso. Acesso será liberado em 8 dias." });
 }
 
 /**
@@ -122,7 +102,13 @@ async function handlePurchaseRevoked(data: Record<string, unknown>) {
 
   const supabaseAdmin = getSupabaseAdmin();
 
-  // Buscar o ID do usuário pelo email
+  // 1. Atualizar tabela purchases para remover permissão de acesso
+  await supabaseAdmin
+    .from("purchases")
+    .update({ access_granted: false })
+    .eq("email", email);
+
+  // 2. Buscar o ID do usuário pelo email no Auth
   const { data: users } = await supabaseAdmin.auth.admin.listUsers();
   const user = users.users.find((u) => u.email === email);
 
