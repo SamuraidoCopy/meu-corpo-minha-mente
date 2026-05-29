@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { CheckCircle2, MailOpen, Lock, MonitorPlay } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import Script from 'next/script';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -123,6 +124,16 @@ export default async function ObrigadoPage(props: PageProps) {
         </p>
 
       </div>
+      <Script id="facebook-pixel-purchase" strategy="afterInteractive">
+        {`
+          if (typeof fbq === 'function') {
+            fbq('track', 'Purchase', {
+              value: 97.00,
+              currency: 'BRL'
+            });
+          }
+        `}
+      </Script>
     </main>
   );
 }

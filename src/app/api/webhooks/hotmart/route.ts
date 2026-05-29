@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { addContactToBrevo, removeContactFromBrevo } from "@/lib/brevo";
 
 // ⚠️ LAZY INIT: O cliente é criado apenas em tempo de execução (runtime),
 // nunca durante o build. Isso evita o erro "supabaseKey is required" na Vercel.
@@ -86,6 +87,13 @@ async function handlePurchaseApproved(data: Record<string, unknown>) {
     throw purchaseError;
   }
 
+  // Sincronizar com o Brevo (Adiciona/Atualiza na lista de Alunos)
+  try {
+    await addContactToBrevo(email, fullName);
+  } catch (brevoError) {
+    console.error("[Hotmart Webhook] Erro ao sincronizar contato com Brevo:", brevoError);
+  }
+
   console.log(`[Hotmart Webhook] Compra registrada para: ${email} (Aguardando liberação D+8)`);
 
   return NextResponse.json({ success: true, message: "Compra registrada com sucesso. Acesso será liberado em 8 dias." });
@@ -108,6 +116,13 @@ async function handlePurchaseRevoked(data: Record<string, unknown>) {
     .update({ access_granted: false })
     .eq("email", email);
 
+  // Sincronizar com o Brevo (Remove da lista de Alunos)
+  try {
+    await removeContactFromBrevo(email);
+  } catch (brevoError) {
+    console.error("[Hotmart Webhook] Erro ao remover contato da lista do Brevo:", brevoError);
+  }
+
   // 2. Buscar o ID do usuário pelo email no Auth
   const { data: users } = await supabaseAdmin.auth.admin.listUsers();
   const user = users.users.find((u) => u.email === email);
@@ -129,3 +144,4 @@ async function handlePurchaseRevoked(data: Record<string, unknown>) {
 
   return NextResponse.json({ success: true });
 }
+

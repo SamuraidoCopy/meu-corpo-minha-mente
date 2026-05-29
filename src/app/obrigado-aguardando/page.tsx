@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Clock, Mail, ShieldCheck, HelpCircle } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import Script from 'next/script';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -118,6 +119,16 @@ export default async function ObrigadoAguardandoPage(props: PageProps) {
       <p className="mt-8 text-neutral-400 text-sm">
         Você pode fechar esta página com segurança.
       </p>
+      <Script id="facebook-pixel-waiting-payment" strategy="afterInteractive">
+        {`
+          if (typeof fbq === 'function') {
+            fbq('track', 'WaitingPayment', {
+              value: 97.00,
+              currency: 'BRL'
+            });
+          }
+        `}
+      </Script>
     </main>
   );
 }
