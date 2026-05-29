@@ -24,7 +24,8 @@ function getSupabaseAdmin(): SupabaseClient {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const hotmartToken = req.headers.get("h-hotmart-token");
+    // Nas versões mais recentes, o token de segurança ("hottok") vem no corpo da requisição (body.hottok)
+    const hotmartToken = req.headers.get("h-hotmart-token") || body.hottok;
 
     // Validação básica de segurança via Token da Hotmart
     // IMPORTANTE: Configurar HOTMART_WEBHOOK_TOKEN no .env.local e nas envs da Vercel

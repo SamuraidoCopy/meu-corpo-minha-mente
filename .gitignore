@@ -46,3 +46,5 @@ next-env.d.ts
 # sensitive files - NEVER commit
 senhas-admin.txt
 *.passwords.txt
+
+.vercel
