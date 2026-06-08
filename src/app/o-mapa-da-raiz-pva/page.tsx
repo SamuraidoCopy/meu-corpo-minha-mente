@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { sendGTMEvent } from '@next/third-parties/google';
-import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -66,6 +65,7 @@ export default function SalesPage() {
                             src="/images/logo-mapa-raiz.png"
                             alt="O Mapa da Raiz"
                             fill
+                            sizes="(max-width: 768px) 128px, 160px"
                             className="object-contain"
                         />
                     </div>
@@ -236,9 +236,9 @@ export default function SalesPage() {
                                                     src={`/images/app-screen-${num}.png`}
                                                     alt={`Tela do Aplicativo ${num}`}
                                                     fill
+                                                    sizes="(max-width: 768px) 240px, 320px"
                                                     className="object-cover object-top opacity-0 animate-fade-in transition-transform duration-700 group-hover:scale-[1.02]"
                                                     onLoadingComplete={(img) => img.classList.add('opacity-100')}
-                                                    unoptimized
                                                 />
                                                 
                                                 {/* Home Indicator - Ultra Subtle */}
@@ -487,6 +487,7 @@ export default function SalesPage() {
                             src="/images/logo-mapa-raiz.png"
                             alt="Logo"
                             fill
+                            sizes="128px"
                             className="object-contain opacity-30 grayscale"
                         />
                     </div>

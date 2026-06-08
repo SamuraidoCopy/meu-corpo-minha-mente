@@ -3,11 +3,8 @@ import { GoogleTagManager } from '@next/third-parties/google'
 import Script from "next/script";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import { createClient } from "@/lib/supabase/server";
 import { ValidationHub } from "@/components/validation-hub";
 import { Suspense } from "react";
-
-export const dynamic = 'force-dynamic'
 
 const inter = Inter({
     subsets: ["latin"],
@@ -29,18 +26,6 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    
-    let isAdmin = false
-    if (user) {
-        const { data: profile } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', user.id)
-            .single()
-        isAdmin = profile?.role === 'admin'
-    }
 
     return (
         <html lang="pt-BR" className={`${inter.variable} ${playfair.variable}`} suppressHydrationWarning>
@@ -74,7 +59,7 @@ export default async function RootLayout({
 
                 {children}
                 <Suspense fallback={null}>
-                    <ValidationHub isAdmin={isAdmin} />
+                    <ValidationHub />
                 </Suspense>
             </body>
         </html>

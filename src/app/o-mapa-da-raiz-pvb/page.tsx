@@ -1,21 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { sendGTMEvent } from '@next/third-parties/google';
-import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
     CheckCircle2,
     ArrowRight,
     ShieldCheck,
-    Menu,
-    X,
     Lock
 } from "lucide-react";
 
 export default function SalesPageVersionB() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleCheckoutClick = () => {
         sendGTMEvent({ 
@@ -52,6 +48,7 @@ export default function SalesPageVersionB() {
                             src="/images/logo-mapa-raiz.png"
                             alt="O Mapa da Raiz"
                             fill
+                            sizes="(max-width: 768px) 128px, 160px"
                             className="object-contain"
                         />
                     </div>
@@ -105,6 +102,7 @@ export default function SalesPageVersionB() {
                             src="/images/cleucia-raniele-vsl-carta.jpg"
                             alt="Cleucia e Dra. Ranieli escrevendo a carta"
                             fill
+                            sizes="(max-width: 1024px) 100vw, 896px"
                             className="object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
@@ -158,6 +156,7 @@ export default function SalesPageVersionB() {
                             src="/images/dra-ranieli-portrait.jpg"
                             alt="Dra. Ranieli"
                             fill
+                            sizes="(max-width: 768px) 100vw, 672px"
                             className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                         />
                     </div>
@@ -263,9 +262,9 @@ export default function SalesPageVersionB() {
                                                             src={`/images/app-screen-${num}.png`}
                                                             alt={`Tela do Aplicativo ${num}`}
                                                             fill
+                                                            sizes="(max-width: 768px) 220px, 300px"
                                                             className="object-cover object-top opacity-0 animate-fade-in transition-transform duration-700 group-hover:scale-[1.02]"
                                                             onLoadingComplete={(img) => img.classList.add('opacity-100')}
-                                                            unoptimized
                                                         />
                                                         
                                                         {/* Home Indicator - Ultra Subtle */}
@@ -387,6 +386,7 @@ export default function SalesPageVersionB() {
                             src="/images/logo-mapa-raiz.png"
                             alt="Logo"
                             fill
+                            sizes="128px"
                             className="object-contain opacity-50 grayscale"
                         />
                     </div>

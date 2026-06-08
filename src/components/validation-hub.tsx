@@ -10,8 +10,6 @@ import {
   LayoutDashboard, 
   ClipboardCheck, 
   Eye,
-  ChevronRight,
-  ChevronLeft,
   X,
   Palette,
   BookOpen,
@@ -19,6 +17,8 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ElementType } from '@/lib/tcm-data'
+
+import { createClient } from '@/lib/supabase/client'
 
 const ROUTES = [
   { name: 'Home/Dashboard', path: '/o-mapa-da-raiz?inspect=true', icon: LayoutDashboard },
@@ -43,15 +43,30 @@ const ELEMENTS_LIST: { name: string; key: ElementType; color: string }[] = [
   { name: 'Água', key: 'Água', color: 'bg-sky-700' },
 ]
 
-interface ValidationHubProps {
-  isAdmin: boolean
-}
-
-export function ValidationHub({ isAdmin }: ValidationHubProps) {
+export function ValidationHub() {
+  const [isAdmin, setIsAdmin] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
+
+  useEffect(() => {
+    async function checkAdmin() {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single()
+        if (profile?.role === 'admin') {
+          setIsAdmin(true)
+        }
+      }
+    }
+    checkAdmin()
+  }, [])
   
   if (!isAdmin) return null
 
