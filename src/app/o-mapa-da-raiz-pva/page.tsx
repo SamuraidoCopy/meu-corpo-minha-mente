@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { sendGTMEvent } from '@next/third-parties/google';
 import Image from "next/image";
+import { useUTM } from "@/lib/useUTM";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -23,6 +24,7 @@ export default function SalesPage() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isMuted, setIsMuted] = useState(true);
     const videoRef = useRef<HTMLIFrameElement>(null);
+    const { getTrackedCheckoutUrl } = useUTM();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -46,7 +48,7 @@ export default function SalesPage() {
                 }]
             }
         });
-        window.location.href = "https://pay.hotmart.com/Y105537373Q";
+        window.location.href = getTrackedCheckoutUrl("https://pay.hotmart.com/Y105537373Q");
     };
 
     return (

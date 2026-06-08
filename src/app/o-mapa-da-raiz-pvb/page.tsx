@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { sendGTMEvent } from '@next/third-parties/google';
 import Image from "next/image";
+import { useUTM } from "@/lib/useUTM";
 import { Button } from "@/components/ui/button";
 import {
     CheckCircle2,
@@ -12,6 +13,7 @@ import {
 } from "lucide-react";
 
 export default function SalesPageVersionB() {
+    const { getTrackedCheckoutUrl } = useUTM();
 
     const handleCheckoutClick = () => {
         sendGTMEvent({ 
@@ -27,7 +29,7 @@ export default function SalesPageVersionB() {
                 }]
             }
         });
-        window.location.href = "https://pay.hotmart.com/Y105537373Q";
+        window.location.href = getTrackedCheckoutUrl("https://pay.hotmart.com/Y105537373Q");
     };
 
     return (
