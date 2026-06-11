@@ -32,6 +32,14 @@ export default function SalesPageVersionB() {
         window.location.href = getTrackedCheckoutUrl("https://pay.hotmart.com/Y105537373Q");
     };
 
+    const scrollToPricing = (e: React.MouseEvent) => {
+        e.preventDefault();
+        const element = document.getElementById("preco");
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
     return (
         <div className="min-h-screen bg-wellness-cream text-slate-900 selection:bg-wellness-sage/20 font-sans">
             {/* Background Mesh */}
@@ -57,7 +65,7 @@ export default function SalesPageVersionB() {
 
                     <div className="hidden md:flex items-center gap-8 font-medium text-slate-600">
                         <Button 
-                            onClick={handleCheckoutClick}
+                            onClick={scrollToPricing}
                             className="bg-wellness-sage hover:bg-wellness-sage/90 text-white rounded-full px-8"
                         >
                             Acessar Agora
@@ -83,7 +91,7 @@ export default function SalesPageVersionB() {
 
                     <div className="pt-8 flex justify-center">
                         <Button 
-                            onClick={handleCheckoutClick}
+                            onClick={scrollToPricing}
                             className="h-auto py-3 px-6 md:py-4 md:px-12 flex flex-col items-center justify-center rounded-full bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-xl shadow-wellness-gold/20 transition-all hover:scale-105 active:scale-95 group"
                         >
                             <span className="font-bold text-base md:text-lg flex items-center text-center">
@@ -294,7 +302,7 @@ export default function SalesPageVersionB() {
             </section>
 
             {/* Seção 4: O Preço (Crossroads) */}
-            <section className="py-20 md:py-24 px-6 bg-[#1A2621] text-white relative overflow-hidden rounded-t-[3rem] md:rounded-t-[5rem]">
+            <section id="preco" className="py-20 md:py-24 px-6 bg-[#1A2621] text-white relative overflow-hidden rounded-t-[3rem] md:rounded-t-[5rem]">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full mesh-gradient opacity-5 pointer-events-none" />
 
                 <div className="container mx-auto max-w-3xl relative z-10 space-y-12 font-serif text-lg md:text-xl leading-relaxed text-white/90">

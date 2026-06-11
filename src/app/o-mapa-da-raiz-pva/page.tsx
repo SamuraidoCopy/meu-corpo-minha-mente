@@ -51,6 +51,14 @@ export default function SalesPage() {
         window.location.href = getTrackedCheckoutUrl("https://pay.hotmart.com/Y105537373Q");
     };
 
+    const scrollToPricing = (e: React.MouseEvent) => {
+        e.preventDefault();
+        const element = document.getElementById("preco");
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
     return (
         <div className="min-h-screen bg-wellness-cream text-slate-900 selection:bg-wellness-sage/20 font-sans">
             {/* Background Mesh */}
@@ -77,7 +85,7 @@ export default function SalesPage() {
                         <a href="#autores" className="hover:text-wellness-sage transition-colors">As Autoras</a>
                         <a href="#faqs" className="hover:text-wellness-sage transition-colors">Dúvidas</a>
                         <Button 
-                            onClick={handleCheckoutClick}
+                            onClick={scrollToPricing}
                             className="bg-wellness-sage hover:bg-wellness-sage/90 text-white rounded-full px-8"
                         >
                             Acessar Agora
@@ -97,7 +105,7 @@ export default function SalesPage() {
                     <a href="#autores" onClick={() => setIsMenuOpen(false)} className="text-2xl font-serif">As Autoras</a>
                     <a href="#faqs" onClick={() => setIsMenuOpen(false)} className="text-2xl font-serif">Dúvidas</a>
                     <Button 
-                        onClick={handleCheckoutClick}
+                        onClick={(e) => { setIsMenuOpen(false); scrollToPricing(e); }}
                         className="bg-wellness-sage text-white rounded-full px-12 py-6 text-xl"
                     >
                         Acessar Agora
@@ -156,7 +164,7 @@ export default function SalesPage() {
                         </div>
 
                         <Button 
-                            onClick={handleCheckoutClick}
+                            onClick={scrollToPricing}
                             className="h-16 md:h-20 px-10 md:px-14 rounded-full text-lg md:text-xl bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-xl shadow-wellness-gold/20 transition-all hover:scale-105 active:scale-95 group"
                         >
                             <span className="md:hidden">QUERO DESCOBRIR A RAIZ</span>
@@ -268,7 +276,7 @@ export default function SalesPage() {
 
                     <div className="mt-16 text-center">
                         <Button 
-                            onClick={handleCheckoutClick}
+                            onClick={scrollToPricing}
                             className="bg-wellness-sage text-white rounded-full px-10 h-14 text-lg"
                         >
                             <span className="md:hidden">QUERO ACESSAR</span>
@@ -344,7 +352,7 @@ export default function SalesPage() {
             </section>
 
             {/* Seção 3: Preço e Garantia */}
-            <section className="py-24 px-6 bg-slate-900 text-white relative overflow-hidden text-center rounded-t-[3rem] md:rounded-t-[5rem]">
+            <section id="preco" className="py-24 px-6 bg-slate-900 text-white relative overflow-hidden text-center rounded-t-[3rem] md:rounded-t-[5rem]">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full mesh-gradient opacity-10 pointer-events-none" />
 
                 <div className="container mx-auto max-w-4xl relative z-10 space-y-12">
