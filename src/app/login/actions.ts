@@ -1,30 +1,51 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 
-export async function login(prevState: any, formData: FormData) {
-    const supabase = createClient()
+type LoginState = {
+    message: string
+    success?: boolean
+}
 
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
+export async function login(_prevState: LoginState, formData: FormData): Promise<LoginState> {
+    const supabase = await createClient()
 
-    const { error } = await (await supabase).auth.signInWithPassword({
+    const email = (formData.get('email') as string)?.trim().toLowerCase()
+
+    if (!email) {
+        return { message: 'Informe seu e-mail.' }
+    }
+
+    // Monta a URL de redirecionamento do link mágico (callback que troca o code por sessão)
+    const headersList = await headers()
+    const origin =
+        process.env.NEXT_PUBLIC_SITE_URL ||
+        (headersList.get('origin') ?? `https://${headersList.get('host')}`)
+
+    const { error } = await supabase.auth.signInWithOtp({
         email,
-        password,
+        options: {
+            // CRÍTICO: não cria usuário novo. Só quem já tem acesso liberado
+            // (criado pelo cron release-access após D+8) consegue receber o link.
+            shouldCreateUser: false,
+            emailRedirectTo: `${origin}/auth/callback`,
+        },
     })
 
     if (error) {
-        console.error('Login error:', error)
-        return { message: error.message }
+        console.error('Login (magic link) error:', error)
+        // Mensagem genérica para não revelar se o e-mail existe na base.
+        return { message: 'Não foi possível enviar o link. Verifique se este é o e-mail da sua compra.' }
     }
 
-    revalidatePath('/', 'layout')
-    redirect('/o-mapa-da-raiz')
+    return {
+        success: true,
+        message: 'Pronto! Enviamos um link de acesso para o seu e-mail. Abra-o neste dispositivo para entrar.',
+    }
 }
 
 export async function signOut() {
-    const supabase = createClient()
-    await (await supabase).auth.signOut()
+    const supabase = await createClient()
+    await supabase.auth.signOut()
 }
