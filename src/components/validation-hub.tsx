@@ -91,10 +91,13 @@ export function ValidationHub() {
   }
 
   return (
-    <div className={`fixed bottom-6 right-6 z-[9999] transition-all duration-300 flex flex-col items-end gap-3`}>
+    <div
+      className="fixed right-4 z-[9999] transition-all duration-300 flex flex-col items-end gap-3"
+      style={{ bottom: 'max(1.5rem, calc(1rem + env(safe-area-inset-bottom)))' }}
+    >
       {/* Expanded Panel */}
       {isOpen && (
-        <div className="bg-white/95 backdrop-blur-xl border border-foreground/10 rounded-3xl shadow-2xl p-6 w-72 animate-in slide-in-from-bottom-5 duration-300 space-y-6">
+        <div className="bg-white/95 backdrop-blur-xl border border-foreground/10 rounded-3xl shadow-2xl p-6 w-[min(288px,calc(100vw-2rem))] animate-in slide-in-from-bottom-5 duration-300 space-y-6">
           <div className="flex items-center justify-between border-b border-foreground/5 pb-4">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
@@ -108,7 +111,7 @@ export function ValidationHub() {
           {/* Quick Navigation */}
           <div className="space-y-2 flex-1 overflow-hidden flex flex-col">
             <p className="text-[10px] uppercase tracking-widest font-bold text-foreground/30 ml-1 mb-3">Navegação Direta</p>
-            <div className="grid grid-cols-1 gap-1 overflow-y-auto max-h-[320px] pr-2 custom-scrollbar">
+            <div className="grid grid-cols-1 gap-1 overflow-y-auto max-h-[40vh] pr-2 custom-scrollbar">
               {ROUTES.map((route) => {
                 const Icon = route.icon
                 // Compare path without query params for active state

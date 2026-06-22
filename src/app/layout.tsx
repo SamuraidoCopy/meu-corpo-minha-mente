@@ -1,4 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+
+export const viewport: Viewport = {
+    viewportFit: 'cover',
+}
 import { GoogleTagManager } from '@next/third-parties/google'
 import Script from "next/script";
 import { Inter, Playfair_Display } from "next/font/google";
