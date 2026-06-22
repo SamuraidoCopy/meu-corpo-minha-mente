@@ -51,8 +51,9 @@ export function ValidationHub() {
   const searchParams = useSearchParams()
 
   useEffect(() => {
+    const supabase = createClient()
+
     async function checkAdmin() {
-      const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
         const { data: profile } = await supabase
@@ -60,12 +61,19 @@ export function ValidationHub() {
           .select('role')
           .eq('id', user.id)
           .single()
-        if (profile?.role === 'admin') {
-          setIsAdmin(true)
-        }
+        setIsAdmin(profile?.role === 'admin')
+      } else {
+        setIsAdmin(false)
       }
     }
+
     checkAdmin()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      checkAdmin()
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
   
   if (!isAdmin) return null

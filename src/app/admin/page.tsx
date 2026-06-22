@@ -9,7 +9,7 @@ export default async function AdminPage() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
-    if (!user) redirect('/login')
+    if (!user) redirect('/admin/login')
 
     // Check role
     const { data: currentUserProfile } = await supabase
@@ -19,7 +19,7 @@ export default async function AdminPage() {
         .single()
 
     if (currentUserProfile?.role !== 'admin') {
-        redirect('/o-mapa-da-raiz')
+        redirect('/admin/login')
     }
 
     // Fetch all users with profile data
