@@ -1,21 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { addContactToBrevo, removeContactFromBrevo } from "@/lib/brevo";
-
-// ⚠️ LAZY INIT: O cliente é criado apenas em tempo de execução (runtime),
-// nunca durante o build. Isso evita o erro "supabaseKey is required" na Vercel.
-function getSupabaseAdmin(): SupabaseClient {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!url || !key) {
-    throw new Error(
-      "[Hotmart Webhook] Variáveis NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY são obrigatórias em runtime."
-    );
-  }
-
-  return createClient(url, key);
-}
+import {
+  getSupabaseAdmin,
+  findAuthUserByEmail,
+  provisionAccess,
+} from "@/lib/supabase/admin-access";
 
 /**
  * Endpoint de Webhook para integração com a Hotmart.
@@ -58,11 +47,13 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * Cria ou ativa o acesso do usuário no App após a compra (Regra D+8: registra compra para liberação posterior).
+ * Libera o acesso do usuário IMEDIATAMENTE após a compra aprovada:
+ * cria o login no Auth (e-mail já confirmado) + profile, registra a compra
+ * com access_granted = true e sincroniza com o Brevo.
  */
 async function handlePurchaseApproved(data: Record<string, unknown>) {
   const buyer = data.buyer as { email?: string; name?: string } | undefined;
-  const email = buyer?.email;
+  const email = buyer?.email?.trim().toLowerCase();
   const fullName = buyer?.name;
   const transactionCode = data.transaction as string | undefined;
 
@@ -72,7 +63,15 @@ async function handlePurchaseApproved(data: Record<string, unknown>) {
 
   const supabaseAdmin = getSupabaseAdmin();
 
-  // Registrar a compra na tabela purchases com access_granted = false
+  // 1. Liberar acesso imediato: cria usuário no Auth + profile (idempotente).
+  try {
+    await provisionAccess(supabaseAdmin, { email, fullName });
+  } catch (provisionError) {
+    console.error("[Hotmart Webhook] Erro ao liberar acesso imediato:", provisionError);
+    throw provisionError;
+  }
+
+  // 2. Registrar a compra com acesso já concedido.
   const { error: purchaseError } = await supabaseAdmin
     .from("purchases")
     .upsert({
@@ -80,7 +79,7 @@ async function handlePurchaseApproved(data: Record<string, unknown>) {
       full_name: fullName,
       hotmart_transaction_code: transactionCode,
       purchase_date: new Date().toISOString(),
-      access_granted: false,
+      access_granted: true,
     }, { onConflict: "email" });
 
   if (purchaseError) {
@@ -88,61 +87,64 @@ async function handlePurchaseApproved(data: Record<string, unknown>) {
     throw purchaseError;
   }
 
-  // Sincronizar com o Brevo (Adiciona/Atualiza na lista de Alunos)
+  // 3. Sincronizar com o Brevo (Adiciona/Atualiza na lista de Alunos).
   try {
     await addContactToBrevo(email, fullName);
   } catch (brevoError) {
     console.error("[Hotmart Webhook] Erro ao sincronizar contato com Brevo:", brevoError);
   }
 
-  console.log(`[Hotmart Webhook] Compra registrada para: ${email} (Aguardando liberação D+8)`);
+  console.log(`[Hotmart Webhook] Acesso liberado imediatamente para: ${email}`);
 
-  return NextResponse.json({ success: true, message: "Compra registrada com sucesso. Acesso será liberado em 8 dias." });
+  return NextResponse.json({
+    success: true,
+    message: "Compra registrada e acesso liberado imediatamente.",
+  });
 }
 
 /**
- * Remove ou bloqueia o acesso do usuário em caso de reembolso/cancelamento.
+ * Bloqueia o acesso do usuário automaticamente em caso de
+ * reembolso, chargeback ou cancelamento.
  */
 async function handlePurchaseRevoked(data: Record<string, unknown>) {
   const buyer = data.buyer as { email?: string } | undefined;
-  const email = buyer?.email;
+  const email = buyer?.email?.trim().toLowerCase();
 
   if (!email) return NextResponse.json({ received: true });
 
   const supabaseAdmin = getSupabaseAdmin();
 
-  // 1. Atualizar tabela purchases para remover permissão de acesso
+  // 1. Revogar a permissão na tabela purchases.
   await supabaseAdmin
     .from("purchases")
     .update({ access_granted: false })
     .eq("email", email);
 
-  // Sincronizar com o Brevo (Remove da lista de Alunos)
+  // 2. Remover da lista de Alunos no Brevo.
   try {
     await removeContactFromBrevo(email);
   } catch (brevoError) {
     console.error("[Hotmart Webhook] Erro ao remover contato da lista do Brevo:", brevoError);
   }
 
-  // 2. Buscar o ID do usuário pelo email no Auth
-  const { data: users } = await supabaseAdmin.auth.admin.listUsers();
-  const user = users.users.find((u) => u.email === email);
+  // 3. Banir o usuário no Auth: bloqueia novos logins e invalida a
+  //    renovação da sessão (lookup paginado, confiável em qualquer base).
+  const user = await findAuthUserByEmail(supabaseAdmin, email);
 
   if (user) {
-    // Desativar o usuário (bloqueia login)
     await supabaseAdmin.auth.admin.updateUserById(user.id, {
       ban_duration: "infinite",
     });
 
-    // Atualizar perfil com flag de acesso
     await supabaseAdmin
       .from("profiles")
       .update({ onboarding_completed: false })
       .eq("id", user.id);
 
-    console.log(`[Hotmart Webhook] Acesso revogado para: ${email}`);
+    console.log(`[Hotmart Webhook] Acesso bloqueado para: ${email}`);
+  } else {
+    console.warn(`[Hotmart Webhook] Reembolso recebido mas usuário não encontrado no Auth: ${email}`);
   }
 
   return NextResponse.json({ success: true });
 }
-

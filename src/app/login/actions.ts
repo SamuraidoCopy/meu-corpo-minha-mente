@@ -26,8 +26,9 @@ export async function login(_prevState: LoginState, formData: FormData): Promise
     const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-            // CRÍTICO: não cria usuário novo. Só quem já tem acesso liberado
-            // (criado pelo cron release-access após D+8) consegue receber o link.
+            // CRÍTICO: não cria usuário novo. Só quem comprou (e teve o login
+            // provisionado pelo webhook da Hotmart na aprovação da compra)
+            // consegue receber o link de acesso.
             shouldCreateUser: false,
             emailRedirectTo: `${origin}/auth/callback`,
         },
