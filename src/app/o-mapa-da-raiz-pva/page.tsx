@@ -117,16 +117,16 @@ export default function SalesPage() {
             <section className="relative pt-24 pb-20 md:pt-32 md:pb-32 px-6 overflow-hidden">
                 <div className="container mx-auto max-w-5xl relative z-10 text-center space-y-8">
                     <div className="inline-block px-4 py-1.5 rounded-full bg-wellness-gold text-white text-xs md:text-sm font-bold tracking-widest uppercase animate-fade-in-up">
-                        ATENÇÃO: PARA QUEM BUSCA DAR UM PONTO FINAL NA TERAPIA &quot;SEM FIM&quot;
+                        VOCÊ JÁ TENTOU DE TUDO E AINDA SE PERGUNTA: O QUE HÁ DE ERRADO COMIGO?
                     </div>
 
                     <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif leading-[1.1] text-slate-800 animate-fade-in-up [animation-delay:200ms]">
-                        Descubra o Idioma Secreto do <br />
-                        <span className="italic text-wellness-sage">seu corpo</span> que nenhuma terapia nunca te ensinou.
+                        O seu <span className="italic text-wellness-sage">rosto</span> guarda a raiz do que você sente. <br />
+                        E dá pra aprender a lê-la em 5 minutos.
                     </h1>
 
                     <p className="text-lg md:text-xl text-slate-700 max-w-3xl mx-auto leading-relaxed animate-fade-in-up [animation-delay:400ms]">
-                        Em 5 minutos olhando no espelho, você pode identificar a <strong>&quot;Raiz do Problema&quot;</strong> emocional que está causando o seu colapso — e como estancar isso.
+                        Na <strong>Terapia Integrativa</strong>, baseada na Medicina Tradicional Chinesa, cada emoção que você não processa adoece um órgão específico, e o seu rosto mostra qual. Em 5 aulas curtas, um espelho e um app, você aprende a ler esses sinais, descobre a sua raiz emocional e dá o primeiro passo que tanta terapia não te deu.
                     </p>
 
                     <div className="animate-fade-in-up [animation-delay:600ms] flex flex-col items-center gap-6">
@@ -167,13 +167,13 @@ export default function SalesPage() {
                             onClick={scrollToPricing}
                             className="h-16 md:h-20 px-10 md:px-14 rounded-full text-lg md:text-xl bg-wellness-gold hover:bg-wellness-gold/90 text-white shadow-xl shadow-wellness-gold/20 transition-all hover:scale-105 active:scale-95 group"
                         >
-                            <span className="md:hidden">QUERO DESCOBRIR A RAIZ</span>
-                            <span className="hidden md:inline">SIM, QUERO DESCOBRIR A RAIZ DO MEU PROBLEMA AGORA</span>
+                            <span className="md:hidden">QUERO DESCOBRIR A MINHA RAIZ</span>
+                            <span className="hidden md:inline">QUERO DESCOBRIR A MINHA RAIZ</span>
                             <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform" />
                         </Button>
 
                         <p className="text-sm text-slate-500 italic">
-                            17 comprimidos diários não pararam a minha depressão, mas sim o que descobri com a Terapia Integrativa.
+                            Método criado pela Esp. Cleucia Venancio e Dra. Ranieli, terapeutas integrativas. A Cleucia levou 9 anos para descobrir que o corpo dela já mostrava a resposta o tempo todo.
                         </p>
                     </div>
                 </div>
@@ -328,7 +328,7 @@ export default function SalesPage() {
                             <div className="space-y-6">
                                 <div className="p-6 glass rounded-2xl border-none">
                                     <p className="italic text-slate-700">
-                                        &quot;A Cleucia passou 9 anos tomando mais de 17 comprimidos por dia por conta de depressão grave... Até usar em si mesma o método de leitura facial do Mapa da Raiz, o qual salvou sua vida. Esse método está acessível aqui por um preço inacreditavél.&quot;
+                                        &quot;A Cleucia passou 9 anos presa em tratamentos que só cuidavam dos sintomas... até usar em si mesma a leitura facial do Mapa da Raiz e finalmente enxergar a raiz que ninguém tinha encontrado. É esse mesmo ponto de partida que você acessa aqui.&quot;
                                     </p>
                                 </div>
 
@@ -351,14 +351,60 @@ export default function SalesPage() {
                 </div>
             </section>
 
+            {/* Seção 2.5: Testemunhos (Trabalho Clínico) */}
+            <section id="provas" className="py-24 px-6 bg-white/30 backdrop-blur-sm relative border-y border-wellness-sage/10">
+                <div className="container mx-auto max-w-6xl">
+                    <div className="text-center mb-14 md:mb-16 space-y-4">
+                        <h2 className="text-3xl md:text-5xl font-serif text-slate-800 leading-tight">
+                            O que pacientes dizem sobre o <span className="italic text-wellness-sage">trabalho das Dras.</span>
+                        </h2>
+                        <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+                            Mensagens reais de quem passou pela Análise Corporal com a Dra. Ranieli e a Esp. Cleucia, no consultório Meu Corpo, Minha Mente — antes de o método virar app.
+                            <span className="block text-sm text-slate-500 mt-2">Identidades preservadas por se tratar de saúde emocional.</span>
+                        </p>
+                    </div>
+
+                    <div className="columns-1 sm:columns-2 lg:columns-3 gap-5">
+                        {[
+                            { n: 1, w: 655, h: 726 },
+                            { n: 2, w: 536, h: 839 },
+                            { n: 12, w: 598, h: 573 },
+                            { n: 3, w: 534, h: 686 },
+                            { n: 5, w: 643, h: 575 },
+                            { n: 8, w: 638, h: 492 },
+                            { n: 6, w: 646, h: 575 },
+                            { n: 7, w: 657, h: 433 },
+                            { n: 11, w: 630, h: 353 },
+                            { n: 9, w: 680, h: 321 },
+                            { n: 4, w: 689, h: 199 },
+                        ].map(({ n, w, h }) => (
+                            <div key={n} className="break-inside-avoid mb-5 glass rounded-2xl overflow-hidden shadow-lg border border-white/40">
+                                <Image
+                                    src={`/images/depoimentos/depoimento-${n}.jpg`}
+                                    alt="Depoimento de paciente sobre a Análise Corporal das Dras. Ranieli e Cleucia"
+                                    width={w}
+                                    height={h}
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                    className="w-full h-auto"
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    <p className="mt-14 text-center text-lg text-slate-700 max-w-2xl mx-auto">
+                        Esse mesmo método de consultório agora cabe na <strong>tela do seu celular</strong>.
+                    </p>
+                </div>
+            </section>
+
             {/* Seção 3: Preço e Garantia */}
             <section id="preco" className="py-24 px-6 bg-slate-900 text-white relative overflow-hidden text-center rounded-t-[3rem] md:rounded-t-[5rem]">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full mesh-gradient opacity-10 pointer-events-none" />
 
                 <div className="container mx-auto max-w-4xl relative z-10 space-y-12">
                     <div className="space-y-4">
-                        <h2 className="text-3xl md:text-5xl font-serif">A Melhor Decisão que <br /> Você Tomará Hoje</h2>
-                        <p className="text-white/80">Compare os caminhos e escolha a sua liberdade.</p>
+                        <h2 className="text-3xl md:text-5xl font-serif">Quanto custa continuar <br /> sem achar a raiz</h2>
+                        <p className="text-white/80">Veja o que esse ciclo já tira de você — e por onde dá pra começar a virar o jogo.</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left opacity-80">
@@ -384,33 +430,37 @@ export default function SalesPage() {
                             OFERTA LIMITADA
                         </div>
 
-                        <div className="space-y-2">
-                            <p className="text-sm uppercase tracking-widest text-slate-500 font-bold">Acesso Completo:</p>
+                        {/* Torre de preços — ancoragem de valor */}
+                        <div className="max-w-md mx-auto text-left space-y-3">
+                            <p className="text-sm uppercase tracking-widest text-slate-500 font-bold text-center mb-4">Tudo o que você leva:</p>
+                            {[
+                                ["Treinamento O Mapa da Raiz (os 5 Elementos)", "R$ 297"],
+                                ["App de Leitura Facial Interativo — acesso imediato", "R$ 297"],
+                                ["Kit de Primeiros Socorros (protocolos de 3 min)", "R$ 147"],
+                                ["Check-in Diário Inteligente", "R$ 97"],
+                            ].map(([item, val], i) => (
+                                <div key={i} className="flex items-center justify-between gap-3">
+                                    <span className="flex items-start gap-2 text-slate-600 text-sm md:text-base">
+                                        <CheckCircle2 className="text-wellness-gold shrink-0 mt-0.5" size={18} />
+                                        {item}
+                                    </span>
+                                    <span className="text-slate-400 line-through text-sm shrink-0">{val}</span>
+                                </div>
+                            ))}
+                            <div className="flex items-center justify-between pt-3 mt-1 border-t border-slate-100 font-bold text-slate-700">
+                                <span>Valor total</span>
+                                <span className="line-through decoration-red-500 decoration-2">R$ 838</span>
+                            </div>
+                        </div>
+
+                        <div className="space-y-2 pt-2">
+                            <p className="text-sm uppercase tracking-widest text-slate-500 font-bold">Hoje, seu acesso completo por apenas:</p>
                             <div className="flex items-baseline justify-center gap-2 font-serif text-slate-800">
                                 <span className="text-2xl md:text-4xl lg:text-5xl opacity-70">R$</span>
                                 <span className="text-7xl md:text-9xl font-bold tracking-tighter leading-none">97</span>
                             </div>
                             <p className="text-slate-500 font-medium">ou 12x de ~R$ 9,70</p>
                         </div>
-
-                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left max-w-2xl mx-auto py-8 border-y border-slate-100">
-                            <li className="flex items-center gap-3 text-slate-600">
-                                <CheckCircle2 className="text-wellness-gold" size={18} />
-                                Treinamento O Mapa da Raiz
-                            </li>
-                            <li className="flex items-center gap-3 text-slate-600">
-                                <CheckCircle2 className="text-wellness-gold" size={18} />
-                                App para o Diagnóstico Facial
-                            </li>
-                            <li className="flex items-center gap-3 text-slate-600">
-                                <CheckCircle2 className="text-wellness-gold" size={18} />
-                                Protocolos de 3 minutos
-                            </li>
-                            <li className="flex items-center gap-3 text-slate-600">
-                                <CheckCircle2 className="text-wellness-gold" size={18} />
-                                Check-in Diário Inteligente
-                            </li>
-                        </ul>
 
                         <Button 
                             onClick={handleCheckoutClick}
@@ -433,7 +483,7 @@ export default function SalesPage() {
                             </div>
                         </div>
                         <p className="text-sm text-white/80 max-w-sm text-left">
-                            Se em 7 dias você não achar que esse método te mostrou o caminho da autocura, nós devolvemos cada centavo investido, sem perguntas. Envie apenas um e-mail.
+                            Se em 7 dias você não achar que esse método te deu mais clareza sobre a sua raiz do que qualquer terapia que já fez, nós devolvemos cada centavo investido, sem perguntas. Envie apenas um e-mail.
                         </p>
                     </div>
                 </div>
@@ -459,7 +509,7 @@ export default function SalesPage() {
                             },
                             {
                                 q: "E se eu não me adaptar ao método?",
-                                a: "Você tem 7 dias de garantia total. Se você não achar que esse método te mostrou o caminho da autocura, devolvemos seu dinheiro sem perguntas. Envie apenas um e-mail."
+                                a: "Você tem 7 dias de garantia total. Se você não achar que esse método te deu mais clareza sobre a sua raiz, devolvemos seu dinheiro sem perguntas. Envie apenas um e-mail."
                             }
                         ].map((faq, i) => (
                             <details key={i} className="group glass rounded-3xl overflow-hidden border-none cursor-pointer">
@@ -482,8 +532,8 @@ export default function SalesPage() {
                             onClick={handleCheckoutClick}
                             className="rounded-full px-12 h-16 bg-wellness-sage hover:bg-wellness-sage/90 text-white shadow-lg shadow-wellness-sage/20 transition-all hover:scale-105"
                         >
-                            <span className="md:hidden">QUERO A AUTOCURA</span>
-                            <span className="hidden md:inline">SIM, QUERO A MINHA AUTOCURA AGORA</span>
+                            <span className="md:hidden">QUERO DESCOBRIR A RAIZ</span>
+                            <span className="hidden md:inline">SIM, QUERO DESCOBRIR A MINHA RAIZ</span>
                         </Button>
                     </div>
                 </div>
