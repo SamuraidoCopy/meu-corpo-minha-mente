@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:quiz": "eslint src/app/quiz src/lib/brevo.ts src/lib/quiz-data.ts src/lib/quiz-copy.ts src/lib/quiz-rate-limit.ts src/lib/quiz-submission.ts src/components/ui/stack-feature-section.tsx src/__tests__/quiz-actions.test.ts src/__tests__/quiz-copy.test.ts src/__tests__/quiz-data.test.ts src/__tests__/quiz-rate-limit.test.ts src/__tests__/quiz-submission.test.ts src/__tests__/brevo-quiz.test.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

@@ -23,7 +23,8 @@ export function useUTM() {
     if (typeof window === "undefined") return baseUrl;
 
     try {
-      const url = new URL(baseUrl);
+      const isRelativeUrl = baseUrl.startsWith("/");
+      const url = new URL(baseUrl, window.location.origin);
       const utmParams = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "src", "sck"];
       
       let hasTracking = false;
@@ -61,6 +62,10 @@ export function useUTM() {
           const computedSrc = parts.join("_").toLowerCase().replace(/[^a-z0-9_-]/g, "");
           url.searchParams.set("src", computedSrc);
         }
+      }
+
+      if (isRelativeUrl) {
+        return `${url.pathname}${url.search}${url.hash}`;
       }
 
       return url.toString();
