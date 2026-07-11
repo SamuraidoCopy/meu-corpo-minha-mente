@@ -32,7 +32,7 @@ O módulo retornará dados normalizados e o elemento recalculado. A Server Actio
 
 ### Rate limit persistente
 
-A migration criará `quiz_rate_limits` e a função SQL `check_quiz_submission_rate_limit`. A função fará incremento atômico de duas chaves HMAC: uma por IP e outra por e-mail. O IP permitirá até 10 tentativas em 10 minutos; o e-mail, até 3. A função será executável apenas pelo `service_role`.
+Uma migration incremental, sem reescrever a migration já aplicada do quiz, criará `quiz_rate_limits` e a função SQL `check_quiz_submission_rate_limit`. A função fará incremento atômico de duas chaves HMAC: uma por IP e outra por e-mail. O IP permitirá até 10 tentativas em 10 minutos; o e-mail, até 3. A função será executável apenas pelo `service_role`.
 
 As chaves serão derivadas com HMAC-SHA256 e `QUIZ_RATE_LIMIT_SECRET`; nenhum IP ou e-mail será persistido na tabela de limites.
 

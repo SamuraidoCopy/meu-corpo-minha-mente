@@ -25,7 +25,7 @@
 
 **Files:**
 - Modify: `src/app/quiz/quiz-client.tsx`
-- Modify: `supabase/migrations/20260707_create_quiz_leads.sql`
+- Create: `supabase/migrations/20260710_harden_quiz_submissions.sql`
 - Test: `src/__tests__/quiz-submission.test.ts`
 
 - [ ] Adicionar teste de contrato para UUID estável.
@@ -38,7 +38,7 @@
 **Files:**
 - Create: `src/lib/quiz-rate-limit.ts`
 - Create: `src/__tests__/quiz-rate-limit.test.ts`
-- Modify: `supabase/migrations/20260707_create_quiz_leads.sql`
+- Create: `supabase/migrations/20260710_harden_quiz_submissions.sql`
 - Modify: `src/app/quiz/actions.ts`
 
 - [ ] Escrever testes para HMAC determinístico, separação IP/e-mail e ausência de dados brutos.
