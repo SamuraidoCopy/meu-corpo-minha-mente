@@ -144,6 +144,23 @@
   animation: fade-in-up 1s ease-out forwards;
 }
 
+@keyframes mcmm-orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mcmm-orbit-ring {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 .delay-1000 {
   animation-delay: 1000ms;
 }
