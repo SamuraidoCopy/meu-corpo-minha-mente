@@ -369,7 +369,7 @@ export function QuizClient() {
 
                 <div className="space-y-6">
                   <div className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white">
-                    Elemento dominante
+                    {QUIZ_COPY.result.label}
                   </div>
 
                   <div className="space-y-3">
