@@ -173,7 +173,7 @@ export function QuizClient() {
       trackDataLayer("quiz_cta_click", { element: resultElement });
     }
 
-    window.location.href = getTrackedCheckoutUrl("/o-mapa-da-raiz-pva");
+    window.location.href = getTrackedCheckoutUrl("/o-mapa-da-raiz-pvc");
   };
 
   return (

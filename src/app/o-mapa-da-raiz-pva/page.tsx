@@ -126,7 +126,7 @@ export default function SalesPage() {
                     </h1>
 
                     <p className="text-lg md:text-xl text-slate-700 max-w-3xl mx-auto leading-relaxed animate-fade-in-up [animation-delay:400ms]">
-                        Na <strong>Terapia Integrativa</strong>, baseada na Medicina Tradicional Chinesa, cada emoção que você não processa adoece um órgão específico, e o seu rosto mostra qual. Em 5 aulas curtas, um espelho e um app, você aprende a ler esses sinais, descobre a sua raiz emocional e dá o primeiro passo que tanta terapia não te deu.
+                        A <strong>Terapia Integrativa</strong>, baseada na Medicina Tradicional Chinesa, relaciona cada emoção a uma parte do corpo, e o rosto é um dos lugares onde ela deixa sinal. Em 5 aulas curtas, um espelho e um app, você aprende a observar esses sinais, a registrar o que se repete e a dar o primeiro passo com o padrão à vista.
                     </p>
 
                     <div className="animate-fade-in-up [animation-delay:600ms] flex flex-col items-center gap-6">
@@ -185,8 +185,8 @@ export default function SalesPage() {
                     <div className="text-center mb-16 space-y-4">
                         <h2 className="text-3xl md:text-5xl font-serif text-slate-800">O Que Você Vai Receber no &quot;Mapa da Raiz&quot;</h2>
                         <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                            Se você só tenta curar os sintomas (as folhas), elas sempre voltarão a secar. <br className="hidden md:block" />
-                            Chegou a hora de tratar a Raiz e resolver o problema.
+                            Se você combate só o que aparece, o problema continua voltando. <br className="hidden md:block" />
+                            Todo resultado tem uma raiz, e é nela que a investigação começa.
                         </p>
                     </div>
 
@@ -197,7 +197,7 @@ export default function SalesPage() {
                             </div>
                             <h3 className="text-xl font-serif mb-4">A Anatomia da Sua Dor</h3>
                             <p className="text-slate-600 leading-relaxed">
-                                Entenda os 5 Elementos da Terapia Integrativa e qual órgão do seu corpo está sofrendo por emoções guardadas.
+                                Entenda os 5 Elementos da Terapia Integrativa e como essa tradição relaciona cada emoção a uma parte do corpo. É um mapa para investigar.
                             </p>
                         </Card>
 
@@ -205,9 +205,9 @@ export default function SalesPage() {
                             <div className="w-14 h-14 rounded-2xl bg-wellness-earth/10 text-wellness-earth flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                 <Activity size={28} />
                             </div>
-                            <h3 className="text-xl font-serif mb-4">Diagnóstico Especializado</h3>
+                            <h3 className="text-xl font-serif mb-4">Leitura Facial</h3>
                             <p className="text-slate-600 leading-relaxed">
-                                Aprenda a fazer a leitura do seu próprio rosto sem precisar de sessões caríssimas de terapia tradicional.
+                                Aprenda a observar o seu rosto por zona, e a registrar o que apareceu junto com o que você estava vivendo naquela semana.
                             </p>
                         </Card>
 
@@ -218,9 +218,9 @@ export default function SalesPage() {
                             <div className="w-14 h-14 rounded-2xl bg-wellness-gold/10 text-wellness-gold flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                 <Smartphone size={28} />
                             </div>
-                            <h3 className="text-xl font-serif mb-4">App para o Diagnóstico Facial</h3>
+                            <h3 className="text-xl font-serif mb-4">App Interativo de Leitura Facial</h3>
                             <p className="text-slate-600 leading-relaxed">
-                                Nosso app exclusivo cruza a informação das marcas do seu rosto com os 5 elementos para um diagnóstico instantâneo.
+                                Uma leitura isolada mostra o hoje. O app vira o seu companheiro de todo dia: você faz a leitura do rosto e registra energia, sono, emoção e sintomas, mais um exercício de respiração que te ajuda a se centrar. No fim do primeiro mês, a sua Constelação de Emoções e a tendência da sua vitalidade desenham o padrão que um dia isolado esconde.
                             </p>
                         </Card>
                     </div>
@@ -328,7 +328,7 @@ export default function SalesPage() {
                             <div className="space-y-6">
                                 <div className="p-6 glass rounded-2xl border-none">
                                     <p className="italic text-slate-700">
-                                        &quot;A Cleucia passou 9 anos presa em tratamentos que só cuidavam dos sintomas... até usar em si mesma a leitura facial do Mapa da Raiz e finalmente enxergar a raiz que ninguém tinha encontrado. É esse mesmo ponto de partida que você acessa aqui.&quot;
+                                        &quot;A Cleucia passou 9 anos tratando os sintomas... até usar em si mesma a leitura facial do Mapa da Raiz e finalmente enxergar a raiz que estava atrás deles. Aqui você começa do ponto onde ela levou 9 anos para chegar.&quot;
                                     </p>
                                 </div>
 
@@ -409,19 +409,19 @@ export default function SalesPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left opacity-80">
                         <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                            <div className="text-white/40 mb-2">Psicólogo Tradicional</div>
-                            <div className="text-red-400 font-bold">~R$ 2.000 /ano</div>
-                            <div className="text-xs text-white/40 mt-1">Anos e anos rodando em círculos, de terapia em terapia.</div>
+                            <div className="text-white/40 mb-2">Mais um ano adiando</div>
+                            <div className="text-red-400 font-bold">12 meses</div>
+                            <div className="text-xs text-white/40 mt-1">O mesmo padrão, agora com um ano perdido.</div>
                         </div>
                         <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                            <div className="text-white/40 mb-2">Remédios Psiquiátricos</div>
-                            <div className="text-red-400 font-bold">R$ 150 - 300 /mês</div>
-                            <div className="text-xs text-white/40 mt-1">+ Efeitos colaterais.</div>
+                            <div className="text-white/40 mb-2">Tentar tudo ao mesmo tempo</div>
+                            <div className="text-red-400 font-bold">0 respostas</div>
+                            <div className="text-xs text-white/40 mt-1">Creme novo, dormir mais, mais uma dica nova toda semana. Quando você muda tudo de uma vez, não dá pra saber o que funcionou.</div>
                         </div>
                         <div className="p-6 rounded-2xl bg-white/5 border border-white/10 text-white/70">
-                            <div className="text-white/70 mb-2">Tempo Perdido</div>
-                            <div className="text-red-400 font-bold">10 anos</div>
-                            <div className="text-xs text-white/70 mt-1">Preso no modo sobrevivência.</div>
+                            <div className="text-white/70 mb-2">Chegar na consulta sem nada</div>
+                            <div className="text-red-400 font-bold">&quot;eu só estou cansada&quot;</div>
+                            <div className="text-xs text-white/70 mt-1">A única frase que sobra quando ninguém anotou o que aconteceu nas últimas semanas.</div>
                         </div>
                     </div>
 
@@ -479,11 +479,11 @@ export default function SalesPage() {
                             </div>
                             <div>
                                 <h4 className="font-bold">Garantia Incondicional</h4>
-                                <p className="text-sm text-white/50 tracking-tight">&quot;Seu Rosto Não Mente&quot;</p>
+                                <p className="text-sm text-white/50 tracking-tight">Sem perguntas</p>
                             </div>
                         </div>
                         <p className="text-sm text-white/80 max-w-sm text-left">
-                            Se em 7 dias você não achar que esse método te deu mais clareza sobre a sua raiz do que qualquer terapia que já fez, nós devolvemos cada centavo investido, sem perguntas. Envie apenas um e-mail.
+                            Se em 7 dias você não achar que esse método te deu mais clareza sobre o que se repete em você, devolvemos cada centavo investido, sem perguntas. Basta enviar um e-mail.
                         </p>
                     </div>
                 </div>
@@ -501,11 +501,11 @@ export default function SalesPage() {
                         {[
                             {
                                 q: "Isso substitui meu psicólogo e meu psiquiatra?",
-                                a: "Não. É um sistema complementar de autodiagnóstico. Nunca pare medicações sem ordem médica. O Mapa serve para dar profundidade ao seu caso, não serve como emergência."
+                                a: "Não. É uma ferramenta complementar de observação e registro. Nunca pare medicações sem ordem médica. O Mapa serve para você chegar na consulta com o que aconteceu anotado, não serve como emergência."
                             },
                             {
                                 q: "Vou ter um aplicativo só meu?",
-                                a: "Isso mesmo. Você terá o seu próprio login e usará os seus dados de forma assertiva para gerenciar sua saúde emocional. Sua privacidade estará protegida, nenhum dado sserá exposto sem o seu consentimento"
+                                a: "Isso mesmo. Você terá o seu próprio login e usará os seus dados de forma assertiva para gerenciar sua saúde emocional. Sua privacidade estará protegida, nenhum dado será exposto sem o seu consentimento."
                             },
                             {
                                 q: "E se eu não me adaptar ao método?",
