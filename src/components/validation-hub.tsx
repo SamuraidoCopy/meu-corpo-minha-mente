@@ -29,8 +29,10 @@ const ROUTES = [
   { name: 'Diário das Emoções', path: '/diario?inspect=true', icon: BookOpen },
   { name: 'Safe Space Preview', path: '/preview-safe-space?inspect=true', icon: Eye },
   { name: 'Painel Admin', path: '/admin', icon: Settings },
+  { name: 'Quiz', path: '/quiz', icon: ClipboardCheck },
   { name: 'Página de Vendas A (PVA)', path: '/o-mapa-da-raiz-pva', icon: Megaphone },
   { name: 'Página de Vendas B (PVB)', path: '/o-mapa-da-raiz-pvb', icon: Megaphone },
+  { name: 'Página de Vendas C (PVC)', path: '/o-mapa-da-raiz-pvc', icon: Megaphone },
   { name: 'Obrigado (Aprovada)', path: '/obrigado', icon: ClipboardCheck },
   { name: 'Obrigado (Aguardando)', path: '/obrigado-aguardando', icon: ClipboardCheck },
 ]
