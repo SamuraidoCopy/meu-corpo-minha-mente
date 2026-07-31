@@ -47,7 +47,7 @@ export default function SalesPageVersionB() {
 
             {/* Top Warning Bar */}
             <div className="bg-wellness-gold text-white text-center py-4 px-4 text-xs md:text-sm font-bold tracking-widest relative z-50 shadow-md">
-                LEIA COM ATENÇÃO: Se você faz terapia ou toma medicação há meses e ainda sente aquele peso no peito...
+                LEIA COM ATENÇÃO: Se você já tentou de tudo pra aliviar esse peso no peito e ele sempre volta...
             </div>
 
             {/* Navigation */}
@@ -78,15 +78,15 @@ export default function SalesPageVersionB() {
             <section className="relative pt-12 pb-12 md:pt-16 md:pb-16 px-6 overflow-hidden">
                 <div className="container mx-auto max-w-4xl relative z-10 text-center space-y-8">
                     <h1 className="text-4xl md:text-5xl lg:text-7xl font-serif leading-[1.1] text-slate-900 animate-fade-in-up">
-                        Como 5 minutos olhando no espelho podem revelar a <span className="italic text-wellness-sage">&quot;Raiz do Problema&quot;</span> que nenhum tratamento te ajudou a enxergar.
+                        Como 5 minutos olhando no espelho podem revelar a <span className="italic text-wellness-sage">&quot;Raiz do Problema&quot;</span> que ninguém ainda tinha te ajudado a enxergar.
                     </h1>
 
                     <h2 className="text-xl md:text-2xl lg:text-3xl text-slate-700 font-serif leading-relaxed max-w-3xl mx-auto animate-fade-in-up delay-300 opacity-0" style={{ animationFillMode: 'forwards' }}>
-                        Conheça o <strong>Mapa da Raiz</strong>, o método de <strong>Terapia Integrativa</strong> que a Esp. Cleucia Venancio criou depois de 9 anos presa em tratamentos que só cuidavam dos sintomas.
+                        Conheça o <strong>Mapa da Raiz</strong>, o método de <strong>Terapia Integrativa</strong> que a Esp. Cleucia Venancio criou depois de 9 anos investigando o que travava sua vida sem nunca chegar até a raiz disso.
                     </h2>
 
                     <p className="text-base md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed pt-4 animate-fade-in-up delay-500 opacity-0" style={{ animationFillMode: 'forwards' }}>
-                        Não importa quanto tempo e dinheiro você já gastou pulando de <strong>profissional em profissional</strong>. Se a terapia só trata os sintomas (os galhos), a doença nunca vai embora. Descubra agora de forma prática qual é o idioma secreto do seu corpo e entenda, enfim, qual órgão está carregando a dor que você guarda há 1, 5 ou até 10 anos.
+                        Não importa quanto tempo você já gastou tentando resolver isso olhando no lugar errado. Quando a atenção fica só nos sintomas (os galhos), o padrão sempre encontra um jeito de voltar. Descubra agora de forma prática qual é o idioma do seu corpo e comece a reconhecer qual área pode estar pedindo atenção há 1, 5 ou até 10 anos.
                     </p>
 
                     <div className="pt-8 flex justify-center">
@@ -130,27 +130,27 @@ export default function SalesPageVersionB() {
 
                     <p>Pode ser difícil ler o que eu vou te dizer.<br />Mas eu preciso abrir o jogo com você.</p>
 
-                    <p>Se você já foi ao <strong>profissional</strong> por anos a fio, tentou fazer aulas de yoga, comprou livros de autoajuda... e mesmo <strong>tomando certinho seus comprimidos todos os dias</strong>, você ainda acaba voltando para o quarto escuro da tristeza profunda ou da ansiedade que aperta o peito.</p>
+                    <p>Se você já foi ao <strong>profissional</strong>, tentou fazer aulas de yoga, comprou livros de autoajuda, fez tudo certinho como te orientaram... e mesmo assim ainda acaba voltando para o quarto escuro da tristeza profunda ou daquela ansiedade que aperta o peito, eu sei exatamente o que você está passando.</p>
 
-                    <p>Tem algo de muito errado por aí, e o sistema tradicional de saúde nunca te contou.<br />E eu posso falar isso de boca cheia, porque eu passei exatamente 9 anos sendo refém da <strong>&quot;Terapia Sem Fim&quot;</strong>.</p>
+                    <p>Eu vivi 9 anos tratando os sintomas e nunca a raiz que gerava os problemas.<br />E posso falar isso com conhecimento de causa, pois vivi na pele esse sofrimento que parece não ter fim.</p>
 
                     <div className="py-8 my-10 border-y border-slate-200">
                         <p className="text-2xl md:text-3xl font-bold text-slate-900 leading-tight">
-                            Por esses longos anos, os médicos olhavam para mim em seus consultórios e apenas me davam mais uma receita de farmácia. Chegou ao cúmulo de eu ter que engolir <span className="text-red-700">17 COMPRIMIDOS DIFERENTES POR DIA.</span>
+                            Por esses longos anos de sofrimento, cheguei a tomar <span className="text-red-700">17 COMPRIMIDOS DIFERENTES POR DIA</span> — cada um cuidando de uma parte do meu dia, e nenhum me ajudando a entender por que aquilo sempre voltava. Só me dopava.
                         </p>
                     </div>
 
-                    <p>Dezessete <strong>comprimidos</strong>... todos os dias. Só para conseguir levantar da cama e funcionar.</p>
+                    <p>Dezessete <strong>comprimidos</strong>... todos os dias. Cada um tratando um sintoma, e o padrão continuava lá, intacto.</p>
 
                     <p>Eu fingia que estava tudo bem. Sorria para as amigas e ia trabalhar. Mas, por dentro, parecia que a vida tinha perdido a cor. Estava tudo cinza, sem graça.</p>
 
-                    <p>Até que a Dra. Ranieli, minha filha, trouxe o conhecimento profundo da Terapia Integrativa e eu aprofundei nos estudos das terapias integrativas para compreender meu corpo e minha mente para a nossa clínica... e nós finalmente entendemos a peça do quebra-cabeça que nenhuma conversa no <strong>profissional</strong> tinha enxergado.</p>
+                    <p>Até que a Dra. Ranieli, minha filha, trouxe o conhecimento profundo da Terapia Integrativa, e juntas aprofundamos nos estudos para compreender o corpo e a mente na nossa clínica... e finalmente enxergamos a peça do quebra-cabeça que nenhum cuidado isolado tinha me ajudado a ver: eu sempre tratava a manifestação do problema, nunca tinha investigado o padrão por trás dela.</p>
 
                     <blockquote className="border-l-4 border-wellness-sage pl-6 italic text-xl md:text-2xl text-slate-800 font-medium my-12 py-2">
-                        &quot;Eles passavam o tempo todo podando as folhas de uma árvore doente... e esqueceram de tratar a verdadeira raiz do problema.&quot;
+                        &quot;A gente passa o tempo todo podando as folhas de uma árvore doente... e esquece de investigar a raiz do problema.&quot;
                     </blockquote>
 
-                    <p>Na verdade, a <strong>Tristeza</strong> enfraquece diretamente o seu Pulmão. O <strong>Medo que nunca passa</strong> não é coisa da sua cabeça; ele estressa os seus Rins (e o seu corpo costuma avisar isso através de fortes olheiras ou problemas na pele em questão de horas).</p>
+                    <p>A Tristeza Profunda costuma aparecer relacionada ao Pulmão. O Medo que nunca passa costuma aparecer relacionado aos Rins (e o corpo às vezes avisa isso através de olheiras marcadas ou alterações na pele). São sinais para investigar, não sentenças — e é exatamente isso que o Mapa te ajuda a fazer.</p>
                 </div>
             </section>
 
@@ -159,7 +159,7 @@ export default function SalesPageVersionB() {
                 <div className="container mx-auto max-w-3xl space-y-8 text-lg md:text-xl text-slate-700 leading-relaxed font-serif">
                     <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-10 text-center leading-tight">Quando unimos a leitura do nosso Corpo Físico com a sabedoria milenar da Terapia Integrativa, tudo fez sentido.</h2>
 
-                    <p className="text-center text-xl md:text-2xl font-bold text-wellness-sage">Nós desvendamos o mapa.</p>
+                    <p className="text-center text-xl md:text-2xl font-bold text-wellness-sage">Encontramos o mapa.</p>
 
                     <div className="max-w-2xl mx-auto aspect-[4/5] relative rounded-[3rem] overflow-hidden my-16 shadow-2xl group transition-all duration-700 grayscale hover:grayscale-0">
                         <Image
@@ -171,26 +171,26 @@ export default function SalesPageVersionB() {
                         />
                     </div>
 
-                    <p>Hoje, quando um paciente vem até a nossa clínica presencial para fazer um raio-x emocional da sua vida, nós não ficamos apenas numa conversa de 50 minutos semana após semana.</p>
+                    <p>Hoje, quando um paciente vem até a nossa clínica presencial para fazer uma primeira leitura emocional da sua vida, nós não ficamos apenas naquela conversa que se repete semana após semana, e não parece fazer sua vida andar.</p>
 
-                    <p>Nós aplicamos O MÉTODO EXECUTIVO: <strong>&quot;Cortando o Mal pela Raiz™&quot;</strong></p>
+                    <p>Nós aplicamos O MÉTODO: <strong>&quot;Cortando o Mal pela Raiz™&quot;</strong></p>
 
-                    <p>Isso funciona muito bem porque as tensões do nosso rosto e as marcas de expressão gritam o que a nossa cabeça tenta esconder. Sabe qual era a minha raiz? Estava travada em uma decisão que tomei sem perceber quando tinha apenas 9 anos de idade!</p>
+                    <p>Isso funciona muito bem porque as tensões do nosso rosto e as marcas de expressão revelam sinais que a nossa cabeça tenta esconder. Sabe qual era a minha raiz? Estava numa decisão que eu tinha tomado sem perceber, ainda com 9 anos de idade!</p>
 
                     <div className="bg-white p-10 rounded-[2rem] shadow-xl border border-slate-100 my-16">
-                        <p className="text-2xl font-bold text-slate-900 mb-6 leading-tight">Quando achei isso, foi como tirar um piano das costas. Voltei a respirar.</p>
-                        <p><strong>Já faz quase 6 anos que durmo bem, com a mente leve e o corpo de volta ao eixo.</strong> E sem aquele medo constante de recair. Foi a autocura profunda do órgão que mudou a minha vida.</p>
+                        <p className="text-2xl font-bold text-slate-900 mb-6 leading-tight">Quando encontrei isso, foi como tirar um piano das costas. Voltei a respirar.</p>
+                        <p><strong>Já faz quase 6 anos que durmo bem, com a mente leve e o corpo de volta ao eixo.</strong> E sem aquele medo constante de recair. Foi investigar a raiz — e não só tratar o sintoma — que mudou a minha vida.</p>
                     </div>
 
-                    <p>A Terapia Integrativa é clara nisso há milhares de anos: as 5 grandes emoções (Raiva, Ansiedade, Preocupação Exagerada, Tristeza Profunda e Aquela Sensação de Medo/Cansaço Existencial) adoecem pouco a pouco os seus 5 órgãos principais. Não adianta nada tentar cobrir o sol com a peneira.</p>
+                    <p>A Terapia Integrativa observa isso há milhares de anos: as 5 grandes emoções (Raiva, Ansiedade, Preocupação Exagerada, Tristeza Profunda e Aquela Sensação de Medo/Cansaço Existencial) costumam aparecer relacionadas aos 5 órgãos principais. Não é uma sentença — é um mapa para você investigar, não para tirar conclusão sozinha.</p>
 
                     <div className="p-10 bg-wellness-gold/10 text-slate-900 rounded-[2rem] border border-wellness-gold/20 mt-16 shadow-sm animate-fade-in-up">
                         <p className="font-bold text-2xl mb-6 flex items-center gap-3">
                             <Lock className="text-wellness-gold" size={24} />
                             Só que temos um grande problema:
                         </p>
-                        <p>Na nossa clínica, a <strong>Sessão Intensiva individual</strong> — onde a gente vai fundo na sua raiz, pessoalmente — custa <strong>R$ 697,00</strong>, e a agenda vive cheia.</p>
-                        <p className="mt-4">Só que, antes de sentar numa sessão dessas, quase todo mundo precisa de uma coisa primeiro: aprender a se enxergar. O mapa antes da viagem. Por isso reunimos a base do método num formato que você acessa de casa, no seu tempo — para dar o seu primeiro passo agora.</p>
+                        <p>Na nossa clínica, a <strong>Sessão Intensiva individual</strong> — onde a gente vai fundo na sua raiz — custa <strong>R$ 697,00</strong>, e a agenda vive cheia.</p>
+                        <p className="mt-4">Só que, antes de sentar numa sessão dessas, quase todo mundo precisa de uma coisa primeiro: aprender a se enxergar. É como abrir o mapa antes da viagem. Por isso reunimos a base do método num formato que você acessa de onde você quiser, no seu tempo — para dar o seu primeiro passo agora.</p>
                     </div>
                 </div>
             </section>
@@ -199,7 +199,7 @@ export default function SalesPageVersionB() {
             <section className="py-16 md:py-20 px-6 bg-white">
                 <div className="container mx-auto max-w-4xl">
                     <div className="text-center mb-16 space-y-6">
-                        <h2 className="text-3xl md:text-5xl font-serif font-bold text-slate-900 leading-tight max-w-3xl mx-auto">Por isso, nós organizamos todo o nosso método e conhecimento de maneira que você possa acessar do conforto da sua casa:</h2>
+                        <h2 className="text-3xl md:text-5xl font-serif font-bold text-slate-900 leading-tight max-w-3xl mx-auto">Por isso, nós organizamos todo o nosso método e conhecimento de maneira que você possa acessar de qualquer lugar:</h2>
                         <h3 className="text-xl md:text-2xl font-bold text-wellness-sage uppercase tracking-widest mt-8">APRESENTAMOS O TREINAMENTO E O APLICATIVO &quot;O MAPA DA RAIZ&quot;</h3>
                     </div>
 
@@ -220,21 +220,21 @@ export default function SalesPageVersionB() {
                                     <CheckCircle2 className="text-wellness-sage shrink-0 mt-1" size={28} />
                                     <div>
                                         <p className="font-bold text-slate-900 text-xl mb-1">Módulo 1:</p>
-                                        <p className="text-slate-600 text-lg">Entenda de uma vez por todas por que seus tratamentos anteriores não te curaram.</p>
+                                        <p className="text-slate-600 text-lg">Entenda por que o mesmo sintoma insiste em voltar, mesmo depois de tanto tempo cuidando dele.</p>
                                     </div>
                                 </li>
                                 <li className="flex gap-4">
                                     <CheckCircle2 className="text-wellness-sage shrink-0 mt-1" size={28} />
                                     <div>
                                         <p className="font-bold text-slate-900 text-xl mb-1">Módulos 2 e 3 (Os 5 Elementos):</p>
-                                        <p className="text-slate-600 text-lg">Entenda a verdadeira causa daquela dor de cabeça que não passa (vem da Raiva!) ou da gastrite que queima no estômago (o palco da Preocupação).</p>
+                                        <p className="text-slate-600 text-lg">Veja a relação entre aquela dor de cabeça que não passa e a Raiva, ou a gastrite que queima no estômago e a Preocupação — um ponto de partida para investigar.</p>
                                     </div>
                                 </li>
                                 <li className="flex gap-4">
                                     <CheckCircle2 className="text-wellness-sage shrink-0 mt-1" size={28} />
                                     <div>
                                         <p className="font-bold text-slate-900 text-xl mb-1">O Kit de Primeiros Socorros:</p>
-                                        <p className="text-slate-600 text-lg">Exercícios práticos e rápidos (de 3 a 5 minutos) focados em acalmar seu sistema nervoso e desligar as crises de ansiedade na mesma hora. Você vai aprender a usar a respiração e pequenos ajustes no seu dia para frear o desespero antes de dormir.</p>
+                                        <p className="text-slate-600 text-lg">Exercícios práticos e rápidos (de 3 a 5 minutos) para ajudar a acalmar o sistema nervoso nos momentos mais difíceis. Você vai aprender a usar a respiração e pequenos ajustes no seu dia para ganhar mais estabilidade antes de dormir.</p>
                                     </div>
                                 </li>
                             </ul>
@@ -248,7 +248,10 @@ export default function SalesPageVersionB() {
                             <h3 className="text-2xl md:text-3xl font-bold text-center mb-8 mt-4 font-serif text-wellness-gold">PARTE 2: O APLICATIVO INTERATIVO 📲</h3>
                             <p className="text-lg md:text-xl text-center text-slate-700 leading-relaxed font-serif">
                                 Assim que a sua compra é confirmada, você já recebe o acesso ao seu &quot;Mapa Facial Interativo&quot;.<br /><br />
-                                É um aplicativo onde, pelo seu próprio celular, de frente para o espelho, você clica e aponta onde tem marcas no seu rosto (ex: olheiras escuras, vermelhidões e rugas). O app vai cruzar essas informações com a Terapia Integrativa e te devolver NA HORA a resposta: qual órgão de fato está em pane e precisa de atenção para te arrancar dessa tristeza.
+                                É um aplicativo onde, pelo seu próprio celular, de frente para o espelho, você clica e aponta onde tem marcas no seu rosto (ex: olheiras escuras, vermelhidões e rugas). O app vai cruzar essas informações com a Terapia Integrativa e te devolver NA HORA uma primeira leitura: qual eixo emocional pode merecer a sua atenção agora.
+                            </p>
+                            <p className="text-xs text-center text-slate-400 mt-6 font-sans max-w-xl mx-auto">
+                                O app é uma ferramenta de autoconhecimento e investigação. Ele não emite diagnóstico e não substitui acompanhamento médico ou psicológico.
                             </p>
 
                             {/* App Screenshots Carousel */}
@@ -354,8 +357,6 @@ export default function SalesPageVersionB() {
                 <div className="container mx-auto max-w-3xl relative z-10 space-y-12 font-serif text-lg md:text-xl leading-relaxed text-white/90">
                     <p>Se a gente fosse fazer as contas, se você sentasse cara a cara com a gente hoje, presencial ou online... essa consulta não sairia por menos de R$ 697,00.</p>
 
-                    <p>Ou, pior, a grana que as pessoas passam uma vida inteira gastando na farmácia com <strong>comprimidos</strong> todo mês (que, dependendo da receita, passa fácil dos R$ 250 mensais), além das consultas em terapias que nunca acabam, que passam, facilmente, dos R$ 2.000,00 por ano (isso se você fizer uma sessão por mês).</p>
-
                     <p>Mas nós criamos O Mapa da Raiz focando em VOCÊ, para ser simples e acessível.</p>
 
                     <p>E se nós cortássemos nossa consulta para metade do valor? Daria cerca de R$ 348,00. Honestamente, já valeria cada centavo para se livrar do sofrimento.</p>
@@ -405,7 +406,7 @@ export default function SalesPageVersionB() {
                     </div>
 
                     <p className="text-center text-base text-white/50 pt-8 font-sans">
-                        Um mês desses tratamentos convencionais cheios de <strong>comprimido</strong>, que não consertam a base, sai muito mais caro que isso. O <strong>Mapa Da Raiz</strong> traz respostas por um investimento menor que R$ 10 ao mês.
+                        Continuar tentando resolver isso sozinha, mês após mês, sem um mapa pra seguir, sai muito mais caro que isso. O <strong>Mapa Da Raiz</strong> te dá esse mapa por um investimento menor que R$ 10 ao mês.
                     </p>
                 </div>
             </section>
@@ -415,11 +416,11 @@ export default function SalesPageVersionB() {
                 <div className="container mx-auto max-w-3xl space-y-8">
                     <ShieldCheck size={64} className="mx-auto text-wellness-cream" />
                     <h2 className="text-3xl md:text-5xl font-serif font-bold text-white">A Regra dos &quot;7 Dias no Espelho&quot;</h2>
-                    <p className="text-xl md:text-2xl font-serif text-wellness-cream brightness-110">Ou a gente te mostra uma luz de verdade, ou não ficamos com 1 centavo seu.</p>
+                    <p className="text-xl md:text-2xl font-serif text-wellness-cream brightness-110">Ou você sai com clareza sobre o seu padrão, ou não ficamos com 1 centavo seu.</p>
 
                     <div className="text-left font-serif text-lg leading-relaxed space-y-6 pt-8 text-white">
-                        <p>Entre agora. Assista às aulas de imediato, e comece seu tratamento com os Exercícios de Primeiros Socorros. Faça isso por até 7 dias corridos.</p>
-                        <p>Se essa imersão não lhe trouxer <strong>a maior verdadeira e inegável clareza sobre o corpo e a mente humana que já te ensinaram até hoje</strong>, nós devolvemos o seu dinheiro.</p>
+                        <p>Entre agora. Assista às aulas de imediato, e comece a praticar os Exercícios de Primeiros Socorros. Faça isso por até 7 dias corridos.</p>
+                        <p>Se essa imersão não te ajudar a nomear com mais clareza o padrão que se repete na sua vida, nós devolvemos o seu dinheiro.</p>
                         <p>Basta nos enviar um simples e-mail para a equipe. Nós vamos reembolsar tudo o que você pagou, direto no seu cartão ou PIX. Sem burocracia, sem perguntas chatas. E continuamos amigos.</p>
                     </div>
 

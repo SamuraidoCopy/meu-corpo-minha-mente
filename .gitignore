@@ -48,3 +48,6 @@ senhas-admin.txt
 *.passwords.txt
 
 .vercel
+
+# ferramentas locais de agente
+.claude/
