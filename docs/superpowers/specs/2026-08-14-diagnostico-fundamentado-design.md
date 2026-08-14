@@ -212,6 +212,8 @@ Requisitos:
 4. Limitar tamanho das reflexões e remover chaves arbitrárias.
 5. Não confiar em resultados, scores ou elementos calculados no cliente.
 6. Mensagens de erro devem permitir tentar novamente sem perder respostas locais.
+7. A autoria de toda leitura ou mutação é derivada exclusivamente de `auth.getUser()` na Server Action; `user_id`, `assessment_id`, scores e resultado enviados pelo cliente não concedem autorização.
+8. O cliente `service_role` só pode ser inicializado após uma sessão autenticada e sempre deve receber o `user.id` obtido dessa sessão como escopo da operação.
 
 ## Tratamento de gravação
 
@@ -245,8 +247,12 @@ Requisitos:
 1. Rejeita pergunta ausente, duplicada ou desconhecida.
 2. Rejeita elemento, zona, escala e `assessment_id` inválidos.
 3. Recalcula scores e ignora resultados forjados pelo cliente.
-4. Impede acesso a avaliação de outra usuária.
-5. Não permite `?element=` alterar ou salvar resultado.
+4. `anon` e `authenticated` não possuem `INSERT`, `UPDATE`, `DELETE` em `diagnostic_assessments` nem `EXECUTE` nas RPCs de mutação; somente `service_role` possui execução dessas RPCs.
+5. Uma Server Action sem sessão retorna erro de autenticação antes de inicializar ou chamar o cliente `service_role`.
+6. Cada Server Action usa o `user.id` devolvido pela sessão como única autoria efetiva, sem aceitar autoria alternativa no payload.
+7. A leitura por RLS retorna somente avaliações da usuária autenticada.
+8. Retomar, salvar progresso ou concluir uma avaliação pertencente a outra usuária falha sem alterar o registro alvo.
+9. Não permite `?element=` alterar ou salvar resultado.
 
 ### Persistência e UI
 
