@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState, useTransition } from 'react'
+import { useEffect, useMemo, useRef, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
@@ -62,6 +62,7 @@ export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds 
     const [error, setError] = useState<string | null>(null)
     const [isPending, startTransition] = useTransition()
     const [, startDraftTransition] = useTransition()
+    const progressSaveQueueRef = useRef<Promise<void>>(Promise.resolve())
 
     const tiedElements = mainDiagnosis?.kind === 'tie' ? mainDiagnosis.elements : []
     const facialZoneIdsForSubmission = resumeAssessment?.facialZoneIds || initialFacialZoneIds
@@ -110,17 +111,23 @@ export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds 
 
     const persistProgress = (nextAnswers: Record<string, boolean>, nextTiebreakAnswers = tiebreakAnswers) => {
         if (!assessmentId) return
-        void saveDiagnosisProgress({
+
+        const payload = {
             assessmentId,
-            questionAnswers: nextAnswers,
-            tiebreakAnswers: nextTiebreakAnswers,
+            questionAnswers: { ...nextAnswers },
+            tiebreakAnswers: { ...nextTiebreakAnswers },
             reflectionAnswers: Object.fromEntries(Object.entries(reflectionAnswers).filter(([, answer]) => answer.trim().length > 0)),
-        }).then((result) => {
-            if (!result.success) setError(result.error || 'Não foi possível salvar o progresso.')
-        }).catch((progressError) => {
-            console.error('Diagnosis progress save failed:', progressError)
-            setError('Não foi possível salvar o progresso. Tente novamente.')
-        })
+        }
+
+        progressSaveQueueRef.current = progressSaveQueueRef.current
+            .then(async () => {
+                const result = await saveDiagnosisProgress(payload)
+                if (!result.success) setError(result.error || 'Não foi possível salvar o progresso.')
+            })
+            .catch((progressError) => {
+                console.error('Diagnosis progress save failed:', progressError)
+                setError('Não foi possível salvar o progresso. Tente novamente.')
+            })
     }
 
     const moveToReflection = (diagnosis: FinalDiagnosis) => {

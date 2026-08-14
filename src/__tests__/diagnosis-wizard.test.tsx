@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mocks = vi.hoisted(() => ({
@@ -16,11 +16,27 @@ vi.mock('@/app/diagnostico/actions', () => ({
 import { DiagnosisWizard } from '@/app/diagnostico/wizard'
 import { getTcmQuestions } from '@/lib/tcm-data'
 
-function answerMain(yesIndexes: number[]) {
+async function clickButton(name: RegExp) {
+    await act(async () => {
+        fireEvent.click(screen.getByRole('button', { name }))
+        await Promise.resolve()
+    })
+}
+
+async function answerMain(yesIndexes: number[]) {
     for (let index = 0; index < 15; index += 1) {
         const yes = yesIndexes.includes(index)
-        fireEvent.click(screen.getByRole('button', { name: yes ? /faz sentido/i : /não se aplica/i }))
+        await clickButton(yes ? /faz sentido/i : /não se aplica/i)
     }
+}
+
+function deferred<T>() {
+    let resolve!: (value: T) => void
+    const promise = new Promise<T>((promiseResolve) => {
+        resolve = promiseResolve
+    })
+
+    return { promise, resolve }
 }
 
 beforeEach(() => {
@@ -38,9 +54,9 @@ beforeEach(() => {
 describe('fluxo do wizard de diagnóstico', () => {
     it('incorpora a 15ª resposta antes de concluir', async () => {
         render(<DiagnosisWizard />)
-        answerMain([14])
+        await answerMain([14])
 
-        fireEvent.click(screen.getByRole('button', { name: /concluir minha leitura/i }))
+        await clickButton(/concluir minha leitura/i)
         await waitFor(() => expect(mocks.completeDiagnosis).toHaveBeenCalledOnce())
 
         const submission = mocks.completeDiagnosis.mock.calls[0][0]
@@ -48,7 +64,7 @@ describe('fluxo do wizard de diagnóstico', () => {
         expect(screen.getByText(/elemento em destaque/i)).toBeInTheDocument()
     })
 
-    it('retoma uma avaliação em andamento sem reiniciar as perguntas', () => {
+    it('retoma uma avaliação em andamento sem reiniciar as perguntas', async () => {
         const partialAnswers = Object.fromEntries(getTcmQuestions().slice(0, 14).map((question) => [question.id, false]))
         render(<DiagnosisWizard resumeAssessment={{
             id: '123e4567-e89b-42d3-a456-426614174000',
@@ -59,24 +75,24 @@ describe('fluxo do wizard de diagnóstico', () => {
         }} />)
 
         expect(screen.getByText(/Sente tensão nos ombros e pescoço/i)).toBeInTheDocument()
-        fireEvent.click(screen.getByRole('button', { name: /faz sentido/i }))
+        await clickButton(/faz sentido/i)
         expect(screen.getByText(/o que você percebe neste padrão/i)).toBeInTheDocument()
     })
 
-    it('abre imediatamente as perguntas contextuais depois de um empate', () => {
+    it('abre imediatamente as perguntas contextuais depois de um empate', async () => {
         render(<DiagnosisWizard />)
-        answerMain([0, 3])
+        await answerMain([0, 3])
 
         expect(screen.getByText(/vamos entender qual padrão está mais presente agora/i)).toBeInTheDocument()
         expect(screen.getByText(/mente ficou acelerada/i)).toBeInTheDocument()
     })
 
-    it('resolve o empate contextual sem abrir comparação quando há vencedor', () => {
+    it('resolve o empate contextual sem abrir comparação quando há vencedor', async () => {
         render(<DiagnosisWizard />)
-        answerMain([0, 3])
+        await answerMain([0, 3])
 
-        fireEvent.click(screen.getByRole('button', { name: /frequentemente/i }))
-        fireEvent.click(screen.getByRole('button', { name: /às vezes/i }))
+        await clickButton(/frequentemente/i)
+        await clickButton(/às vezes/i)
 
         expect(screen.queryByText(/última pergunta de desempate/i)).not.toBeInTheDocument()
         expect(screen.getByText(/o que você percebe neste padrão/i)).toBeInTheDocument()
@@ -84,14 +100,14 @@ describe('fluxo do wizard de diagnóstico', () => {
 
     it('abre comparação final e aceita resultado combinado', async () => {
         render(<DiagnosisWizard />)
-        answerMain([0, 3])
+        await answerMain([0, 3])
 
-        fireEvent.click(screen.getByRole('button', { name: /frequentemente/i }))
-        fireEvent.click(screen.getByRole('button', { name: /frequentemente/i }))
+        await clickButton(/frequentemente/i)
+        await clickButton(/frequentemente/i)
 
         expect(screen.getByText(/qual desses padrões mais interferiu/i)).toBeInTheDocument()
-        fireEvent.click(screen.getByRole('button', { name: /não consigo separar/i }))
-        fireEvent.click(screen.getByRole('button', { name: /concluir minha leitura/i }))
+        await clickButton(/não consigo separar/i)
+        await clickButton(/concluir minha leitura/i)
 
         await waitFor(() => expect(mocks.completeDiagnosis).toHaveBeenCalledOnce())
         expect(mocks.completeDiagnosis.mock.calls[0][0].comparisonChoice).toBe('none')
@@ -100,13 +116,44 @@ describe('fluxo do wizard de diagnóstico', () => {
     it('mantém as respostas na tela quando a gravação falha', async () => {
         mocks.completeDiagnosis.mockResolvedValue({ error: 'falha temporária' })
         render(<DiagnosisWizard />)
-        answerMain([0, 3])
+        await answerMain([0, 3])
 
-        fireEvent.click(screen.getByRole('button', { name: /frequentemente/i }))
-        fireEvent.click(screen.getByRole('button', { name: /às vezes/i }))
-        fireEvent.click(screen.getByRole('button', { name: /concluir minha leitura/i }))
+        await clickButton(/frequentemente/i)
+        await clickButton(/às vezes/i)
+        await clickButton(/concluir minha leitura/i)
 
         await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/falha temporária/i))
         expect(screen.queryByText(/elemento em destaque/i)).not.toBeInTheDocument()
+    })
+
+    it('espera o salvamento anterior concluir antes de persistir o próximo progresso', async () => {
+        const firstSave = deferred<{ success: boolean }>()
+        mocks.saveDiagnosisProgress.mockReturnValueOnce(firstSave.promise)
+
+        render(<DiagnosisWizard resumeAssessment={{
+            id: '123e4567-e89b-42d3-a456-426614174000',
+            facialZoneIds: [],
+            questionAnswers: {},
+            tiebreakAnswers: {},
+            reflectionAnswers: {},
+        }} />)
+
+        await clickButton(/faz sentido/i)
+        await waitFor(() => expect(mocks.saveDiagnosisProgress).toHaveBeenCalledOnce())
+
+        await clickButton(/faz sentido/i)
+
+        expect(mocks.saveDiagnosisProgress).toHaveBeenCalledOnce()
+
+        await act(async () => {
+            firstSave.resolve({ success: true })
+        })
+
+        await waitFor(() => expect(mocks.saveDiagnosisProgress).toHaveBeenCalledTimes(2))
+        const [firstQuestion, secondQuestion] = getTcmQuestions().slice(0, 2)
+        expect(mocks.saveDiagnosisProgress.mock.calls[1][0].questionAnswers).toMatchObject({
+            [firstQuestion.id]: true,
+            [secondQuestion.id]: true,
+        })
     })
 })
