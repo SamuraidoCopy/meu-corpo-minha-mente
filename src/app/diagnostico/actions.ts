@@ -41,31 +41,36 @@ export async function completeDiagnosis(payload: unknown) {
         return { error: 'Usuário não autenticado.' }
     }
 
-    const admin = getSupabaseAdmin()
     const record = buildDiagnosticRecord(parsed)
     const resultElements = parsed.final.elements
-    const { data: completedAssessmentId, error: assessmentError } = await admin
-        .rpc('complete_diagnostic_assessment', {
-            p_user_id: user.id,
-            p_record: record,
-            p_assessment_id: assessmentId,
-        })
+    try {
+        const admin = getSupabaseAdmin()
+        const { data: completedAssessmentId, error: assessmentError } = await admin
+            .rpc('complete_diagnostic_assessment', {
+                p_user_id: user.id,
+                p_record: record,
+                p_assessment_id: assessmentId,
+            })
 
-    if (assessmentError || !completedAssessmentId) {
-        console.error('Error saving diagnostic assessment atomically:', assessmentError)
+        if (assessmentError || !completedAssessmentId) {
+            console.error('Error saving diagnostic assessment atomically:', assessmentError)
+            return { error: 'Não foi possível salvar sua leitura. Tente novamente.' }
+        }
+
+        revalidatePath('/o-mapa-da-raiz')
+        revalidatePath('/mapa/v2')
+        revalidatePath('/admin')
+
+        return {
+            success: true,
+            assessmentId: completedAssessmentId,
+            resultKind: parsed.final.kind,
+            resultElements,
+            facialConvergence: record.facial_convergence,
+        }
+    } catch (error) {
+        console.error('Error saving diagnostic assessment atomically:', error)
         return { error: 'Não foi possível salvar sua leitura. Tente novamente.' }
-    }
-
-    revalidatePath('/o-mapa-da-raiz')
-    revalidatePath('/mapa/v2')
-    revalidatePath('/admin')
-
-    return {
-        success: true,
-        assessmentId: completedAssessmentId,
-        resultKind: parsed.final.kind,
-        resultElements,
-        facialConvergence: record.facial_convergence,
     }
 }
 
@@ -82,41 +87,64 @@ export async function startDiagnosisAssessment(payload: unknown) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { error: 'Usuário não autenticado.' }
 
-    const admin = getSupabaseAdmin()
-    const { data: existing } = await admin
-        .from('diagnostic_assessments')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('status', 'in_progress')
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
+    try {
+        const admin = getSupabaseAdmin()
+        const { data: existing, error: lookupError } = await admin
+            .from('diagnostic_assessments')
+            .select('id')
+            .eq('user_id', user.id)
+            .eq('status', 'in_progress')
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle()
 
-    if (existing?.id) return { success: true, assessmentId: existing.id }
+        if (lookupError) {
+            console.error('Error looking up diagnosis draft:', lookupError)
+            return { error: 'Não foi possível iniciar esta leitura.' }
+        }
+        if (existing?.id) return { success: true, assessmentId: existing.id }
 
-    const { data: assessment, error } = await admin
-        .from('diagnostic_assessments')
-        .insert({
-            user_id: user.id,
-            status: 'in_progress',
-            facial_zone_ids: parsed.facial.selectedZoneIds,
-            facial_scores: parsed.facial.scores,
-            question_answers: {},
-            question_scores: {},
-            tiebreak_answers: {},
-            tiebreak_scores: {},
-            result_elements: [],
-            algorithm_version: DIAGNOSIS_ALGORITHM_VERSION,
-        })
-        .select('id')
-        .single()
+        const { data: assessment, error } = await admin
+            .from('diagnostic_assessments')
+            .insert({
+                user_id: user.id,
+                status: 'in_progress',
+                facial_zone_ids: parsed.facial.selectedZoneIds,
+                facial_scores: parsed.facial.scores,
+                question_answers: {},
+                question_scores: {},
+                tiebreak_answers: {},
+                tiebreak_scores: {},
+                result_elements: [],
+                algorithm_version: DIAGNOSIS_ALGORITHM_VERSION,
+            })
+            .select('id')
+            .single()
 
-    if (error) {
+        if (error?.code === '23505') {
+            const { data: concurrent, error: concurrentLookupError } = await admin
+                .from('diagnostic_assessments')
+                .select('id')
+                .eq('user_id', user.id)
+                .eq('status', 'in_progress')
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .maybeSingle()
+
+            if (concurrentLookupError) throw concurrentLookupError
+            if (concurrent?.id) return { success: true, assessmentId: concurrent.id }
+        }
+
+        if (error) {
+            console.error('Error creating diagnosis draft:', error)
+            return { error: 'Não foi possível iniciar esta leitura.' }
+        }
+
+        return { success: true, assessmentId: assessment?.id }
+    } catch (error) {
         console.error('Error creating diagnosis draft:', error)
         return { error: 'Não foi possível iniciar esta leitura.' }
     }
-
-    return { success: true, assessmentId: assessment?.id }
 }
 
 export async function saveDiagnosisProgress(payload: unknown) {
@@ -151,19 +179,24 @@ export async function saveDiagnosisProgress(payload: unknown) {
         return { error: 'O desempate contém um elemento que não está empatado.' }
     }
 
-    const admin = getSupabaseAdmin()
-    const { error: updateError } = await admin.rpc('merge_diagnostic_progress', {
-        p_user_id: user.id,
-        p_assessment_id: input.assessmentId,
-        p_question_answers: questionAnswers,
-        p_tiebreak_answers: tiebreakAnswers,
-        p_reflection_answers: progress.reflectionAnswers,
-    })
+    try {
+        const admin = getSupabaseAdmin()
+        const { error: updateError } = await admin.rpc('merge_diagnostic_progress', {
+            p_user_id: user.id,
+            p_assessment_id: input.assessmentId,
+            p_question_answers: questionAnswers,
+            p_tiebreak_answers: tiebreakAnswers,
+            p_reflection_answers: progress.reflectionAnswers,
+        })
 
-    if (updateError) {
-        console.error('Error saving diagnosis progress:', updateError)
+        if (updateError) {
+            console.error('Error saving diagnosis progress:', updateError)
+            return { error: 'Não foi possível salvar o progresso desta leitura.' }
+        }
+
+        return { success: true }
+    } catch (error) {
+        console.error('Error saving diagnosis progress:', error)
         return { error: 'Não foi possível salvar o progresso desta leitura.' }
     }
-
-    return { success: true }
 }

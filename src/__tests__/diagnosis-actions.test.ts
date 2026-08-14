@@ -43,15 +43,20 @@ const validPayload = {
 
 const assessmentId = '00000000-0000-4000-8000-000000000001'
 
-function createAdminQuery() {
+function createAdminQuery(options: {
+    maybeSingleResult?: { data: { id: string } | null; error: unknown }
+    singleResult?: { data: { id: string } | null; error: unknown }
+} = {}) {
+    const maybeSingleResult = options.maybeSingleResult || { data: null, error: null }
+    const singleResult = options.singleResult || { data: { id: assessmentId }, error: null }
     const query = {
         select: vi.fn(() => query),
         eq: vi.fn(() => query),
         order: vi.fn(() => query),
         limit: vi.fn(() => query),
-        maybeSingle: vi.fn(async () => ({ data: null, error: null })),
+        maybeSingle: vi.fn(async () => maybeSingleResult),
         insert: vi.fn(() => query),
-        single: vi.fn(async () => ({ data: { id: assessmentId }, error: null })),
+        single: vi.fn(async () => singleResult),
     }
     return query
 }
@@ -122,6 +127,48 @@ describe('diagnosis actions trust boundary', () => {
         expect(mocks.sessionFrom).not.toHaveBeenCalled()
         expect(mocks.sessionRpc).not.toHaveBeenCalled()
         expect(mocks.adminFrom).toHaveBeenCalledWith('diagnostic_assessments')
+    })
+
+    it('reuses a draft created concurrently after a unique conflict', async () => {
+        const initialLookup = createAdminQuery({
+            maybeSingleResult: { data: null, error: null },
+        })
+        const insertConflict = createAdminQuery({
+            singleResult: { data: null, error: { code: '23505' } },
+        })
+        const concurrentDraft = createAdminQuery({
+            maybeSingleResult: { data: { id: 'concurrent-assessment' }, error: null },
+        })
+        mocks.adminFrom
+            .mockReturnValueOnce(initialLookup)
+            .mockReturnValueOnce(insertConflict)
+            .mockReturnValueOnce(concurrentDraft)
+
+        const result = await startDiagnosisAssessment({ facialZoneIds: [] })
+
+        expect(result).toEqual({ success: true, assessmentId: 'concurrent-assessment' })
+        expect(mocks.adminFrom).toHaveBeenCalledTimes(3)
+    })
+
+    it('returns the existing persistence error when the admin client throws', async () => {
+        mocks.getSupabaseAdmin.mockImplementation(() => {
+            throw new Error('missing service role key')
+        })
+
+        await expect(completeDiagnosis(validPayload)).resolves.toEqual({
+            error: 'Não foi possível salvar sua leitura. Tente novamente.',
+        })
+        await expect(startDiagnosisAssessment({ facialZoneIds: [] })).resolves.toEqual({
+            error: 'Não foi possível iniciar esta leitura.',
+        })
+        await expect(saveDiagnosisProgress({
+            assessmentId,
+            questionAnswers: { fogo_1: true },
+            tiebreakAnswers: {},
+            reflectionAnswers: {},
+        })).resolves.toEqual({
+            error: 'Não foi possível salvar o progresso desta leitura.',
+        })
     })
 
     it('does not initialize privileged draft persistence when unauthenticated', async () => {

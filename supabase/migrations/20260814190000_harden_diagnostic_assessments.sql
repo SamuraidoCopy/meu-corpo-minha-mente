@@ -9,6 +9,30 @@ revoke all on table public.diagnostic_assessments from public, anon, authenticat
 grant select on table public.diagnostic_assessments to authenticated;
 grant select, insert, update, delete on table public.diagnostic_assessments to service_role;
 
+do $$
+declare
+  duplicate_user_id uuid;
+  duplicate_count bigint;
+begin
+  select user_id, count(*)
+    into duplicate_user_id, duplicate_count
+    from public.diagnostic_assessments
+   where status = 'in_progress'
+   group by user_id
+  having count(*) > 1
+   limit 1;
+
+  if duplicate_user_id is not null then
+    raise exception 'Cannot enforce one in-progress diagnostic assessment per user: user_id % has % drafts',
+      duplicate_user_id, duplicate_count;
+  end if;
+end;
+$$;
+
+create unique index public.diagnostic_assessments_one_in_progress_per_user_idx
+  on public.diagnostic_assessments (user_id)
+  where status = 'in_progress';
+
 create or replace function public.complete_diagnostic_assessment(
   p_user_id uuid,
   p_record jsonb,
@@ -16,7 +40,7 @@ create or replace function public.complete_diagnostic_assessment(
 ) returns uuid
 language plpgsql
 security invoker
-set search_path = public
+set search_path = ''
 as $$
 declare
   assessment_id uuid;
@@ -119,7 +143,7 @@ create or replace function public.merge_diagnostic_progress(
 ) returns boolean
 language plpgsql
 security invoker
-set search_path = public
+set search_path = ''
 as $$
 declare
   updated_id uuid;
