@@ -2,7 +2,7 @@
 
 ## Status
 
-Ready for Development
+Implementation complete; production gate pending local Supabase execution.
 
 ## Contexto
 
@@ -27,4 +27,11 @@ A lógica determinística e o desempate estão funcionais, mas usuários autenti
 
 ## QA Results
 
-Não revisado.
+- Vitest completo: **96/96** testes, 11 arquivos.
+- TypeScript: `npx tsc --noEmit` **PASS**.
+- ESLint focado: **PASS**; o aviso de `<img>` foi removido nas três telas de logo.
+- Build: `npm run build` **PASS**, 24 rotas geradas.
+- Auditorias: `npm audit --omit=dev --audit-level=high` e `npm audit --audit-level=high` **PASS**, zero vulnerabilidades.
+- Teste pgTAP: **PENDENTE**; `npx supabase test db ...` não conectou porque o Docker/Supabase local estava desligado (`ECONNREFUSED 127.0.0.1:54322`).
+
+Gate atual: **CONCERNS** até executar `supabase start`, `supabase db reset` e o teste SQL em ambiente controlado. O código e os testes unitários estão prontos para essa validação.
