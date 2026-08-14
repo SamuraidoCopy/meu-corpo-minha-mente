@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 
 import { createClient } from '@/lib/supabase/server'
+import { getSupabaseAdmin } from '@/lib/supabase/admin-access'
 import {
     buildDiagnosticRecord,
     DIAGNOSIS_ALGORITHM_VERSION,
@@ -40,9 +41,10 @@ export async function completeDiagnosis(payload: unknown) {
         return { error: 'Usuário não autenticado.' }
     }
 
+    const admin = getSupabaseAdmin()
     const record = buildDiagnosticRecord(parsed)
     const resultElements = parsed.final.elements
-    const { data: completedAssessmentId, error: assessmentError } = await supabase
+    const { data: completedAssessmentId, error: assessmentError } = await admin
         .rpc('complete_diagnostic_assessment', {
             p_user_id: user.id,
             p_record: record,
@@ -80,7 +82,8 @@ export async function startDiagnosisAssessment(payload: unknown) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { error: 'Usuário não autenticado.' }
 
-    const { data: existing } = await supabase
+    const admin = getSupabaseAdmin()
+    const { data: existing } = await admin
         .from('diagnostic_assessments')
         .select('id')
         .eq('user_id', user.id)
@@ -91,7 +94,7 @@ export async function startDiagnosisAssessment(payload: unknown) {
 
     if (existing?.id) return { success: true, assessmentId: existing.id }
 
-    const { data: assessment, error } = await supabase
+    const { data: assessment, error } = await admin
         .from('diagnostic_assessments')
         .insert({
             user_id: user.id,
@@ -134,25 +137,9 @@ export async function saveDiagnosisProgress(payload: unknown) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { error: 'Usuário não autenticado.' }
 
-    const { data: assessment, error: loadError } = await supabase
-        .from('diagnostic_assessments')
-        .select('question_answers, tiebreak_answers')
-        .eq('id', input.assessmentId)
-        .eq('user_id', user.id)
-        .eq('status', 'in_progress')
-        .single()
-
-    if (loadError || !assessment) return { error: 'Esta leitura não está mais disponível para edição.' }
-
-    const questionAnswers = {
-        ...((assessment.question_answers || {}) as Record<string, boolean>),
-        ...progress.questionAnswers,
-    }
+    const questionAnswers = progress.questionAnswers
     const main = calculateMainDiagnosis(questionAnswers)
-    const tiebreakAnswers = {
-        ...((assessment.tiebreak_answers || {}) as Record<string, number>),
-        ...progress.tiebreakAnswers,
-    }
+    const tiebreakAnswers = progress.tiebreakAnswers
     const allowedTiebreak = new Set(ELEMENT_ORDER)
     if (Object.keys(tiebreakAnswers).some((element) => !allowedTiebreak.has(element as typeof ELEMENT_ORDER[number]))) {
         return { error: 'Desempate inválido.' }
@@ -164,19 +151,14 @@ export async function saveDiagnosisProgress(payload: unknown) {
         return { error: 'O desempate contém um elemento que não está empatado.' }
     }
 
-    const { error: updateError } = await supabase
-        .from('diagnostic_assessments')
-        .update({
-            question_answers: questionAnswers,
-            question_scores: main.scores,
-            tiebreak_answers: tiebreakAnswers,
-            tiebreak_scores: main.kind === 'tie' ? tiebreakAnswers : {},
-            reflection_answers: progress.reflectionAnswers,
-            updated_at: new Date().toISOString(),
-        })
-        .eq('id', input.assessmentId)
-        .eq('user_id', user.id)
-        .eq('status', 'in_progress')
+    const admin = getSupabaseAdmin()
+    const { error: updateError } = await admin.rpc('merge_diagnostic_progress', {
+        p_user_id: user.id,
+        p_assessment_id: input.assessmentId,
+        p_question_answers: questionAnswers,
+        p_tiebreak_answers: tiebreakAnswers,
+        p_reflection_answers: progress.reflectionAnswers,
+    })
 
     if (updateError) {
         console.error('Error saving diagnosis progress:', updateError)
