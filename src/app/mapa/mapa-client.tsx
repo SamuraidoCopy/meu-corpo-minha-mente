@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { FacialMap } from '@/components/facial-map'
-import { FACIAL_ZONES, FacialZone, ELEMENTS } from '@/lib/tcm-data'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { FacialZone, ELEMENTS } from '@/lib/tcm-data'
+import { calculateFacialScores } from '@/lib/diagnosis'
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ChevronDown } from 'lucide-react'
 
@@ -22,23 +23,11 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
         })
     }
 
-    const dominantElementInfo = (() => {
-        if (selectedZones.length === 0) return null;
-        const counts = selectedZones.reduce((acc, zone) => {
-            acc[zone.element] = (acc[zone.element] || 0) + 1;
-            return acc;
-        }, {} as Record<string, number>);
-
-        let dominant = selectedZones[0].element;
-        let max = 0;
-        for (const [el, count] of Object.entries(counts)) {
-            if (count > max) {
-                max = count;
-                dominant = el as keyof typeof ELEMENTS;
-            }
-        }
-        return ELEMENTS[dominant];
-    })();
+    const facialDiagnosis = calculateFacialScores(selectedZones.map((zone) => zone.id))
+    const highlightedElements = facialDiagnosis.elements
+    const highlightedElementInfo = highlightedElements.length > 0
+        ? ELEMENTS[highlightedElements[0]]
+        : null
 
     return (
         <main className="flex flex-col lg:flex-row min-h-screen items-center justify-center pt-32 pb-10 px-6 lg:px-20 gap-12 relative overflow-hidden bg-gradient-to-br from-background via-background to-wellness-sage/5">
@@ -73,7 +62,7 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
                     <p
                         className="text-xs uppercase tracking-[0.2em] text-wellness-sage font-bold mb-3 animate-in fade-in slide-in-from-bottom-2 duration-700 delay-200 fill-mode-backwards"
                     >
-                        Ferramenta de Autodiagnóstico
+                        Leitura guiada de padrões
                     </p>
                     <h1
                         className="text-5xl lg:text-6xl font-serif text-foreground leading-tight mb-6 animate-in fade-in slide-in-from-bottom-2 duration-700 delay-300 fill-mode-backwards"
@@ -83,7 +72,7 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
                     <p
                         className="text-foreground/70 text-lg leading-relaxed max-w-lg mx-auto lg:mx-0 animate-in fade-in slide-in-from-bottom-2 duration-700 delay-400 fill-mode-backwards mb-8"
                     >
-                        Seu rosto é um mapa da sua saúde interna. <span className="font-semibold text-primary">Selecione uma ou mais áreas</span> que apresentam sinais (manchas, cor, linhas profundas) para revelar a origem.
+                        Seu rosto pode ser observado como um conjunto de sinais associados. <span className="font-semibold text-primary">Selecione uma ou mais áreas</span> para levar esses sinais à leitura guiada.
                     </p>
                 </header>
 
@@ -124,9 +113,9 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
                 id="info-panel"
                 className="flex-1 w-full max-w-md min-h-[500px] flex items-center justify-center z-10 relative scroll-mt-24"
             >
-                {dominantElementInfo ? (
+                {highlightedElementInfo ? (
                     <div
-                        key={dominantElementInfo.name}
+                        key={highlightedElements.join('-')}
                         className="w-full animate-in fade-in slide-in-from-right-10 zoom-in-95 duration-500"
                     >
                         <Card className="glass border-white/40 shadow-2xl rounded-[2.5rem] overflow-hidden bg-white/60 backdrop-blur-xl">
@@ -134,13 +123,17 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
                                 <div
                                     className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-wellness-sage/10 text-wellness-sage text-[10px] font-bold uppercase tracking-widest mb-6 mx-auto animate-in zoom-in spin-in-180 duration-500"
                                 >
-                                    Padrão Predominante ({selectedZones.length} região(ões))
+                                    {highlightedElements.length > 1 ? 'Padrões em destaque' : 'Elemento em destaque'} ({selectedZones.length} região(ões))
                                 </div>
-                                <CardTitle className="text-4xl font-serif mb-3 text-foreground">Elemento {dominantElementInfo.name}</CardTitle>
+                                <CardTitle className="text-4xl font-serif mb-3 text-foreground">
+                                    {highlightedElements.length > 1
+                                        ? highlightedElements.join(' + ')
+                                        : `Elemento ${highlightedElementInfo.name}`}
+                                </CardTitle>
                                 <div className="flex items-center justify-center gap-2 text-sm uppercase tracking-wide font-medium text-wellness-gold">
-                                    <span>{dominantElementInfo.organ}</span>
+                                    <span>{highlightedElementInfo.organ}</span>
                                     <span className="w-1 h-1 rounded-full bg-wellness-gold" />
-                                    <span>{dominantElementInfo.emotion}</span>
+                                    <span>{highlightedElementInfo.emotion}</span>
                                 </div>
                             </CardHeader>
                             <CardContent className="pt-10 space-y-8 px-8 pb-10">
@@ -161,12 +154,13 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
                                         Interpretação
                                     </h4>
                                     <p className="text-sm text-foreground/70 leading-relaxed pl-3.5 border-l-2 border-wellness-sage/20">
-                                        <strong>{dominantElementInfo.name}</strong>. {dominantElementInfo.description}
+                                        <strong>{highlightedElementInfo.name}</strong>. {highlightedElementInfo.description}
+                                        {highlightedElements.length > 1 && ' O mapa mostra mais de um padrão em destaque; a leitura guiada fará as perguntas de desempate.'}
                                     </p>
                                 </div>
 
                                 <Button className="w-full h-14 rounded-2xl bg-wellness-sage hover:bg-wellness-sage/90 text-white shadow-lg shadow-wellness-sage/25 text-lg font-medium tracking-wide transition-all hover:translate-y-[-2px] active:translate-y-[1px]" asChild>
-                                    <Link href={`/diagnostico?element=${dominantElementInfo.name}`}>Investigar Raiz Profundamente</Link>
+                                    <Link href={`/diagnostico?zones=${encodeURIComponent(selectedZones.map((zone) => zone.id).join(','))}`}>Investigar Raiz Profundamente</Link>
                                 </Button>
                             </CardContent>
                         </Card>
@@ -179,7 +173,7 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
                         <div className="space-y-2">
                             <h3 className="text-2xl font-serif text-foreground/40 italic">Inicie sua análise</h3>
                             <p className="text-foreground/30 text-sm max-w-[200px] mx-auto leading-relaxed">
-                                Selecione uma ou mais regiões no mapa facial para descobrir as conexões com sua saúde interna.
+                                Selecione uma ou mais regiões no mapa facial para registrar os padrões que deseja observar.
                             </p>
                         </div>
                     </div>

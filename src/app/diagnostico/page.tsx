@@ -4,25 +4,54 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
-import { ElementType } from '@/lib/tcm-data'
+import { FACIAL_ZONES } from '@/lib/tcm-data'
 
-export default async function DiagnosticoPage({ searchParams }: { searchParams: Promise<{ element?: string }> }) {
-    const supabase = createClient()
-    const { data: { user } } = await (await supabase).auth.getUser()
+function parseFacialZoneIds(value: string | string[] | undefined) {
+    const rawValues = Array.isArray(value) ? value : value?.split(',') || []
+    const knownIds = new Set(FACIAL_ZONES.map((zone) => zone.id))
+    const candidates = rawValues.flatMap((item) => item.split(',')).map((item) => item.trim()).filter(Boolean)
+
+    return {
+        ids: [...new Set(candidates.filter((item) => knownIds.has(item)))],
+        hadInvalid: candidates.some((item) => !knownIds.has(item)),
+    }
+}
+
+export default async function DiagnosticoPage({ searchParams }: {
+    searchParams: Promise<{ zones?: string | string[]; element?: string }>
+}) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
         redirect('/login')
     }
 
-    const { data: profile } = await (await supabase)
+    const { data: profile } = await supabase
         .from('profiles')
-        .select('gender, dominant_element')
+        .select('gender')
         .eq('id', user.id)
         .single()
 
+    const { data: draft } = await supabase
+        .from('diagnostic_assessments')
+        .select('id, facial_zone_ids, question_answers, tiebreak_answers, reflection_answers')
+        .eq('user_id', user.id)
+        .eq('status', 'in_progress')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
     const resolvedParams = await searchParams
-    const initialElement = resolvedParams?.element as ElementType | undefined
-    const hasCompletedInitialDiagnosis = !!profile?.dominant_element
+    const parsedFacialZones = parseFacialZoneIds(resolvedParams?.zones)
+    const initialFacialZoneIds = parsedFacialZones.ids
+    const resumeAssessment = draft ? {
+        id: draft.id,
+        facialZoneIds: Array.isArray(draft.facial_zone_ids) ? draft.facial_zone_ids : [],
+        questionAnswers: (draft.question_answers || {}) as Record<string, boolean>,
+        tiebreakAnswers: (draft.tiebreak_answers || {}) as Record<string, number>,
+        reflectionAnswers: (draft.reflection_answers || {}) as Record<string, string>,
+    } : undefined
 
     return (
         <main className="min-h-screen pt-32 pb-16 px-6 relative overflow-hidden flex flex-col items-center">
@@ -44,17 +73,18 @@ export default async function DiagnosticoPage({ searchParams }: { searchParams: 
 
             <div className="max-w-4xl w-full z-10 relative">
                 <header className="text-center mb-16 space-y-4">
-                    <p className="text-xs uppercase tracking-[0.3em] font-bold text-foreground/40">INVESTIGAÇÃO GUIADA</p>
-                    <h1 className="text-6xl font-serif text-foreground/90 leading-tight">O Silêncio dos <span className="italic text-primary">Sintomas</span></h1>
+                    <p className="text-xs uppercase tracking-[0.3em] font-bold text-foreground/40">LEITURA GUIADA</p>
+                    <h1 className="text-6xl font-serif text-foreground/90 leading-tight">Observe seus <span className="italic text-primary">padrões</span></h1>
                     <p className="text-foreground/50 text-lg max-w-xl mx-auto italic">
-                        &quot;O que o corpo não fala, o sintoma grita. Responda com a verdade do seu momento.&quot;
+                        &quot;Observe o que aparece no seu momento atual e responda sem julgamento.&quot;
                     </p>
                 </header>
 
                 <DiagnosisWizard
                     userGender={profile?.gender}
-                    initialElement={initialElement}
-                    hasCompletedInitialDiagnosis={hasCompletedInitialDiagnosis}
+                    initialFacialZoneIds={initialFacialZoneIds}
+                    invalidFacialZoneIds={parsedFacialZones.hadInvalid}
+                    resumeAssessment={resumeAssessment}
                 />
 
                 <footer className="mt-16 text-center">
