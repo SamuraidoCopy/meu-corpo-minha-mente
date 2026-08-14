@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { FacialMap } from '@/components/facial-map'
 import { FacialZone, ELEMENTS } from '@/lib/tcm-data'
 import { calculateFacialScores } from '@/lib/diagnosis'
@@ -32,9 +33,12 @@ export function MapaClient({ gender = 'Feminino' }: { gender?: 'Masculino' | 'Fe
     return (
         <main className="flex flex-col lg:flex-row min-h-screen items-center justify-center pt-32 pb-10 px-6 lg:px-20 gap-12 relative overflow-hidden bg-gradient-to-br from-background via-background to-wellness-sage/5">
             <Link href="/o-mapa-da-raiz" className="absolute top-6 left-6 md:top-8 md:left-12 z-50">
-                <img
+                <Image
                     src="/images/logo-mapa-raiz.png"
                     alt="O Mapa da Raiz"
+                    width={761}
+                    height={328}
+                    priority
                     className="h-10 md:h-14 w-auto object-contain opacity-90 drop-shadow-sm hover:opacity-100 transition-opacity"
                 />
             </Link>

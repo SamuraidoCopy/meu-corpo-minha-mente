@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -94,9 +95,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
       style={elementInfo ? elementInfo.theme.cssVars as React.CSSProperties : undefined}
     >
       <Link href="/o-mapa-da-raiz" className="absolute top-6 left-6 md:top-8 md:left-8 z-50">
-        <img
+        <Image
           src="/images/logo-mapa-raiz.png"
           alt="O Mapa da Raiz"
+          width={761}
+          height={328}
+          priority
           className="h-8 md:h-12 w-auto object-contain opacity-90 drop-shadow-sm hover:opacity-100 transition-opacity"
         />
       </Link>
