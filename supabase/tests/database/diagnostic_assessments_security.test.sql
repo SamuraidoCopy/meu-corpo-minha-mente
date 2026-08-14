@@ -1,5 +1,5 @@
 begin;
-select plan(12);
+select plan(16);
 
 select ok(
   to_regprocedure('public.complete_diagnostic_assessment(uuid,jsonb,uuid)') is not null,
@@ -15,6 +15,14 @@ select ok(
   'anon cannot insert diagnostic assessments'
 );
 select ok(
+  not has_table_privilege('anon', 'public.diagnostic_assessments', 'UPDATE'),
+  'anon cannot update diagnostic assessments'
+);
+select ok(
+  not has_table_privilege('anon', 'public.diagnostic_assessments', 'DELETE'),
+  'anon cannot delete diagnostic assessments'
+);
+select ok(
   not has_table_privilege('authenticated', 'public.diagnostic_assessments', 'INSERT'),
   'authenticated cannot insert diagnostic assessments'
 );
@@ -25,6 +33,14 @@ select ok(
 select ok(
   not has_table_privilege('authenticated', 'public.diagnostic_assessments', 'DELETE'),
   'authenticated cannot delete diagnostic assessments'
+);
+select ok(
+  has_table_privilege('service_role', 'public.diagnostic_assessments', 'INSERT'),
+  'service role can insert diagnostic assessments'
+);
+select ok(
+  has_table_privilege('service_role', 'public.diagnostic_assessments', 'UPDATE'),
+  'service role can update diagnostic assessments'
 );
 select ok(
   case

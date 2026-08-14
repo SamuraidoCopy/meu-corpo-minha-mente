@@ -124,6 +124,15 @@ describe('diagnosis actions trust boundary', () => {
         expect(mocks.adminFrom).toHaveBeenCalledWith('diagnostic_assessments')
     })
 
+    it('does not initialize privileged draft persistence when unauthenticated', async () => {
+        mocks.getUser.mockResolvedValue({ data: { user: null } })
+
+        await expect(startDiagnosisAssessment({ facialZoneIds: [] })).resolves.toEqual({
+            error: 'Usu\u00e1rio n\u00e3o autenticado.',
+        })
+        expect(mocks.getSupabaseAdmin).not.toHaveBeenCalled()
+    })
+
     it('merges progress through the service-role RPC only', async () => {
         const result = await saveDiagnosisProgress({
             assessmentId,
@@ -144,5 +153,19 @@ describe('diagnosis actions trust boundary', () => {
             p_reflection_answers: {},
         })
         expect(mocks.adminFrom).not.toHaveBeenCalled()
+    })
+
+    it('does not initialize privileged progress persistence when unauthenticated', async () => {
+        mocks.getUser.mockResolvedValue({ data: { user: null } })
+
+        await expect(saveDiagnosisProgress({
+            assessmentId,
+            questionAnswers: { fogo_1: true },
+            tiebreakAnswers: {},
+            reflectionAnswers: {},
+        })).resolves.toEqual({
+            error: 'Usu\u00e1rio n\u00e3o autenticado.',
+        })
+        expect(mocks.getSupabaseAdmin).not.toHaveBeenCalled()
     })
 })
