@@ -11,7 +11,7 @@ import {
     parseFacialZoneSelection,
     parseDiagnosticSubmission,
 } from '@/lib/diagnosis-submission'
-import { calculateMainDiagnosis, ELEMENT_ORDER } from '@/lib/diagnosis'
+import { calculateMainDiagnosis, calculateTiebreak, ELEMENT_ORDER } from '@/lib/diagnosis'
 
 export async function completeDiagnosis(payload: unknown) {
     const rawAssessmentId = payload && typeof payload === 'object' && 'assessmentId' in payload
@@ -178,6 +178,18 @@ export async function saveDiagnosisProgress(payload: unknown) {
     if (main.kind === 'tie' && Object.keys(tiebreakAnswers).some((element) => !main.elements.includes(element as typeof ELEMENT_ORDER[number]))) {
         return { error: 'O desempate contém um elemento que não está empatado.' }
     }
+    if (progress.comparisonChoice !== undefined && (
+        main.kind !== 'tie'
+        || (progress.comparisonChoice !== 'none' && !main.elements.includes(progress.comparisonChoice))
+    )) {
+        return { error: 'A escolha comparativa é inválida.' }
+    }
+    if (progress.comparisonChoice !== undefined && main.kind === 'tie') {
+        const hasAllTiebreakAnswers = main.elements.every((element) => Object.prototype.hasOwnProperty.call(tiebreakAnswers, element))
+        if (!hasAllTiebreakAnswers || calculateTiebreak(main.elements, tiebreakAnswers).kind !== 'tie') {
+            return { error: 'A escolha comparativa só pode ser salva após concluir o desempate.' }
+        }
+    }
 
     try {
         const admin = getSupabaseAdmin()
@@ -187,6 +199,8 @@ export async function saveDiagnosisProgress(payload: unknown) {
             p_question_answers: questionAnswers,
             p_tiebreak_answers: tiebreakAnswers,
             p_reflection_answers: progress.reflectionAnswers,
+            p_revision: progress.progressRevision,
+            p_comparison_choice: progress.comparisonChoice,
         })
 
         if (updateError) {

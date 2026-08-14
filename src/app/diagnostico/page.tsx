@@ -35,7 +35,7 @@ export default async function DiagnosticoPage({ searchParams }: {
 
     const { data: draft } = await supabase
         .from('diagnostic_assessments')
-        .select('id, facial_zone_ids, question_answers, tiebreak_answers, reflection_answers')
+        .select('id, facial_zone_ids, question_answers, tiebreak_answers, reflection_answers, comparison_choice, progress_revision')
         .eq('user_id', user.id)
         .eq('status', 'in_progress')
         .order('created_at', { ascending: false })
@@ -51,6 +51,8 @@ export default async function DiagnosticoPage({ searchParams }: {
         questionAnswers: (draft.question_answers || {}) as Record<string, boolean>,
         tiebreakAnswers: (draft.tiebreak_answers || {}) as Record<string, number>,
         reflectionAnswers: (draft.reflection_answers || {}) as Record<string, string>,
+        comparisonChoice: draft.comparison_choice as 'Madeira' | 'Fogo' | 'Terra' | 'Metal' | 'Água' | 'none' | undefined,
+        progressRevision: typeof draft.progress_revision === 'number' ? draft.progress_revision : 0,
     } : undefined
 
     return (

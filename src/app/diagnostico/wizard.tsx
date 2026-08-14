@@ -10,6 +10,7 @@ import {
     calculateMainDiagnosis,
     calculateTiebreak,
     TIEBREAK_QUESTIONS,
+    type ComparativeChoice,
     type MainDiagnosis,
     type TiebreakResult,
 } from '@/lib/diagnosis'
@@ -29,6 +30,8 @@ interface DiagnosisWizardProps {
         questionAnswers: Record<string, boolean>
         tiebreakAnswers: Record<string, number>
         reflectionAnswers: Record<string, string>
+        comparisonChoice?: ComparativeChoice
+        progressRevision?: number
     }
 }
 
@@ -46,6 +49,8 @@ type ProgressPayload = {
     questionAnswers: Record<string, boolean>
     tiebreakAnswers: Partial<Record<ElementType, number>>
     reflectionAnswers: Record<string, string>
+    comparisonChoice?: ComparativeChoice
+    progressRevision: number
 }
 
 function withTimeout<T>(promise: Promise<T>, timeoutMs: number) {
@@ -79,7 +84,7 @@ export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds 
     const [tiebreakAnswers, setTiebreakAnswers] = useState<Partial<Record<ElementType, number>>>(resumeAssessment?.tiebreakAnswers || {})
     const [tiebreakIndex, setTiebreakIndex] = useState(Object.keys(resumeAssessment?.tiebreakAnswers || {}).length)
     const [tiebreakDiagnosis, setTiebreakDiagnosis] = useState<TiebreakResult | null>(null)
-    const [comparisonChoice, setComparisonChoice] = useState<ElementType | 'none' | undefined>()
+    const [comparisonChoice, setComparisonChoice] = useState<ComparativeChoice | undefined>(resumeAssessment?.comparisonChoice)
     const [finalDiagnosis, setFinalDiagnosis] = useState<FinalDiagnosis | null>(null)
     const [reflectionAnswers, setReflectionAnswers] = useState<Record<number, string>>(() => Object.fromEntries(
         Object.entries(resumeAssessment?.reflectionAnswers || {}).map(([key, value]) => [Number(key), value]),
@@ -88,22 +93,42 @@ export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds 
     const [isPending, startTransition] = useTransition()
     const [, startDraftTransition] = useTransition()
     const progressSaveQueueRef = useRef<Promise<void>>(Promise.resolve())
+    const progressSaveRunningRef = useRef(false)
+    const queuedProgressRef = useRef<{ id: string; progress: ProgressPayload } | null>(null)
     const pendingProgressRef = useRef<ProgressPayload | null>(null)
     const assessmentIdRef = useRef<string | null>(resumeAssessment?.id || null)
+    const progressRevisionRef = useRef(resumeAssessment?.progressRevision || 0)
 
     const tiedElements = mainDiagnosis?.kind === 'tie' ? mainDiagnosis.elements : []
     const facialZoneIdsForSubmission = resumeAssessment?.facialZoneIds || initialFacialZoneIds
 
     const enqueueProgressSave = useCallback((id: string, progress: ProgressPayload) => {
-        progressSaveQueueRef.current = progressSaveQueueRef.current
-            .then(async () => {
-                const result = await withTimeout(saveDiagnosisProgress({ assessmentId: id, ...progress }), PROGRESS_SAVE_TIMEOUT_MS)
-                if (!result.success) setError(result.error || 'Não foi possível salvar o progresso.')
-            })
-            .catch((progressError) => {
-                console.error('Diagnosis progress save failed:', progressError)
-                setError('Não foi possível salvar o progresso. Tente novamente.')
-            })
+        queuedProgressRef.current = { id, progress }
+        if (progressSaveRunningRef.current) return progressSaveQueueRef.current
+
+        progressSaveRunningRef.current = true
+        progressSaveQueueRef.current = (async () => {
+            try {
+                while (queuedProgressRef.current) {
+                    const queued = queuedProgressRef.current
+                    queuedProgressRef.current = null
+                    try {
+                        const result = await withTimeout(
+                            saveDiagnosisProgress({ assessmentId: queued.id, ...queued.progress }),
+                            PROGRESS_SAVE_TIMEOUT_MS,
+                        )
+                        if (!result.success) setError(result.error || 'Não foi possível salvar o progresso.')
+                    } catch (progressError) {
+                        console.error('Diagnosis progress save failed:', progressError)
+                        setError('Não foi possível salvar o progresso. Tente novamente.')
+                    }
+                }
+            } finally {
+                progressSaveRunningRef.current = false
+            }
+        })()
+        return progressSaveQueueRef.current
+
     }, [])
 
     useEffect(() => {
@@ -143,12 +168,12 @@ export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds 
             setStage('reflection')
             return
         }
-        const resumedTiebreak = calculateTiebreak(resumedMain.elements, resumeAssessment.tiebreakAnswers)
+        const resumedTiebreak = calculateTiebreak(resumedMain.elements, resumeAssessment.tiebreakAnswers, resumeAssessment.comparisonChoice)
         setTiebreakDiagnosis(resumedTiebreak)
         if (Object.keys(resumeAssessment.tiebreakAnswers).length < resumedMain.elements.length) {
             setStage('tiebreak')
             setTiebreakIndex(Object.keys(resumeAssessment.tiebreakAnswers).length)
-        } else if (resumedTiebreak.kind === 'tie') {
+        } else if (resumedTiebreak.kind === 'tie' && resumeAssessment.comparisonChoice === undefined) {
             setStage('comparison')
         } else {
             setFinalDiagnosis(resumedTiebreak)
@@ -156,12 +181,19 @@ export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds 
         }
     }, [mainDiagnosis, questions, resumeAssessment])
 
-    const persistProgress = (nextAnswers: Record<string, boolean>, nextTiebreakAnswers = tiebreakAnswers) => {
+    const persistProgress = (
+        nextAnswers: Record<string, boolean>,
+        nextTiebreakAnswers = tiebreakAnswers,
+        nextComparisonChoice = comparisonChoice,
+    ) => {
         const payload = {
             questionAnswers: { ...nextAnswers },
             tiebreakAnswers: { ...nextTiebreakAnswers },
             reflectionAnswers: Object.fromEntries(Object.entries(reflectionAnswers).filter(([, answer]) => answer.trim().length > 0)),
+            progressRevision: progressRevisionRef.current + 1,
+            comparisonChoice: nextComparisonChoice,
         }
+        progressRevisionRef.current = payload.progressRevision
 
         pendingProgressRef.current = payload
         const id = assessmentIdRef.current
@@ -225,18 +257,28 @@ export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds 
         if (!mainDiagnosis || mainDiagnosis.kind !== 'tie') return
         const diagnosis = calculateTiebreak(tiedElements, tiebreakAnswers, choice)
         setComparisonChoice(choice)
+        persistProgress(answers, tiebreakAnswers, choice)
         setTiebreakDiagnosis(diagnosis)
         moveToReflection(diagnosis)
     }
 
     const finishDiagnosis = () => {
         if (!finalDiagnosis || isPending) return
+        const completedAssessmentId = assessmentIdRef.current || assessmentId
+        if (!completedAssessmentId) {
+            setError('Aguarde o início desta leitura antes de concluir.')
+            return
+        }
 
         setError(null)
         startTransition(async () => {
             try {
+                // Completion must follow the latest accepted progress snapshot.
+                // The queue coalesces pending snapshots and resolves after the
+                // final in-flight request (or its timeout) has settled.
+                await progressSaveQueueRef.current
                 const result = await completeDiagnosis({
-                    assessmentId,
+                    assessmentId: completedAssessmentId,
                     facialZoneIds: facialZoneIdsForSubmission,
                     questionAnswers: answers,
                     tiebreakAnswers,
@@ -401,6 +443,12 @@ export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds 
                 </CardFooter>
             </Card>
         )
+    }
+
+    // A resumed draft with all main answers starts in `main` for one render
+    // while the derived diagnosis effect selects reflection/comparison.
+    if (stage === 'main' && currentStep >= questions.length) {
+        return <p role="status" className="text-center text-foreground/50">Carregando sua leitura...</p>
     }
 
     const question = questions[currentStep]

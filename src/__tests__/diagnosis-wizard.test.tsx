@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mocks = vi.hoisted(() => ({
     completeDiagnosis: vi.fn(),
@@ -43,6 +43,7 @@ function deferred<T>() {
 
 beforeEach(() => {
     vi.clearAllMocks()
+    vi.spyOn(console, 'error').mockImplementation(() => undefined)
     mocks.completeDiagnosis.mockResolvedValue({
         success: true,
         assessmentId: 'assessment-1',
@@ -51,6 +52,10 @@ beforeEach(() => {
     })
     mocks.startDiagnosisAssessment.mockResolvedValue({ success: true, assessmentId: '123e4567-e89b-42d3-a456-426614174000' })
     mocks.saveDiagnosisProgress.mockResolvedValue({ success: true })
+})
+
+afterEach(() => {
+    vi.restoreAllMocks()
 })
 
 describe('fluxo do wizard de diagnóstico', () => {
@@ -79,6 +84,21 @@ describe('fluxo do wizard de diagnóstico', () => {
         expect(screen.getByText(/Sente tensão nos ombros e pescoço/i)).toBeInTheDocument()
         await clickButton(/faz sentido/i)
         expect(screen.getByText(/o que você percebe neste padrão/i)).toBeInTheDocument()
+    })
+
+    it('retoma diretamente a reflexão quando a comparação já foi respondida', async () => {
+        const tieAnswers = Object.fromEntries(getTcmQuestions().map((question) => [question.id, question.element === 'Madeira' || question.element === 'Fogo']))
+        render(<DiagnosisWizard resumeAssessment={{
+            id: '123e4567-e89b-42d3-a456-426614174000',
+            facialZoneIds: [],
+            questionAnswers: tieAnswers,
+            tiebreakAnswers: { Madeira: 3, Fogo: 3 },
+            comparisonChoice: 'none',
+            reflectionAnswers: {},
+        }} />)
+
+        await waitFor(() => expect(screen.getByText(/O que você percebe neste padrão/i)).toBeInTheDocument())
+        expect(screen.queryByText(/Qual desses padrões mais interferiu/i)).not.toBeInTheDocument()
     })
 
     it('persiste a última resposta preenchida antes da criação do rascunho', async () => {
@@ -260,6 +280,80 @@ describe('fluxo do wizard de diagnóstico', () => {
                 await Promise.resolve()
             })
 
+            expect(mocks.saveDiagnosisProgress).toHaveBeenCalledTimes(2)
+        } finally {
+            vi.useRealTimers()
+        }
+    })
+
+    it('aguarda o snapshot mais novo antes de concluir a leitura', async () => {
+        const firstSave = deferred<{ success: boolean }>()
+        mocks.saveDiagnosisProgress.mockReturnValueOnce(firstSave.promise).mockResolvedValue({ success: true })
+
+        render(<DiagnosisWizard resumeAssessment={{
+            id: '123e4567-e89b-42d3-a456-426614174000',
+            facialZoneIds: [],
+            questionAnswers: {},
+            tiebreakAnswers: {},
+            reflectionAnswers: {},
+        }} />)
+
+        await clickButton(/Não se aplica/i)
+        await waitFor(() => expect(mocks.saveDiagnosisProgress).toHaveBeenCalledOnce())
+        for (let index = 1; index < 15; index += 1) await clickButton(/Não se aplica/i)
+        await clickButton(/concluir minha leitura/i)
+
+        expect(mocks.completeDiagnosis).not.toHaveBeenCalled()
+        await act(async () => {
+            firstSave.resolve({ success: true })
+            await firstSave.promise
+        })
+
+        await waitFor(() => expect(mocks.completeDiagnosis).toHaveBeenCalledOnce())
+        expect(mocks.saveDiagnosisProgress.mock.calls.at(-1)?.[0].progressRevision).toBe(15)
+    })
+
+    it('mantém revisões monotônicas quando o primeiro salvamento chega atrasado', async () => {
+        vi.useFakeTimers()
+        try {
+            const firstSave = deferred<{ success: boolean }>()
+            mocks.saveDiagnosisProgress.mockReturnValueOnce(firstSave.promise).mockResolvedValueOnce({ success: true })
+
+            render(<DiagnosisWizard resumeAssessment={{
+                id: '123e4567-e89b-42d3-a456-426614174000',
+                facialZoneIds: [],
+                questionAnswers: {},
+                tiebreakAnswers: {},
+                reflectionAnswers: {},
+            }} />)
+
+            await clickButton(/faz sentido/i)
+            await act(async () => {
+                await Promise.resolve()
+                await Promise.resolve()
+            })
+            expect(mocks.saveDiagnosisProgress).toHaveBeenCalledOnce()
+            await clickButton(/faz sentido/i)
+            expect(mocks.saveDiagnosisProgress.mock.calls[0][0].progressRevision).toBe(1)
+
+            await act(async () => {
+                vi.advanceTimersByTime(10_000)
+                await Promise.resolve()
+                await Promise.resolve()
+            })
+            await act(async () => {
+                await Promise.resolve()
+                await Promise.resolve()
+                await Promise.resolve()
+            })
+            expect(mocks.saveDiagnosisProgress).toHaveBeenCalledTimes(2)
+            expect(mocks.saveDiagnosisProgress.mock.calls[1][0].progressRevision).toBe(2)
+
+            await act(async () => {
+                firstSave.resolve({ success: true })
+                await firstSave.promise
+                await Promise.resolve()
+            })
             expect(mocks.saveDiagnosisProgress).toHaveBeenCalledTimes(2)
         } finally {
             vi.useRealTimers()

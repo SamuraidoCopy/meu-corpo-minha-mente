@@ -34,6 +34,7 @@ export const diagnosisProgressSchema = z.object({
     tiebreakAnswers: tiebreakAnswersSchema.default({}),
     comparisonChoice: z.union([elementEnum, z.literal('none')]).optional(),
     reflectionAnswers: reflectionAnswersSchema.default({}),
+    progressRevision: z.number().int().nonnegative().default(0),
 })
 
 export type DiagnosticSubmission = z.infer<typeof diagnosticSubmissionSchema>
@@ -152,6 +153,7 @@ export function buildDiagnosticRecord(parsed: ParsedDiagnosticSubmission) {
         result_elements: parsed.final.elements,
         resolution_method: parsed.final.resolutionMethod ?? null,
         facial_convergence: classifyFacialConvergence(parsed.final.elements, parsed.facial),
+        comparison_choice: parsed.comparisonChoice ?? null,
         reflection_answers: parsed.reflectionAnswers,
         algorithm_version: DIAGNOSIS_ALGORITHM_VERSION,
     }
