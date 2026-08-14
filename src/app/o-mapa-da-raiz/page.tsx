@@ -33,6 +33,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
     redirect('/login')
   }
 
+  const dicaIndex = [...user.id].reduce((total, character) => total + character.charCodeAt(0), 0) % DICAS_DA_DOUTORA.length
+  const dicaDaDoutora = DICAS_DA_DOUTORA[dicaIndex]
+
   // Check valid profile
   const { data: profile } = await supabase
     .from('profiles')
@@ -240,7 +243,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
               <div className="absolute top-[-20%] right-[-20%] w-[60%] h-[60%] bg-white/10 rounded-full blur-2xl" />
               <h3 className="text-xl font-serif relative z-10 mb-2 italic">Dica das Doutoras</h3>
               <p className="text-sm text-white/80 relative z-10 leading-relaxed">
-                &quot;{DICAS_DA_DOUTORA[Math.floor(Math.random() * DICAS_DA_DOUTORA.length)]}&quot;
+                &quot;{dicaDaDoutora}&quot;
               </p>
             </div>
           </div>

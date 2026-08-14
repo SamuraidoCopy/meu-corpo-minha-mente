@@ -76,16 +76,42 @@ function elementInfo(elements: readonly ElementType[]) {
 export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds = EMPTY_FACIAL_ZONE_IDS, invalidFacialZoneIds = false, resumeAssessment }: DiagnosisWizardProps) {
     const router = useRouter()
     const questions = useMemo(() => getTcmQuestions(userGender), [userGender])
-    const [stage, setStage] = useState<Stage>('main')
+    const resumedMainDiagnosis = useMemo(
+        () => resumeAssessment ? calculateMainDiagnosis(resumeAssessment.questionAnswers, questions) : null,
+        [questions, resumeAssessment],
+    )
+    const resumedTiebreakDiagnosis = useMemo(
+        () => resumedMainDiagnosis?.kind === 'tie'
+            ? calculateTiebreak(resumedMainDiagnosis.elements, resumeAssessment?.tiebreakAnswers || {}, resumeAssessment?.comparisonChoice)
+            : null,
+        [resumedMainDiagnosis, resumeAssessment],
+    )
+    const resumedMainComplete = Boolean(resumeAssessment && Object.keys(resumeAssessment.questionAnswers).length >= questions.length)
+    const resumedTiebreakComplete = Boolean(
+        resumeAssessment
+        && resumedMainDiagnosis?.kind === 'tie'
+        && Object.keys(resumeAssessment.tiebreakAnswers).length >= resumedMainDiagnosis.elements.length,
+    )
+    const resumedStage = useMemo<Stage>(() => {
+        if (!resumeAssessment || !resumedMainComplete || !resumedMainDiagnosis) return 'main'
+        if (resumedMainDiagnosis.kind !== 'tie') return 'reflection'
+        if (!resumedTiebreakComplete) return 'tiebreak'
+        if (resumedTiebreakDiagnosis?.kind === 'tie' && resumeAssessment.comparisonChoice === undefined) return 'comparison'
+        return 'reflection'
+    }, [resumeAssessment, resumedMainComplete, resumedMainDiagnosis, resumedTiebreakComplete, resumedTiebreakDiagnosis])
+    const resumedFinalDiagnosis = resumedStage === 'reflection'
+        ? resumedMainDiagnosis?.kind === 'tie' ? resumedTiebreakDiagnosis : resumedMainDiagnosis
+        : null
+    const [stage, setStage] = useState<Stage>(resumedStage)
     const [currentStep, setCurrentStep] = useState(Object.keys(resumeAssessment?.questionAnswers || {}).length)
     const [assessmentId, setAssessmentId] = useState<string | null>(resumeAssessment?.id || null)
     const [answers, setAnswers] = useState<Record<string, boolean>>(resumeAssessment?.questionAnswers || {})
-    const [mainDiagnosis, setMainDiagnosis] = useState<MainDiagnosis | null>(null)
+    const [mainDiagnosis, setMainDiagnosis] = useState<MainDiagnosis | null>(resumedMainDiagnosis)
     const [tiebreakAnswers, setTiebreakAnswers] = useState<Partial<Record<ElementType, number>>>(resumeAssessment?.tiebreakAnswers || {})
     const [tiebreakIndex, setTiebreakIndex] = useState(Object.keys(resumeAssessment?.tiebreakAnswers || {}).length)
-    const [tiebreakDiagnosis, setTiebreakDiagnosis] = useState<TiebreakResult | null>(null)
+    const [tiebreakDiagnosis, setTiebreakDiagnosis] = useState<TiebreakResult | null>(resumedTiebreakDiagnosis)
     const [comparisonChoice, setComparisonChoice] = useState<ComparativeChoice | undefined>(resumeAssessment?.comparisonChoice)
-    const [finalDiagnosis, setFinalDiagnosis] = useState<FinalDiagnosis | null>(null)
+    const [finalDiagnosis, setFinalDiagnosis] = useState<FinalDiagnosis | null>(resumedFinalDiagnosis)
     const [reflectionAnswers, setReflectionAnswers] = useState<Record<number, string>>(() => Object.fromEntries(
         Object.entries(resumeAssessment?.reflectionAnswers || {}).map(([key, value]) => [Number(key), value]),
     ))
@@ -157,29 +183,6 @@ export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds 
         })
         return () => { cancelled = true }
     }, [assessmentId, enqueueProgressSave, initialFacialZoneIds, resumeAssessment])
-
-    useEffect(() => {
-        if (!resumeAssessment || mainDiagnosis) return
-        const resumedMain = calculateMainDiagnosis(resumeAssessment.questionAnswers, questions)
-        setMainDiagnosis(resumedMain)
-        if (Object.keys(resumeAssessment.questionAnswers).length < questions.length) return
-        if (resumedMain.kind !== 'tie') {
-            setFinalDiagnosis(resumedMain)
-            setStage('reflection')
-            return
-        }
-        const resumedTiebreak = calculateTiebreak(resumedMain.elements, resumeAssessment.tiebreakAnswers, resumeAssessment.comparisonChoice)
-        setTiebreakDiagnosis(resumedTiebreak)
-        if (Object.keys(resumeAssessment.tiebreakAnswers).length < resumedMain.elements.length) {
-            setStage('tiebreak')
-            setTiebreakIndex(Object.keys(resumeAssessment.tiebreakAnswers).length)
-        } else if (resumedTiebreak.kind === 'tie' && resumeAssessment.comparisonChoice === undefined) {
-            setStage('comparison')
-        } else {
-            setFinalDiagnosis(resumedTiebreak)
-            setStage('reflection')
-        }
-    }, [mainDiagnosis, questions, resumeAssessment])
 
     const persistProgress = (
         nextAnswers: Record<string, boolean>,
