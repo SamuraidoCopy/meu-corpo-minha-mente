@@ -29,8 +29,9 @@ A lógica determinística e o desempate estão funcionais, mas usuários autenti
 
 - Vitest completo: **96/96** testes, 11 arquivos.
 - TypeScript: `npx tsc --noEmit` **PASS**.
-- ESLint focado: **PASS**; o aviso de `<img>` foi removido nas três telas de logo.
-- Build: `npm run build` **PASS**, 24 rotas geradas.
+- ESLint focado: **PASS**; o aviso de `<img>` foi removido nas três telas de logo e a configuração foi atualizada para os presets Flat do Next16.
+- Lint global (`npm run lint`): **CONCERNS** por 23 erros preexistentes fora do fluxo do diagnóstico (scripts, legado, admin/diário e componentes antigos); nenhum erro no escopo focado.
+- Build: `npm run build` com Next16.3.1 **PASS**, 23 rotas geradas.
 - Auditorias: `npm audit --omit=dev --audit-level=high` e `npm audit --audit-level=high` **PASS**, zero vulnerabilidades.
 - Teste pgTAP: **PENDENTE**; `npx supabase test db ...` não conectou porque o Docker/Supabase local estava desligado (`ECONNREFUSED 127.0.0.1:54322`).
 
