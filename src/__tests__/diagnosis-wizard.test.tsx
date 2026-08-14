@@ -32,11 +32,13 @@ async function answerMain(yesIndexes: number[]) {
 
 function deferred<T>() {
     let resolve!: (value: T) => void
-    const promise = new Promise<T>((promiseResolve) => {
+    let reject!: (reason?: unknown) => void
+    const promise = new Promise<T>((promiseResolve, promiseReject) => {
         resolve = promiseResolve
+        reject = promiseReject
     })
 
-    return { promise, resolve }
+    return { promise, resolve, reject }
 }
 
 beforeEach(() => {
@@ -77,6 +79,27 @@ describe('fluxo do wizard de diagnóstico', () => {
         expect(screen.getByText(/Sente tensão nos ombros e pescoço/i)).toBeInTheDocument()
         await clickButton(/faz sentido/i)
         expect(screen.getByText(/o que você percebe neste padrão/i)).toBeInTheDocument()
+    })
+
+    it('persiste a última resposta preenchida antes da criação do rascunho', async () => {
+        const draft = deferred<{ success: boolean; assessmentId: string }>()
+        mocks.startDiagnosisAssessment.mockReturnValueOnce(draft.promise)
+
+        render(<DiagnosisWizard />)
+        await clickButton(/faz sentido/i)
+        expect(mocks.saveDiagnosisProgress).not.toHaveBeenCalled()
+
+        await act(async () => {
+            draft.resolve({ success: true, assessmentId: '123e4567-e89b-42d3-a456-426614174000' })
+            await draft.promise
+        })
+
+        await waitFor(() => expect(mocks.saveDiagnosisProgress).toHaveBeenCalledOnce())
+        const question = getTcmQuestions()[0]
+        expect(mocks.saveDiagnosisProgress.mock.calls[0][0]).toMatchObject({
+            assessmentId: '123e4567-e89b-42d3-a456-426614174000',
+            questionAnswers: { [question.id]: true },
+        })
     })
 
     it('abre imediatamente as perguntas contextuais depois de um empate', async () => {
@@ -155,5 +178,91 @@ describe('fluxo do wizard de diagnóstico', () => {
             [firstQuestion.id]: true,
             [secondQuestion.id]: true,
         })
+    })
+
+    it('continua a fila quando o primeiro salvamento retorna erro', async () => {
+        const firstSave = deferred<{ success: boolean; error: string }>()
+        mocks.saveDiagnosisProgress.mockReturnValueOnce(firstSave.promise).mockResolvedValueOnce({ success: true })
+
+        render(<DiagnosisWizard resumeAssessment={{
+            id: '123e4567-e89b-42d3-a456-426614174000',
+            facialZoneIds: [],
+            questionAnswers: {},
+            tiebreakAnswers: {},
+            reflectionAnswers: {},
+        }} />)
+
+        await clickButton(/faz sentido/i)
+        await waitFor(() => expect(mocks.saveDiagnosisProgress).toHaveBeenCalledOnce())
+        await clickButton(/faz sentido/i)
+        expect(mocks.saveDiagnosisProgress).toHaveBeenCalledOnce()
+
+        await act(async () => {
+            firstSave.resolve({ success: false, error: 'falha temporária' })
+            await firstSave.promise
+        })
+
+        await waitFor(() => expect(mocks.saveDiagnosisProgress).toHaveBeenCalledTimes(2))
+    })
+
+    it('continua a fila quando o primeiro salvamento rejeita', async () => {
+        const firstSave = deferred<{ success: boolean }>()
+        mocks.saveDiagnosisProgress.mockReturnValueOnce(firstSave.promise).mockResolvedValueOnce({ success: true })
+
+        render(<DiagnosisWizard resumeAssessment={{
+            id: '123e4567-e89b-42d3-a456-426614174000',
+            facialZoneIds: [],
+            questionAnswers: {},
+            tiebreakAnswers: {},
+            reflectionAnswers: {},
+        }} />)
+
+        await clickButton(/faz sentido/i)
+        await waitFor(() => expect(mocks.saveDiagnosisProgress).toHaveBeenCalledOnce())
+        await clickButton(/faz sentido/i)
+        expect(mocks.saveDiagnosisProgress).toHaveBeenCalledOnce()
+
+        await act(async () => {
+            firstSave.reject(new Error('falha de rede'))
+            await firstSave.promise.catch(() => undefined)
+        })
+
+        await waitFor(() => expect(mocks.saveDiagnosisProgress).toHaveBeenCalledTimes(2))
+    })
+
+    it('libera a fila depois do timeout de um salvamento pendente', async () => {
+        vi.useFakeTimers()
+        try {
+            mocks.saveDiagnosisProgress.mockReturnValueOnce(new Promise(() => undefined)).mockResolvedValueOnce({ success: true })
+
+            render(<DiagnosisWizard resumeAssessment={{
+                id: '123e4567-e89b-42d3-a456-426614174000',
+                facialZoneIds: [],
+                questionAnswers: {},
+                tiebreakAnswers: {},
+                reflectionAnswers: {},
+            }} />)
+
+            await clickButton(/faz sentido/i)
+            await act(async () => {
+                await Promise.resolve()
+                await Promise.resolve()
+            })
+            expect(mocks.saveDiagnosisProgress).toHaveBeenCalledOnce()
+
+            await clickButton(/faz sentido/i)
+            expect(mocks.saveDiagnosisProgress).toHaveBeenCalledOnce()
+
+            await act(async () => {
+                vi.advanceTimersByTime(10_000)
+                await Promise.resolve()
+                await Promise.resolve()
+                await Promise.resolve()
+            })
+
+            expect(mocks.saveDiagnosisProgress).toHaveBeenCalledTimes(2)
+        } finally {
+            vi.useRealTimers()
+        }
     })
 })

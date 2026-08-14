@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState, useTransition } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
@@ -39,11 +39,36 @@ const FREQUENCY_OPTIONS = [
     { value: 3, label: 'Quase todos os dias' },
 ] as const
 
+const EMPTY_FACIAL_ZONE_IDS: string[] = []
+const PROGRESS_SAVE_TIMEOUT_MS = 10_000
+
+type ProgressPayload = {
+    questionAnswers: Record<string, boolean>
+    tiebreakAnswers: Partial<Record<ElementType, number>>
+    reflectionAnswers: Record<string, string>
+}
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number) {
+    return new Promise<T>((resolve, reject) => {
+        const timeoutId = setTimeout(() => reject(new Error('Diagnosis progress save timed out')), timeoutMs)
+        promise.then(
+            (value) => {
+                clearTimeout(timeoutId)
+                resolve(value)
+            },
+            (error: unknown) => {
+                clearTimeout(timeoutId)
+                reject(error)
+            },
+        )
+    })
+}
+
 function elementInfo(elements: readonly ElementType[]) {
     return elements.map((element) => ELEMENTS[element])
 }
 
-export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds = [], invalidFacialZoneIds = false, resumeAssessment }: DiagnosisWizardProps) {
+export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds = EMPTY_FACIAL_ZONE_IDS, invalidFacialZoneIds = false, resumeAssessment }: DiagnosisWizardProps) {
     const router = useRouter()
     const questions = useMemo(() => getTcmQuestions(userGender), [userGender])
     const [stage, setStage] = useState<Stage>('main')
@@ -63,9 +88,23 @@ export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds 
     const [isPending, startTransition] = useTransition()
     const [, startDraftTransition] = useTransition()
     const progressSaveQueueRef = useRef<Promise<void>>(Promise.resolve())
+    const pendingProgressRef = useRef<ProgressPayload | null>(null)
+    const assessmentIdRef = useRef<string | null>(resumeAssessment?.id || null)
 
     const tiedElements = mainDiagnosis?.kind === 'tie' ? mainDiagnosis.elements : []
     const facialZoneIdsForSubmission = resumeAssessment?.facialZoneIds || initialFacialZoneIds
+
+    const enqueueProgressSave = useCallback((id: string, progress: ProgressPayload) => {
+        progressSaveQueueRef.current = progressSaveQueueRef.current
+            .then(async () => {
+                const result = await withTimeout(saveDiagnosisProgress({ assessmentId: id, ...progress }), PROGRESS_SAVE_TIMEOUT_MS)
+                if (!result.success) setError(result.error || 'Não foi possível salvar o progresso.')
+            })
+            .catch((progressError) => {
+                console.error('Diagnosis progress save failed:', progressError)
+                setError('Não foi possível salvar o progresso. Tente novamente.')
+            })
+    }, [])
 
     useEffect(() => {
         if (resumeAssessment || assessmentId) return
@@ -74,7 +113,15 @@ export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds 
             try {
                 const result = await startDiagnosisAssessment({ facialZoneIds: initialFacialZoneIds })
                 if (cancelled) return
-                if (result.success && result.assessmentId) setAssessmentId(result.assessmentId)
+                if (result.success && result.assessmentId) {
+                    assessmentIdRef.current = result.assessmentId
+                    setAssessmentId(result.assessmentId)
+                    const pendingProgress = pendingProgressRef.current
+                    if (pendingProgress) {
+                        pendingProgressRef.current = null
+                        enqueueProgressSave(result.assessmentId, pendingProgress)
+                    }
+                }
                 else if (!result.success) setError(result.error || 'Não foi possível iniciar esta leitura.')
             } catch (startError) {
                 if (!cancelled) {
@@ -84,7 +131,7 @@ export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds 
             }
         })
         return () => { cancelled = true }
-    }, [assessmentId, initialFacialZoneIds, resumeAssessment])
+    }, [assessmentId, enqueueProgressSave, initialFacialZoneIds, resumeAssessment])
 
     useEffect(() => {
         if (!resumeAssessment || mainDiagnosis) return
@@ -110,24 +157,18 @@ export function DiagnosisWizard({ userGender = 'Feminino', initialFacialZoneIds 
     }, [mainDiagnosis, questions, resumeAssessment])
 
     const persistProgress = (nextAnswers: Record<string, boolean>, nextTiebreakAnswers = tiebreakAnswers) => {
-        if (!assessmentId) return
-
         const payload = {
-            assessmentId,
             questionAnswers: { ...nextAnswers },
             tiebreakAnswers: { ...nextTiebreakAnswers },
             reflectionAnswers: Object.fromEntries(Object.entries(reflectionAnswers).filter(([, answer]) => answer.trim().length > 0)),
         }
 
-        progressSaveQueueRef.current = progressSaveQueueRef.current
-            .then(async () => {
-                const result = await saveDiagnosisProgress(payload)
-                if (!result.success) setError(result.error || 'Não foi possível salvar o progresso.')
-            })
-            .catch((progressError) => {
-                console.error('Diagnosis progress save failed:', progressError)
-                setError('Não foi possível salvar o progresso. Tente novamente.')
-            })
+        pendingProgressRef.current = payload
+        const id = assessmentIdRef.current
+        if (!id) return
+
+        pendingProgressRef.current = null
+        enqueueProgressSave(id, payload)
     }
 
     const moveToReflection = (diagnosis: FinalDiagnosis) => {
