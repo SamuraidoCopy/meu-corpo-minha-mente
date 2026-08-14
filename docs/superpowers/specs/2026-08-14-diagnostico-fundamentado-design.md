@@ -167,13 +167,15 @@ Criar uma tabela `diagnostic_assessments` com uma avaliação por execução:
 
 Requisitos:
 
-1. RLS permite à usuária ler, inserir e atualizar somente suas próprias avaliações.
-2. O resultado é recalculado no servidor a partir das respostas canônicas.
-3. Avaliações concluídas não têm seus dados de cálculo sobrescritos por uma nova execução.
-4. `profiles.dominant_element` permanece temporariamente como cache de compatibilidade apenas para resultados únicos.
-5. Adicionar ao perfil `highlighted_elements text[]` para consumidores que precisam renderizar resultados combinados.
-6. Para resultado combinado ou insuficiente, `dominant_element` deve ficar nulo.
-7. Registros antigos no perfil continuam legíveis como `legacy-profile-v1`; não serão fabricadas respostas históricas inexistentes.
+1. RLS permite à usuária ler somente suas próprias avaliações.
+2. `anon` e `authenticated` não possuem privilégios diretos de mutação em `diagnostic_assessments`.
+3. Server Actions autenticadas validam os dados canônicos e usam um cliente `service_role` server-only para iniciar, atualizar e concluir avaliações.
+4. O resultado é recalculado no servidor antes da chamada atômica de conclusão; nenhuma RPC pública aceita resultado calculado pelo cliente.
+5. Avaliações concluídas não têm seus dados de cálculo sobrescritos por uma nova execução.
+6. `profiles.dominant_element` permanece temporariamente como cache de compatibilidade apenas para resultados únicos.
+7. Adicionar ao perfil `highlighted_elements text[]` para consumidores que precisam renderizar resultados combinados.
+8. Para resultado combinado ou insuficiente, `dominant_element` deve ficar nulo.
+9. Registros antigos no perfil continuam legíveis como `legacy-profile-v1`; não serão fabricadas respostas históricas inexistentes.
 
 ## Integração com telas existentes
 
