@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
+import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { ELEMENTS, ElementType } from '@/lib/tcm-data'
 import { SignOutButton } from '@/components/sign-out-button'
 import { Map as MapIcon, Leaf, Brain, Activity } from 'lucide-react'
@@ -20,8 +20,8 @@ const IconMap = {
 const DICAS_DA_DOUTORA = [
   "Lembre-se: seu fígado precisa de movimento e seu coração de pausas. Respire fundo e traga a atenção para o agora. — Dra. Ranieli & Dra. Cleucia",
   "O corpo nunca mente. Quando a mente tenta disfarçar a exaustão, ele nos avisa através dos pequenos sinais. Honre seu cansaço. — Dra. Ranieli & Dra. Cleucia",
-  "A verdadeira saúde não é a ausência perfeita de desequilíbrios, mas a resiliência para voltar ao seu eixo. Você está no caminho seguro. — Dra. Ranieli & Dra. Cleucia",
-  "Observe seu corpo sem julgamentos. Cada sintoma é apenas um mensageiro tentando te proteger. Ouça-o com amor e compaixão. — Dra. Ranieli & Dra. Cleucia"
+  "Observe suas variações com gentileza e volte ao que ajuda você a se organizar. — Dra. Ranieli & Dra. Cleucia",
+  "Observe seu corpo sem julgamentos e registre o que mudou no seu momento atual. — Dra. Ranieli & Dra. Cleucia"
 ];
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
@@ -33,12 +33,24 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
     redirect('/login')
   }
 
+  const dicaIndex = [...user.id].reduce((total, character) => total + character.charCodeAt(0), 0) % DICAS_DA_DOUTORA.length
+  const dicaDaDoutora = DICAS_DA_DOUTORA[dicaIndex]
+
   // Check valid profile
   const { data: profile } = await supabase
     .from('profiles')
-    .select('onboarding_completed, dominant_element, gender, full_name, avatar_url, role')
+    .select('onboarding_completed, dominant_element, highlighted_elements, gender, full_name, avatar_url, role')
     .eq('id', user.id)
     .single()
+
+  const { data: latestAssessment } = await supabase
+    .from('diagnostic_assessments')
+    .select('result_kind, result_elements, created_at')
+    .eq('user_id', user.id)
+    .eq('status', 'completed')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
 
   const isAdmin = profile?.role === 'admin'
   const isInspectMode = elementOverride || (await searchParams).inspect === 'true'
@@ -52,11 +64,27 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
     redirect('/onboarding')
   }
 
-  // Determine which element to show (Priority: Override > Profile)
-  let diagnosis = profile?.dominant_element as ElementType | null
-  
+  const storedElements = Array.isArray(latestAssessment?.result_elements)
+    ? latestAssessment.result_elements.filter((element): element is ElementType => Object.prototype.hasOwnProperty.call(ELEMENTS, element))
+    : Array.isArray(profile?.highlighted_elements)
+      ? profile.highlighted_elements.filter((element): element is ElementType => Object.prototype.hasOwnProperty.call(ELEMENTS, element))
+      : profile?.dominant_element && Object.prototype.hasOwnProperty.call(ELEMENTS, profile.dominant_element)
+        ? [profile.dominant_element as ElementType]
+        : []
+
+  const resultKind = latestAssessment?.result_kind === 'combined'
+    ? 'combined'
+    : latestAssessment?.result_kind === 'insufficient'
+      ? 'insufficient'
+      : storedElements.length > 0
+        ? 'single'
+        : null
+
+  // Overrides are restricted to admins; regular users use the latest assessment.
+  let diagnosis = resultKind === 'single' ? storedElements[0] : null
+
   if (isAdmin && elementOverride && typeof elementOverride === 'string') {
-    diagnosis = elementOverride as ElementType
+    diagnosis = Object.prototype.hasOwnProperty.call(ELEMENTS, elementOverride) ? elementOverride as ElementType : null
   }
 
   const elementInfo = diagnosis ? ELEMENTS[diagnosis] : null
@@ -70,9 +98,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
       style={elementInfo ? elementInfo.theme.cssVars as React.CSSProperties : undefined}
     >
       <Link href="/o-mapa-da-raiz" className="absolute top-6 left-6 md:top-8 md:left-8 z-50">
-        <img
+        <Image
           src="/images/logo-mapa-raiz.png"
           alt="O Mapa da Raiz"
+          width={761}
+          height={328}
+          priority
           className="h-8 md:h-12 w-auto object-contain opacity-90 drop-shadow-sm hover:opacity-100 transition-opacity"
         />
       </Link>
@@ -108,13 +139,13 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
                 </div>
                 <div className="relative z-10 space-y-6 flex flex-col items-center text-center">
                   <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${elementInfo.theme.badgeBg} text-primary self-start md:self-center`}>
-                    Elemento Dominante
+                    Elemento em destaque
                   </div>
                   <h2 className={`text-6xl font-serif leading-tight text-primary`}>
                     {elementInfo.name}
                   </h2>
                   <p className="text-xl text-foreground/60 max-w-xl leading-relaxed mx-auto">
-                    "{elementInfo.description}"
+                    &ldquo;{elementInfo.description}&rdquo;
                   </p>
                   <div className="flex flex-wrap justify-center gap-6 pt-6 border-t border-foreground/5 font-medium w-full">
                     <div className="flex items-center gap-2">
@@ -128,10 +159,28 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
                   </div>
                 </div>
               </div>
+            ) : resultKind === 'combined' && storedElements.length > 0 ? (
+              <div className="glass rounded-[2rem] p-10 border border-wellness-gold/20 bg-wellness-gold/5 space-y-6">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-wellness-gold/10 text-wellness-gold">
+                  Padrões em destaque
+                </div>
+                <h2 className="text-4xl font-serif text-foreground/90">Sua leitura tem mais de um padrão</h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {storedElements.map((element) => (
+                    <div key={element} className="rounded-2xl bg-white/40 p-5">
+                      <p className="text-2xl font-serif text-primary">{element}</p>
+                      <p className="text-sm text-foreground/60 mt-2">{ELEMENTS[element].emotion}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-foreground/60">Você pode escolher qual padrão aprofundar no mapa, sem alterar esta leitura.</p>
+              </div>
             ) : (
               <div className="glass rounded-[2rem] p-12 text-center space-y-6 border-dashed border-2 border-foreground/10 bg-transparent shadow-none">
-                <h2 className="text-3xl font-serif text-foreground/80 italic">Ainda não encontramos sua Raiz.</h2>
-                <p className="text-foreground/50 max-w-md mx-auto">Complete sua investigação inicial para descobrir seu elemento dominante e começar a equilibrar seu corpo e mente.</p>
+                <h2 className="text-3xl font-serif text-foreground/80 italic">
+                  {resultKind === 'insufficient' ? 'Nenhum padrão em destaque agora.' : 'Ainda não encontramos uma leitura.'}
+                </h2>
+                <p className="text-foreground/50 max-w-md mx-auto">Responda à investigação guiada para registrar uma leitura contextual e revisável.</p>
                 <Button asChild className="h-14 px-10 rounded-full text-lg shadow-xl shadow-primary/20 bg-primary">
                   <Link href="/mapa">Iniciar Investigação</Link>
                 </Button>
@@ -141,16 +190,16 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
             {/* Sub-grid for actions */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Mapa da Raiz */}
-              <Link href={diagnosis ? "/mapa/v2" : "/mapa"} className="group">
+              <Link href={diagnosis || resultKind === 'combined' ? "/mapa/v2" : "/mapa"} className="group">
                 <div className="glass rounded-3xl p-8 h-full border-white/30 group-hover:bg-white/60 transition-all group-hover:-translate-y-1">
                   <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
                     <MapIcon size={24} strokeWidth={1.5} />
                   </div>
                   <h3 className="text-xl font-serif mb-2">{diagnosis ? 'O Mapa das Expressões' : 'O Mapa da Raiz'}</h3>
                   <p className="text-sm text-foreground/50 leading-relaxed">
-                    {diagnosis
+                    {diagnosis || resultKind === 'combined'
                       ? "Aprofunde na sua Raiz e dores através das suas marcas de expressão facial."
-                      : "Analise os sinais que o seu rosto revela sobre sua saúde interna."}
+                      : "Registre os sinais que você percebe no rosto e leve-os para uma leitura contextual."}
                   </p>
                 </div>
               </Link>
@@ -177,7 +226,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
                   <div className="w-1 h-8 rounded-full bg-primary" />
                   <div>
                     <h4 className="text-sm font-bold text-foreground/80">Fase de Descoberta</h4>
-                    <p className="text-xs text-foreground/50 mt-1">Identificando desequilíbrios elementares.</p>
+                    <p className="text-xs text-foreground/50 mt-1">Observando padrões elementares.</p>
                   </div>
                 </div>
                 <div className="flex gap-4 items-start opacity-40">
@@ -194,7 +243,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ [
               <div className="absolute top-[-20%] right-[-20%] w-[60%] h-[60%] bg-white/10 rounded-full blur-2xl" />
               <h3 className="text-xl font-serif relative z-10 mb-2 italic">Dica das Doutoras</h3>
               <p className="text-sm text-white/80 relative z-10 leading-relaxed">
-                &quot;{DICAS_DA_DOUTORA[Math.floor(Math.random() * DICAS_DA_DOUTORA.length)]}&quot;
+                &quot;{dicaDaDoutora}&quot;
               </p>
             </div>
           </div>
