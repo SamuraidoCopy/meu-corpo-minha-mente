@@ -29,7 +29,7 @@ begin
 end;
 $$;
 
-create unique index public.diagnostic_assessments_one_in_progress_per_user_idx
+create unique index diagnostic_assessments_one_in_progress_per_user_idx
   on public.diagnostic_assessments (user_id)
   where status = 'in_progress';
 
