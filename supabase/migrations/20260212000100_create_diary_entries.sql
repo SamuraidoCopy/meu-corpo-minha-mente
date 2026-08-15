@@ -7,7 +7,7 @@ create table diary_entries (
   -- Metrics (1-5 scale)
   energy_level int check (energy_level between 1 and 5),
   sleep_quality int check (sleep_quality between 1 and 5),
-  mood text, -- e.g., 'Ansiada', 'Triste', 'Neutra', 'Feliz', 'Irritada'
+  mood text, -- e.g., 'Ansiosa', 'Triste', 'Neutra', 'Feliz', 'Irritada'
   
   -- Text fields
   symptoms text, -- Open text for specific symptoms
