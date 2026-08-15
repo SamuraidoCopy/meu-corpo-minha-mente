@@ -522,13 +522,15 @@ it('serializa salvamentos de progresso na ordem das respostas', async () => {
     .mockReturnValueOnce(firstSave.promise)
     .mockResolvedValue({ success: true })
 
-  render(<DiagnosisWizard resumeAssessment={{
+  const resumeAssessment = {
     id: '123e4567-e89b-42d3-a456-426614174000',
     facialZoneIds: [],
     questionAnswers: {},
     tiebreakAnswers: {},
     reflectionAnswers: {},
-  }} />)
+  }
+
+  render(<DiagnosisWizard resumeAssessment={resumeAssessment} />)
 
   fireEvent.click(screen.getByRole('button', { name: /faz sentido/i }))
   fireEvent.click(screen.getByRole('button', { name: /não se aplica/i }))
