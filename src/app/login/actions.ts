@@ -36,6 +36,9 @@ export async function login(_prevState: LoginState, formData: FormData): Promise
 
     if (error) {
         console.error('Login (magic link) error:', error)
+        if (error.status === 429 || error.code === 'over_email_send_rate_limit') {
+            return { message: 'Muitas tentativas recentes. Aguarde alguns minutos antes de solicitar outro link.' }
+        }
         // Mensagem genérica para não revelar se o e-mail existe na base.
         return { message: 'Não foi possível enviar o link. Verifique se este é o e-mail da sua compra.' }
     }
